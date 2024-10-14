@@ -27,7 +27,7 @@ LINKS="${linksDir}/${GRAPH_ID}_links.json"
 WALKS_ORIENTED="${walkDictsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_oriented.json"
 WALKS_VECTORIZED="${walkListsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_vectorized.txt"
 
-python3 workflow/scripts/copan_node2vec_walks_vectorized_copy.py "$LINKS" \
+python3 workflow/scripts/copan_node2vec_walks_vectorized.py "$LINKS" \
     "$walk_length" "$n_walks" "$p" "$q" "$seed" \
     "$WALKS_ORIENTED" "$WALKS_VECTORIZED"
 
@@ -36,6 +36,6 @@ OUTPUT_MODEL="${modelDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_wal
 OUTPUT_EMBEDDINGS="${embeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.embeddings"
 OUTPUT_EDGE_EMBEDDINGS="${edgeEmbeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.edge_embeddings"
 
-python3 workflow/scripts/copan_node2vec_vectorization_copy.py \
+python3 workflow/scripts/copan_node2vec_vectorization.py \
     "$WALKS_VECTORIZED" "$OUTPUT_MODEL" "$OUTPUT_EMBEDDINGS" "$OUTPUT_EDGE_EMBEDDINGS" \
     "$dimensions" "$window" "$min_count" "$sg"
