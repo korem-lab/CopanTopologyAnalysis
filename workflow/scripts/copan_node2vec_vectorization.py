@@ -39,7 +39,7 @@ def main():
     model = Word2Vec.load(MODEL_F)
     most_sim = model.wv.most_similar("A")
     print(most_sim)
-    
+
 
 if __name__ == '__main__':
     main()
