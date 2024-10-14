@@ -1,0 +1,5 @@
+*.json filter=lfs diff=lfs merge=lfs -text
+copan_0* filter=lfs diff=lfs merge=lfs -text
+config/copangraphs/copan_0.gfa filter=lfs diff=lfs merge=lfs -text
+workflow/out/link_dicts/copan_0_links.json filter=lfs diff=lfs merge=lfs -text
+workflow/out/walk_dicts_oriented/copan_0_80Lw10Nw1p1q_walks_wOrientation.json filter=lfs diff=lfs merge=lfs -text

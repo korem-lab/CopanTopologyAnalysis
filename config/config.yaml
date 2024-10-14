@@ -1,0 +1,27 @@
+# Directories
+graphDir: "config/copangraphs"
+
+linksDir: "workflow/out/link_dicts"
+
+walkDictsDir: "workflow/out/walk_dicts_oriented"
+walkListsDir: "workflow/out/walk_lists_vectorized"
+
+modelDir: "workflow/out/vectorization_model/models"
+embeddingsDir: "workflow/out/vectorization_model/embeddings"
+edgeEmbeddingsDir: "workflow/out/vectorization_model/edge_embeddings"
+
+
+# Walk params
+walk_length: 1 # number of nodes in walk (doesn't include starting node)
+n_walks: 10 # number of walks to perform per node
+p: 1
+q: 1
+seed: 1
+
+# Embedding params
+# tbh idk what most of these do...
+dimensions: 128  # default embedding dimensions in Node2Vec; equivalent to vector size in Word2Vec
+window: 5
+min_count: 5
+sg: 0
+
