@@ -1,5 +1,5 @@
 # Ignore large files
-config/copangraphs/copan_0.gfa
-workflow/out/link_dicts/copan_0_links.json
-workflow/out/walk_dicts_oriented/copan_0_80Lw10Nw1p1q_walks_wOrientation.json
+#config/copangraphs/copan_0.gfa
+#workflow/out/link_dicts/copan_0_links.json
+#workflow/out/walk_dicts_oriented/copan_0_80Lw10Nw1p1q_walks_wOrientation.json
 
