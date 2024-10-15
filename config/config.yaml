@@ -12,7 +12,7 @@ edgeEmbeddingsDir: "workflow/out/vectorization_model/edge_embeddings"
 
 
 # Walk params
-walk_length: 1 # number of nodes in walk (doesn't include starting node)
+walk_length: 30 # number of nodes in walk (doesn't include starting node)
 n_walks: 10 # number of walks to perform per node
 p: 1
 q: 1

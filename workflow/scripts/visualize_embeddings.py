@@ -1,81 +1,77 @@
-# import sys
-# import matplotlib.pyplot as plt
-
-# from sklearn.manifold import TSNE
-# from sklearn.model_selection import train_test_split
-# from sklearn.linear_model import LogisticRegressionCV
-# from sklearn.metrics import accuracy_score
-
-# import os
-# import networkx as nx
-# import numpy as np
-# import pandas as pd
-
-# from stellargraph.data import BiasedRandomWalk
-# from stellargraph import StellarGraph
-# from stellargraph import datasets
-# from IPython.display import display, HTML
-
 from gensim.models import Word2Vec
-import random
-import os
+from gensim.models import KeyedVectors
+from sklearn.manifold import TSNE
+import numpy as np
+import matplotlib.pyplot as plt
+import matplotlib.cm as cm
+import json
+import sys
 
-# import numpy as np
-# import pandas as pd
-# from matplotlib import pyplot as plt
-import tensorflow as tf
-from tensorflow import keras
+MODEL_F = sys.argv[1]
+EMBEDDING_F = sys.argv[2]
+WALKS_DICT_F = sys.argv[3]
+EMBEDDING_PLOT = sys.argv[4]
+PLOT_TITLE = sys.argv[5]
 
-MODEL_F = "workflow/out/vectorization_model/models/dummy_graph_1Lw10Nw1p1q_walks.model"
+PERPLEXITY = int(sys.argv[6])
+N_ITER = int(sys.argv[7])
+N_COMPONENTS = int(sys.argv[8])
+RAND_STATE = int(sys.argv[9])
 
 def main():
     model = Word2Vec.load(MODEL_F)
-    most_sim = model.wv.most_similar("A")
-    print(most_sim)
+
+    embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')
+    # avector = embeddings['81773']  # Get numpy vector of a word
+    # return print(avector)
+    # return print(embeddings.key_to_index)
+
+    # return print(model.wv.most_similar('81773'))
+    
+    # KeyedVectors.load(EMBEDDING_F, mmap='r')
+
+    # model = KeyedVectors.load(EMBEDDING_F, mmap='r')
+
+
+    # with open(WALKS_DICT_F, 'r') as f:
+    #     walks_dict = json.load(f)
 
     embedding_clusters = []
     node_clusters = []
-    for word in keys:
+    # for node in walks_dict.keys():
+    for node in embedding_kv.key_to_index.keys():
         embeddings = []
-        words = []
-        for similar_word, _ in model.most_similar(word, topn=30):
-            words.append(similar_word)
-            embeddings.append(model[similar_word])
+        nodes = []
+        for similar_node, _ in model.wv.most_similar(node, topn=30):
+            nodes.append(similar_node)
+            embeddings.append(embedding_kv[similar_node])
         embedding_clusters.append(embeddings)
-        word_clusters.append(words)
+        node_clusters.append(nodes)
+    
+    embedding_clusters = np.array(embedding_clusters)
+    n, m, k = embedding_clusters.shape
+    tsne_model_en_2d = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
+    embeddings_en_2d = np.array(tsne_model_en_2d.fit_transform(embedding_clusters.reshape(n * m, k))).reshape(n, m, 2)
 
-    # dataset = datasets.Cora()
-    # display(HTML(dataset.description))
-    # G, node_subjects = dataset.load(largest_connected_component_only=True)
+    tsne_plot_similar_words(PLOT_TITLE, nodes, embeddings_en_2d, node_clusters, 0.7,
+                        EMBEDDING_PLOT)
 
-    # # Retrieve node embeddings and corresponding subjects
-    # node_ids = model.wv.index2word  # list of node IDs
-    # node_embeddings = (
-    #    model.wv.vectors
-    # )  
-    # # numpy.ndarray of size number of nodes times embeddings dimensionality
-    # node_targets = node_subjects[[int(node_id) for node_id in node_ids]]
-
-    # # Apply t-SNE transformation on node embeddings
-    # tsne = TSNE(n_components=2)
-    # node_embeddings_2d = tsne.fit_transform(node_embeddings)
-
-    # # draw the points
-    # alpha = 0.7
-    # label_map = {l: i for i, l in enumerate(np.unique(node_targets))}
-    # node_colours = [label_map[target] for target in node_targets]
-
-    # plt.figure(figsize=(10, 8))
-    # plt.scatter(
-    #     node_embeddings_2d[:, 0],
-    #     node_embeddings_2d[:, 1],
-    #     c=node_colours,
-    #     cmap="jet",
-    #     alpha=alpha,
-    # )
-
-    # model = keras.models.load_model(MODEL_F)
-
+def tsne_plot_similar_words(title, labels, embedding_clusters, word_clusters, a, filename):
+    plt.figure(figsize=(16, 9))
+    colors = cm.rainbow(np.linspace(0, 1, len(labels)))
+    for label, embeddings, words, color in zip(labels, embedding_clusters, word_clusters, colors):
+        x = embeddings[:, 0]
+        y = embeddings[:, 1]
+        plt.scatter(x, y, c=color, alpha=a, label=label)
+        for i, word in enumerate(words):
+            plt.annotate(word, alpha=0.5, xy=(x[i], y[i]), xytext=(5, 2),
+                         textcoords='offset points', ha='right', va='bottom', size=8)
+    plt.legend(loc=4)
+    plt.title(title)
+    plt.grid(True)
+    if filename:
+        plt.savefig(filename, format='png', dpi=150, bbox_inches='tight')
+    plt.show()
 
 if __name__ == '__main__':
     main()

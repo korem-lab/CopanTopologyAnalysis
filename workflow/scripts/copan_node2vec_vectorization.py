@@ -2,6 +2,7 @@ from gensim.models import Word2Vec
 from gensim.models import KeyedVectors
 from node2vec.edges import HadamardEmbedder
 import sys
+import gc
 
 # in/out files
 WALKS_F = sys.argv[1]
@@ -21,24 +22,42 @@ def main():
     with open(WALKS_F, 'r') as file:
         walks = [line.strip().split(',') for line in file.readlines()]
 
+    # vectorization all at once -- not memory friendly
     node_model = Word2Vec(sentences=walks, vector_size=DIMENSIONS, window=WINDOW, min_count=MIN_COUNT, sg=SG)
+
+    # # memory friendly!
+    # node_model = Word2Vec(vector_size=DIMENSIONS, window=WINDOW, min_count=MIN_COUNT, sg=SG)
+
+    # # Build vocabulary first (saves memory)
+    # node_model.build_vocab(walks)
+
+    # # Train model incrementally
+    # node_model.train(walks, total_examples=node_model.corpus_count, epochs=node_model.epochs)
 
     node_model.save(MODEL_F)
     node_model.wv.save(EMBEDDING_F)
 
-    edges_embs = HadamardEmbedder(keyed_vectors=node_model.wv)
+    # Free memory before creating edge embeddings
+    # del node_model
+    # gc.collect()
 
-    # Get all edges in a separate KeyedVectors instance - use with caution could be huge for big networks
-    edges_kv = edges_embs.as_keyed_vectors()
+    # edges_embs = HadamardEmbedder(keyed_vectors=node_model.wv)
 
-    # Save embeddings for later use
-    edges_kv.save(EDGE_EMBEDDING_F)
+    # # Get all edges in a separate KeyedVectors instance - use with caution could be huge for big networks
+    # # edges_kv = edges_embs.as_keyed_vectors()
 
-    embeddings = KeyedVectors.load(EMBEDDING_F, mmap='r')
-    avector = embeddings['A']  # Get numpy vector of a word
-    model = Word2Vec.load(MODEL_F)
-    most_sim = model.wv.most_similar("A")
-    print(most_sim)
+    # # Save embeddings for later use
+    # # edges_kv.save(EDGE_EMBEDDING_F)
+
+    # # Iterate over edges and save them incrementally
+    # with open(EDGE_EMBEDDING_F, 'w') as edge_file:
+    #     for edge in edges_embs:
+    #         edge_file.write(f"{edge}\n")
+
+    # embeddings = KeyedVectors.load(EMBEDDING_F, mmap='r')
+    # avector = embeddings['A']  # Get numpy vector of a word
+    # model = Word2Vec.load(MODEL_F)
+    # most_sim = model.wv.most_similar("A")
 
 
 if __name__ == '__main__':
