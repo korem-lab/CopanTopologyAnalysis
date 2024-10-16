@@ -71,7 +71,7 @@ def tsne_plot_similar_words(title, labels, embedding_clusters, word_clusters, a,
     plt.grid(True)
     if filename:
         plt.savefig(filename, format='png', dpi=150, bbox_inches='tight')
-    plt.show()
+    # plt.show()
 
 if __name__ == '__main__':
     main()

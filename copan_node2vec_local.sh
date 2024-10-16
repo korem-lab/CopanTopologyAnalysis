@@ -30,7 +30,7 @@ EDGE_EMBEDDINGS="${edgeEmbeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${
 #     "$dimensions" "$window" "$min_count" "$sg"
 
 PLOT="${plotsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_embeddingPlot.png"
-PLOT_TITLE="${GRAPH_ID}: ${walk_length} walk length, ${n_walks} walks, ${p} p, ${q} q"
+PLOT_TITLE="${GRAPH_ID}: walk length ${walk_length} node, ${n_walks} walks, ${p} p, ${q} q"
 
 # Visualize embeddings
 python3 workflow/scripts/visualize_embeddings.py \
