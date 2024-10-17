@@ -30,56 +30,78 @@ else
     echo "get_links is false. Skipping the get_links step."
 fi
 
-# Random sample walks
-WALKS_ORIENTED="${walkDictsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_oriented.json"
-WALKS_VECTORIZED="${walkListsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_vectorized.txt"
+# Define parameter values for looping
+p_values=(0.5 2.0 1.0)
+q_values=(0.5 2.0 1.0)
+walk_lengths=(30 80)
+n_walks_values=(10 50)
 
-# Generate walks step
-if [ "$generate_walks" = true ]; then
-    echo "generate_walks is true. Checking for walks files..."
-    if [ ! -f "$WALKS_ORIENTED" ] || [ ! -f "$WALKS_VECTORIZED" ]; then
-        echo "One or both walks files do not exist. Running the generate_walks script."
-        python3 workflow/scripts/generate_walks.py "$LINKS" \
-        "$walk_length" "$n_walks" "$p" "$q" "$seed" \
-        "$WALKS_ORIENTED" "$WALKS_VECTORIZED"
-    else
-        echo "Walks files already exist."
-    fi
-else
-    echo "generate_walks is false. Skipping the generate_walks step."
-fi
+# Loop over the combinations of parameters
+for walk_length in "${walk_lengths[@]}"; do
+  for n_walks in "${n_walks_values[@]}"; do
+    for p in "${p_values[@]}"; do
+      for q in "${q_values[@]}"; do
+        
+        echo "Running for walk_length=$walk_length, n_walks=$n_walks, p=$p, q=$q"
 
-# Vectorize walks
-MODEL="${modelDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.model"
-EMBEDDINGS="${embeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.embeddings"
-EDGE_EMBEDDINGS="${edgeEmbeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.edge_embeddings"
+        # Random sample walks
+        WALKS_ORIENTED="${walkDictsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_oriented.json"
+        WALKS_VECTORIZED="${walkListsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_vectorized.txt"
 
-# Check if model files do not exist
-if [ "$embed_nodes" = true ]; then
-    echo "embed_nodes is true. Checking for model files..."
-    if [ ! -f "$MODEL" ] || [ ! -f "$EMBEDDINGS" ] || [ ! -f "$EDGE_EMBEDDINGS" ]; then
-        echo "Model files do not exist. Running the vectorize_embed_nodes script."
-        python3 workflow/scripts/vectorize_embed_nodes.py \
-        "$WALKS_VECTORIZED" "$MODEL" "$EMBEDDINGS" "$EDGE_EMBEDDINGS" \
-        "$dimensions" "$window" "$min_count" "$sg"
-    else
-        echo "Model files already exist."
-    fi
-else
-    echo "embed_nodes is false. Skipping the embed_nodes step."
-fi
+        # Generate walks step
+        if [ "$generate_walks" = true ]; then
+            echo "generate_walks is true. Checking for walks files..."
+            if [ ! -f "$WALKS_ORIENTED" ] || [ ! -f "$WALKS_VECTORIZED" ]; then
+                echo "One or both walks files do not exist. Running the generate_walks script."
+                python3 workflow/scripts/generate_walks.py "$LINKS" \
+                "$walk_length" "$n_walks" "$p" "$q" "$seed" \
+                "$WALKS_ORIENTED" "$WALKS_VECTORIZED"
+            else
+                echo "Walks files already exist."
+            fi
+        else
+            echo "generate_walks is false. Skipping the generate_walks step."
+        fi
 
-# Check if plot file exists
-if [ "$visualize_embeddings" = true ]; then
-    echo "visualize_embeddings is true. Checking for plot file..."
-    if [ ! -f "$PLOT" ]; then
-        echo "Plot files do not exist. Running the visualize_embeddings script."
-        python3 workflow/scripts/visualize_embeddings.py \
-        "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" \
-        "$perplexity" "$n_iter" "$n_components" "$random_state"
-    else
-        echo "Plot files already exist."
-    fi
-else
-    echo "visualize_embeddings is false. Skipping the visualize_embeddings step."
-fi
+        # Vectorize walks
+        MODEL="${modelDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.model"
+        EMBEDDINGS="${embeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.embeddings"
+        EDGE_EMBEDDINGS="${edgeEmbeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.edge_embeddings"
+
+        # Check if model files do not exist
+        if [ "$embed_nodes" = true ]; then
+            echo "embed_nodes is true. Checking for model files..."
+            if [ ! -f "$MODEL" ] || [ ! -f "$EMBEDDINGS" ] || [ ! -f "$EDGE_EMBEDDINGS" ]; then
+                echo "Model files do not exist. Running the vectorize_embed_nodes script."
+                python3 workflow/scripts/vectorize_embed_nodes.py \
+                "$WALKS_VECTORIZED" "$MODEL" "$EMBEDDINGS" "$EDGE_EMBEDDINGS" \
+                "$dimensions" "$window" "$min_count" "$sg"
+            else
+                echo "Model files already exist."
+            fi
+        else
+            echo "embed_nodes is false. Skipping the embed_nodes step."
+        fi
+
+        # Check for visualization
+        PLOT_TITLE="${GRAPH_ID}: walk length ${walk_length}, ${n_walks} walks, p=${p}, q=${q}"
+        PLOT="${plotsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_embeddingPlot.png"
+
+        if [ "$visualize_embeddings" = true ]; then
+            echo "visualize_embeddings is true. Checking for plot file..."
+            if [ ! -f "$PLOT" ]; then
+                echo "Plot files do not exist. Running the visualize_embeddings script."
+                python3 workflow/scripts/visualize_embeddings.py \
+                "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" \
+                "$perplexity" "$n_iter" "$n_components" "$random_state"
+            else
+                echo "Plot files already exist."
+            fi
+        else
+            echo "visualize_embeddings is false. Skipping the visualize_embeddings step."
+        fi
+
+      done
+    done
+  done
+done
