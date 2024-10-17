@@ -2,10 +2,8 @@ import re
 import json
 import sys
 
-GFA_F = "copan_0.gfa"
-NODE_INFO_DICT = GFA_F.replace(".gfa", "_links.json")
-GFA_F = sys.argv[0]
-NODE_INFO_DICT = sys.argv[1]
+GFA_F = sys.argv[1]
+NODE_INFO_DICT = sys.argv[2]
 
 def main():
     n_seg = 0
