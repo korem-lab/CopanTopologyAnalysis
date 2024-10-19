@@ -1,9 +1,9 @@
 #!/bin/bash
 #
 #SBATCH --job-name=get_links
-#SBATCH --output=/workflow/out/job_out/job_output_%j.txt  # Standard output
-#SBATCH --error=/workflow/out/job_out/job_error_%j.txt    # Standard error
-#SBATCH --time=20:00:00
+#SBATCH --output=workflow/out/job_out/job_output_%j.txt  # Standard output
+#SBATCH --error=workflow/out/job_out/job_error_%j.txt    # Standard error
+#SBATCH --time=48:00:00
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=50G
 #SBATCH --account pmg
@@ -57,8 +57,8 @@ for walk_length in "${walk_lengths[@]}"; do
 
         # Submit each combination as a separate job
         sbatch --job-name="copan_w${walk_length}_n${n_walks}_p${p}_q${q}" \
-       --output="/workflow/out/job_out/w${walk_length}_n${n_walks}_p${p}_q${q}_output_%j.txt" \
-       --error="/workflow/out/job_out/w${walk_length}_n${n_walks}_p${p}_q${q}_error_%j.txt" \
+       --output="workflow/out/job_out/w${walk_length}_n${n_walks}_p${p}_q${q}_output_%j.txt" \
+       --error="workflow/out/job_out/w${walk_length}_n${n_walks}_p${p}_q${q}_error_%j.txt" \
        --export=ALL,GRAPH_ID=$GRAPH_ID,walk_length=$walk_length,n_walks=$n_walks,p=$p,q=$q,get_links=$get_links,generate_walks=$generate_walks,embed_nodes=$embed_nodes,visualize_embeddings=$visualize_embeddings <<'EOF'
 
 #!/bin/bash
