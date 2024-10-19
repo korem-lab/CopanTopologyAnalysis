@@ -9,7 +9,7 @@
 #SBATCH --account pmg
 
 # Load the Python module
-module load python3
+# module load python3
 
 # Load configuration
 source config/config.cfg
