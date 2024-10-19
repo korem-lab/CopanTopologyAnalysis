@@ -61,7 +61,7 @@ for walk_length in "${walk_lengths[@]}"; do
                        --error="workflow/out/job_out/w${walk_length}_n${n_walks}_p${p}_q${q}_error_%j.txt" \
                        --export=ALL,GRAPH_ID=$GRAPH_ID,walk_length=$walk_length,n_walks=$n_walks,p=$p,q=$q,get_links=$get_links,generate_walks=$generate_walks,embed_nodes=$embed_nodes,visualize_embeddings=$visualize_embeddings <<EOF
 #!/bin/bash
-#SBATCH --time=15:00:00
+#SBATCH --time=00:10:00
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=10G
 #SBATCH --account pmg
@@ -86,41 +86,50 @@ LINKS="${linksDir}/${GRAPH_ID}_links.json"
 WALKS_ORIENTED="${walkDictsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_oriented.json"
 WALKS_VECTORIZED="${walkListsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_vectorized.txt"
 
-# Generate walks step
-if [ "$generate_walks" = true ]; then
-    if [ ! -f "$WALKS_ORIENTED" ] || [ ! -f "$WALKS_VECTORIZED" ]; then
-         echo python3 workflow/scripts/generate_walks.py "$LINKS" \
+echo $LINKS
+echo python3 workflow/scripts/generate_walks.py "$LINKS" \
         "$walk_length" "$n_walks" "$p" "$q" "$seed" \
         "$WALKS_ORIENTED" "$WALKS_VECTORIZED"
-    fi
-fi
+python3 workflow/scripts/generate_walks.py "$LINKS" \
+        "$walk_length" "$n_walks" "$p" "$q" "$seed" \
+        "$WALKS_ORIENTED" "$WALKS_VECTORIZED"
+EOF 
 
-# Vectorize walks
-MODEL="${modelDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.model"
-EMBEDDINGS="${embeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.embeddings"
-EDGE_EMBEDDINGS="${edgeEmbeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.edge_embeddings"
+# # Generate walks step
+# if [ "$generate_walks" = true ]; then
+#     if [ ! -f "$WALKS_ORIENTED" ] || [ ! -f "$WALKS_VECTORIZED" ]; then
+#         python3 workflow/scripts/generate_walks.py "$LINKS" \
+#         "$walk_length" "$n_walks" "$p" "$q" "$seed" \
+#         "$WALKS_ORIENTED" "$WALKS_VECTORIZED"
+#     fi
+# fi
 
-if [ "$embed_nodes" = true ]; then
-    if [ ! -f "$MODEL" ] || [ ! -f "$EMBEDDINGS" ] || [ ! -f "$EDGE_EMBEDDINGS" ]; then
-        echo python3 workflow/scripts/vectorize_embed_nodes.py \
-        "$WALKS_VECTORIZED" "$MODEL" "$EMBEDDINGS" "$EDGE_EMBEDDINGS" \
-        "$dimensions" "$window" "$min_count" "$sg"
-    fi
-fi
+# # Vectorize walks
+# MODEL="${modelDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.model"
+# EMBEDDINGS="${embeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.embeddings"
+# EDGE_EMBEDDINGS="${edgeEmbeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks.edge_embeddings"
 
-# Check for visualization
-PLOT_TITLE="${GRAPH_ID}: walk length ${walk_length}, ${n_walks} walks, p=${p}, q=${q}"
-PLOT="${plotsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_embeddingPlot.png"
+# if [ "$embed_nodes" = true ]; then
+#     if [ ! -f "$MODEL" ] || [ ! -f "$EMBEDDINGS" ] || [ ! -f "$EDGE_EMBEDDINGS" ]; then
+#         echo python3 workflow/scripts/vectorize_embed_nodes.py \
+#         "$WALKS_VECTORIZED" "$MODEL" "$EMBEDDINGS" "$EDGE_EMBEDDINGS" \
+#         "$dimensions" "$window" "$min_count" "$sg"
+#     fi
+# fi
 
-if [ "$visualize_embeddings" = true ]; then
-    if [ ! -f "$PLOT" ]; then
-        echo python3 workflow/scripts/visualize_embeddings.py \
-        "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" \
-        "$perplexity" "$n_iter" "$n_components" "$random_state"
-    fi
-fi
-EOF
-            done
-        done
-    done
-done
+# # Check for visualization
+# PLOT_TITLE="${GRAPH_ID}: walk length ${walk_length}, ${n_walks} walks, p=${p}, q=${q}"
+# PLOT="${plotsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_embeddingPlot.png"
+
+# if [ "$visualize_embeddings" = true ]; then
+#     if [ ! -f "$PLOT" ]; then
+#         echo python3 workflow/scripts/visualize_embeddings.py \
+#         "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" \
+#         "$perplexity" "$n_iter" "$n_components" "$random_state"
+#     fi
+# fi
+# EOF
+#             done
+#         done
+#     done
+# done
