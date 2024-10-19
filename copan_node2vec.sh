@@ -3,9 +3,9 @@
 #SBATCH --job-name=copan_walks
 #SBATCH --output=/workflow/out/job_out/job_output_%j.txt  # Standard output
 #SBATCH --error=/workflow/out/job_out/job_error_%j.txt    # Standard error
-#SBATCH --time=00:10:00
+#SBATCH --time=01:00:00
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=200G
+#SBATCH --mem=10G
 #SBATCH --account pmg
 
 # Load the Python module
