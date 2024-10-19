@@ -111,7 +111,7 @@ EDGE_EMBEDDINGS="${edgeEmbeddingsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${
 
 if [ "$embed_nodes" = true ]; then
     if [ ! -f "$MODEL" ] || [ ! -f "$EMBEDDINGS" ] || [ ! -f "$EDGE_EMBEDDINGS" ]; then
-        echo python3 workflow/scripts/vectorize_embed_nodes.py \
+        python3 workflow/scripts/vectorize_embed_nodes.py \
         "$WALKS_VECTORIZED" "$MODEL" "$EMBEDDINGS" "$EDGE_EMBEDDINGS" \
         "$dimensions" "$window" "$min_count" "$sg"
     fi
@@ -123,7 +123,7 @@ PLOT="${plotsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_embeddingPl
 
 if [ "$visualize_embeddings" = true ]; then
     if [ ! -f "$PLOT" ]; then
-        echo python3 workflow/scripts/visualize_embeddings.py \
+        python3 workflow/scripts/visualize_embeddings.py \
         "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" \
         "$perplexity" "$n_iter" "$n_components" "$random_state"
     fi
