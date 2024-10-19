@@ -11,6 +11,10 @@
 # Load the Python module
 module load python3
 
+# Activate the conda environment
+source /burg/pmg/users/korem_lab/miniforge3/etc/profile.d/conda.sh  # Ensures conda is available in the script
+conda activate word2vec_env
+
 # Load configuration
 source config/config.cfg
 
@@ -21,7 +25,7 @@ echo "input graph: " $GRAPH_ID
 get_links=true
 generate_walks=true
 embed_nodes=true
-visualize_embeddings=false
+visualize_embeddings=true
 
 # Get graph links
 INPUT_GRAPH="${graphDir}/${GRAPH_ID}.gfa"
