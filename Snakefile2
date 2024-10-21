@@ -48,25 +48,25 @@ rule all:
                walk_length=WALK_LENGTHS,
                n_walks=N_WALKS,
                p=P_VALUES,
-               q=Q_VALUES)
+               q=Q_VALUES),
 
-        # plotting embeddign with t-SNE
-        # expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_{perplexity}perp{n_iter}iter_embeddingPlot.png"),
-        #        graph_id=GRAPH_IDS,
-        #        walk_length=WALK_LENGTHS,
-        #        n_walks=N_WALKS,
-        #        p=P_VALUES,
-        #        q=Q_VALUES,
-        #        perplexity=PERPLEXITIES,
-        #        n_iter=N_ITERS),
-        # expand(join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_{perplexity}perp{n_iter}iter_clusters.json"),
-        #        graph_id=GRAPH_IDS,
-        #        walk_length=WALK_LENGTHS,
-        #        n_walks=N_WALKS,
-        #        p=P_VALUES,
-        #        q=Q_VALUES,
-        #        perplexity=PERPLEXITIES,
-        #        n_iter=N_ITERS)
+       #  plotting embedding with t-SNE
+        expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_{perplexity}perp{n_iter}iter_embeddingPlot.png"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES,
+               perplexity=PERPLEXITIES,
+               n_iter=N_ITERS),
+        expand(join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_{perplexity}perp{n_iter}iter_clusters.json"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES,
+               perplexity=PERPLEXITIES,
+               n_iter=N_ITERS)
 
 include:
     "workflow/rules/copan_node2vec2.smk"
