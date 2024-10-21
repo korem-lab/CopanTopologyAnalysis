@@ -3,7 +3,7 @@
 #SBATCH --job-name=copanmake
 #SBATCH --output=workflow/out/job_out/copanmake_%j.out  # Standard output
 #SBATCH --error=workflow/out/job_out/copanmake_%j.err    # Standard error
-#SBATCH --time=01:00:00
+#SBATCH --time=48:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=24
 #SBATCH --mem=10G
