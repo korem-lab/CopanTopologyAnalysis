@@ -61,7 +61,7 @@ for walk_length in "${walk_lengths[@]}"; do
                        --error="workflow/out/job_out/w${walk_length}_n${n_walks}_p${p}_q${q}_error_%j.txt" \
                        --export=ALL,GRAPH_ID=$GRAPH_ID,walk_length=$walk_length,n_walks=$n_walks,p=$p,q=$q,get_links=$get_links,generate_walks=$generate_walks,embed_nodes=$embed_nodes,visualize_embeddings=$visualize_embeddings <<EOF
 #!/bin/bash
-#SBATCH --time=00:0:00
+#SBATCH --time=00:10:00
 #SBATCH --cpus-per-task=1
 #SBATCH --mem=10G
 #SBATCH --account pmg

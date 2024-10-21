@@ -101,13 +101,14 @@ for walk_length in "${walk_lengths[@]}"; do
         # Check for visualization
         PLOT_TITLE="${GRAPH_ID}: walk length ${walk_length}, ${n_walks} walks, p=${p}, q=${q}"
         PLOT="${plotsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_embeddingPlot.png"
+        CLUSTER_DICT="${clustersDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_clusters.json"
 
         if [ "$visualize_embeddings" = true ]; then
             echo "visualize_embeddings is true. Checking for plot file..."
             if [ ! -f "$PLOT" ]; then
                 echo "Plot files do not exist. Running the visualize_embeddings script."
                 python3 workflow/scripts/visualize_embeddings.py \
-                "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" \
+                "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" "$CLUSTER_DICT" \
                 "$perplexity" "$n_iter" "$n_components" "$random_state"
             else
                 echo "Plot files already exist."
