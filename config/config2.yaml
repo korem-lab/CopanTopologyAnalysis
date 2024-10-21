@@ -15,10 +15,10 @@ clustersDir: "workflow/out/cluster_dicts"
 graph_id: ["copan_0"]
 
 # Walk params
-walk_lengths: [30]  # list of walk lengths
-n_walks: [50]      # list of number of walks to perform per node
-p: [1]             # list of p values
-q: [1]             # list of q values
+walk_lengths: [30, 80]  # list of walk lengths
+n_walks: [10, 50]      # list of number of walks to perform per node
+p: [1, 0.5, 2]             # list of p values
+q: [1, 0.5, 2]             # list of q values
 seed: 1
 
 # Embedding params
@@ -28,7 +28,7 @@ min_count: 5
 sg: 0
 
 # t-SNE params
-perplexities: [5]  # list of perplexity values
-n_iters: [300]     # list of n_iter values
+perplexities: [5, 10, 30, 50, 100]  # list of perplexity values
+n_iters: [500, 1000, 3000, 5000]     # list of n_iter values
 n_components: 2
 random_state: 32
