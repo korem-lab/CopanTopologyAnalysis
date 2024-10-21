@@ -105,7 +105,7 @@ for walk_length in "${walk_lengths[@]}"; do
 
         if [ "$visualize_embeddings" = true ]; then
             echo "visualize_embeddings is true. Checking for plot file..."
-            if [ ! -f "$PLOT" ]; then
+            if [ ! -f "$PLOT" ] || [ ! -f "$CLUSTER_DICT"]; then
                 echo "Plot files do not exist. Running the visualize_embeddings script."
                 python3 workflow/scripts/visualize_embeddings.py \
                 "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" "$CLUSTER_DICT" \
