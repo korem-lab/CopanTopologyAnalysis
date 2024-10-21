@@ -27,7 +27,10 @@ echo "q: $q"
 
 echo $WALKS_ORIENTED
 echo $WALKS_VECTORIZED
+<<<<<<< HEAD
 
+=======
+>>>>>>> addc90a (bash script edits)
 # Define parameter values for looping
 p_values=(0.5)
 q_values=(0.5)
@@ -47,7 +50,13 @@ for walk_length in "${walk_lengths[@]}"; do
                     if [ ! -f "$WALKS_ORIENTED" ] || [ ! -f "$WALKS_VECTORIZED" ]; then
                         echo hi
                         echo "path $WALKS_ORIENTED"
-                        echo "path $WALKS_VECTORIZED"
+		echo hi
+		echo $WALKS_ORIENTED
+		echo $WALKS_VECTORIZED
+                if [ "$generate_walks" = true ]; then
+                    if [ ! -f "$WALKS_ORIENTED" ] || [ ! -f "$WALKS_VECTORIZED" ]; then
+                        echo hi again
+			echo "path $WALKS_ORIENTED"
                     fi 
                 fi 
             done 

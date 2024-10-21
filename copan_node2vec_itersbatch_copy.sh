@@ -85,12 +85,26 @@ INPUT_GRAPH="${graphDir}/${GRAPH_ID}.gfa"
 LINKS="${linksDir}/${GRAPH_ID}_links.json"
 WALKS_ORIENTED="${walkDictsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_oriented.json"
 WALKS_VECTORIZED="${walkListsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_vectorized.txt"
-
+echo $WALKS_ORIENTED
+echo $WALKS_VECTORIZED
+echo "walkDictsDir: $walkDictsDir"
+echo "walkListsDir: $walkListsDir"
+echo "GRAPH_ID: $GRAPH_ID"
+echo "walk_length: $walk_length"
+echo "n_walks: $n_walks"
+echo "p: $p"
+echo "q: $q"
+WALKS_ORIENTED="${walkDictsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_oriented.json"
+WALKS_VECTORIZED="${walkListsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_walks_vectorized.txt"
+echo $WALKS_ORIENTED
+echo $WALKS_VECTORIZED
 # Generate walks step
 if [ "$generate_walks" = true ]; then
     if [ ! -f "$WALKS_ORIENTED" ] || [ ! -f "$WALKS_VECTORIZED" ]; then
 
         echo $LINKS
+	echo $WALKS_ORIENTED
+	echo $WALKS_VECTORIZED
 
         echo python3 workflow/scripts/generate_walks.py "$LINKS" \
         "$walk_length" "$n_walks" "$p" "$q" "$seed" \
