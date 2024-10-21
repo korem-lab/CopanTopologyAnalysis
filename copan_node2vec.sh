@@ -51,6 +51,10 @@ q_values=(0.5 2.0 1.0)
 walk_lengths=(30 80)
 n_walks_values=(10 50)
 
+# Define ranges for perplexity and n_iter
+perplexity_values=(5 10 30 50 100)  # Adjust as needed
+n_iter_values=(500 1000 3000 5000)  # Adjust as needed
+
 # Loop over the combinations of parameters
 for walk_length in "${walk_lengths[@]}"; do
   for n_walks in "${n_walks_values[@]}"; do
@@ -98,26 +102,32 @@ for walk_length in "${walk_lengths[@]}"; do
             echo "embed_nodes is false. Skipping the embed_nodes step."
         fi
 
-        # Check for visualization
-        PLOT_TITLE="${GRAPH_ID}: walk length ${walk_length}, ${n_walks} walks, p=${p}, q=${q}"
-        PLOT="${plotsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_embeddingPlot.png"
-        CLUSTER_DICT="${clustersDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_clusters.json"
+        # Loop over perplexity and n_iter values
+        for perplexity in "${perplexity_values[@]}"; do
+          for n_iter in "${n_iter_values[@]}"; do
 
-        if [ "$visualize_embeddings" = true ]; then
-            echo "visualize_embeddings is true. Checking for plot file..."
-            if [ ! -f "$PLOT" ] || [ ! -f "$CLUSTER_DICT"]; then
-                echo "Plot files do not exist. Running the visualize_embeddings script."
-                python3 workflow/scripts/visualize_embeddings.py \
-                "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" "$CLUSTER_DICT" \
-                "$perplexity" "$n_iter" "$n_components" "$random_state"
+            PLOT_TITLE="${GRAPH_ID}: walk length ${walk_length}, ${n_walks} walks, p=${p}, q=${q}, perplexity=${perplexity}, iterations=${n_iter}"
+            PLOT="${plotsDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_${perplexity}perp_${n_iter}iter_embeddingPlot.png"
+            CLUSTER_DICT="${clustersDir}/${GRAPH_ID}_${walk_length}Lw${n_walks}Nw${p}p${q}q_${perplexity}perp_${n_iter}iter_clusters.json"
+
+            if [ "$visualize_embeddings" = true ]; then
+                echo "visualize_embeddings is true. Checking for plot file..."
+                if [ ! -f "$PLOT" ] || [ ! -f "$CLUSTER_DICT" ]; then
+                    echo "Plot files do not exist. Running the visualize_embeddings script."
+                    python3 workflow/scripts/visualize_embeddings.py \
+                    "$MODEL" "$EMBEDDINGS" "$LINKS" "$PLOT" "$PLOT_TITLE" "$CLUSTER_DICT" \
+                    "$perplexity" "$n_iter" "$n_components" "$random_state"
+                else
+                    echo "Plot files already exist."
+                fi
             else
-                echo "Plot files already exist."
+                echo "visualize_embeddings is false. Skipping the visualize_embeddings step."
             fi
-        else
-            echo "visualize_embeddings is false. Skipping the visualize_embeddings step."
-        fi
+          done
+        done
 
       done
     done
   done
 done
+
