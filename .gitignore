@@ -11,4 +11,4 @@ __pycache__/
 /config/copangraphs/*
 /workflow/out/*
 workflow/out/link_dicts/copan_0_links.json
-
+.snakemake/

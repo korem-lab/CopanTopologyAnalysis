@@ -1,0 +1,66 @@
+from os.path import join
+
+configfile: "config/config2.yaml"
+
+# Define variables for multiple values
+GRAPH_IDS = config["graph_id"]
+WALK_LENGTHS = config["walk_lengths"]
+N_WALKS = config["n_walks"]
+P_VALUES = config["p"]
+Q_VALUES = config["q"]
+PERPLEXITIES = config["perplexities"]
+N_ITERS = config["n_iters"]
+
+rule all:
+    input:
+        expand(join(config["graphDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS),
+        expand(join(config["linksDir"], "{graph_id}_links.json"), graph_id=GRAPH_IDS),
+        expand(join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES),
+        expand(join(config["walkDictsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES),
+        expand(join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks.model"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES),
+        expand(join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks.embeddings"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES),
+        expand(join(config["edgeEmbeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks.edge_embeddings"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES),
+        expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_{perplexity}perp{n_iter}iter_embeddingPlot.png"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES,
+               perplexity=PERPLEXITIES,
+               n_iter=N_ITERS),
+        expand(join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_{perplexity}perp{n_iter}iter_clusters.json"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES,
+               perplexity=PERPLEXITIES,
+               n_iter=N_ITERS)
+
+include:
+    "workflow/rules/copan_node2vec2.smk"
