@@ -8,7 +8,7 @@ __pycache__/
 # Ignore virtual environment directories
 .venv/
 
-/config/copangraphs/*
-/workflow/out/*
-workflow/out/link_dicts/copan_0_links.json
+config/copangraphs/
+workflow/out/
 .snakemake/
+.DS_Store
