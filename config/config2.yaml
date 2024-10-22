@@ -17,8 +17,8 @@ graph_id: ["copan_0"]
 # Walk params
 walk_lengths: [30, 80]  # list of walk lengths
 n_walks: [10, 50]      # list of number of walks to perform per node
-p: [1, 0.5, 2]             # list of p values
-q: [1, 0.5, 2]             # list of q values
+p: [1.0, 0.5, 2.0]             # list of p values
+q: [1.0, 0.5, 2.0]             # list of q values
 seed: 1
 
 # Embedding params
