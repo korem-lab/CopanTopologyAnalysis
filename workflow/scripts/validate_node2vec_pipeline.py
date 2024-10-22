@@ -11,7 +11,7 @@ LINKS_F = "workflow/out/link_dicts/copan_0_links.json"
 LINKS_CHECK_F = "workflow/out/validation/nodes_not_in_links.txt"
 
 WALKS_ORIENTED_F = "workflow/out/walk_dicts_oriented/copan_0_30Lw10Nw1.0p1.0q_walks_oriented.json"
-WALKS_VECTORIZED_F = "workflow/out/walk_dicts_vectorized/copan_0_30Lw10Nw1.0p1.0q_walks_vectorized.txt"
+WALKS_VECTORIZED_F = "workflow/out/walk_lists_vectorized/copan_0_30Lw10Nw1.0p1.0q_walks_vectorized.txt"
 WALKS_ORIENTED_CHECK_F = "workflow/out/validation/nodes_not_in_walkDict.txt"
 WALKS_VECTORIZED_CHECK_F = "workflow/out/validation/nodes_not_in_walkList.txt"
 
