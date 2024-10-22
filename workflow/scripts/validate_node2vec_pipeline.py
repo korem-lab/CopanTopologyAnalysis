@@ -84,7 +84,7 @@ def check_walks(nodes, walks_oriented_f, walks_vectorized_f, nodes_not_in_dict_f
         walks_dict = json.load(f)
     
     unoriented_nodes = []
-    with open(walks_vectorized_f):
+    with open(walks_vectorized_f, 'r') as f:
         for line in f:
             line_nodes = line.strip().split(',')
             unoriented_nodes.extend(line_nodes)
