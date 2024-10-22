@@ -7,6 +7,7 @@ import matplotlib.cm as cm
 import json
 import sys
 
+
 MODEL_F = sys.argv[1]
 EMBEDDING_F = sys.argv[2]
 WALKS_DICT_F = sys.argv[3]
@@ -35,7 +36,6 @@ def main():
     node_clusters = []
     cluster_dict = {}
 
-    # for node in walks_dict.keys():
     for node in embedding_kv.key_to_index.keys():
         embeddings = []
         nodes = []
