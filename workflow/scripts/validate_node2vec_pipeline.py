@@ -5,7 +5,7 @@ import json
 from gensim.models import Word2Vec
 from gensim.models import KeyedVectors
 
-GRAPH_F = "workflow/out/copan_0.gfa"
+GRAPH_F = "workflow/config/copangraphs/copan_0.gfa"
 
 LINKS_F = "workflow/out/link_dicts/copan_0_links.json"
 LINKS_CHECK_F = "workflow/out/validation/nodes_not_in_links.txt"
