@@ -71,5 +71,5 @@ rule visualizeTSNE:
         {input.model} {input.embeddings} {input.links} \
         {output.plot} {output.cluster_dict} \
         {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
-        {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.k}
+        {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions}
         """
