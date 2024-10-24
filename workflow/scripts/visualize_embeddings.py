@@ -25,6 +25,7 @@ PERPLEXITY = int(sys.argv[11])
 N_ITER = int(sys.argv[12])   
 N_COMPONENTS = int(sys.argv[13])  
 RAND_STATE = int(sys.argv[14])  
+DIMENSION = str(sys.argv[15])
 
 
 def main():
@@ -51,19 +52,18 @@ def main():
         json.dump(cluster_dict, f, indent=4)
     
     # t-SNE visualization
-    embeddings = np.array(embedding_clusters)
-    n, m, k = embeddings.shape
-    tsne_model_en_2d = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
-    embeddings_en_2d = np.array(tsne_model_en_2d.fit_transform(embeddings.reshape(n * m, k))).reshape(n, m, 2)
+    # embeddings = np.array(embedding_clusters)
+    # n, m, k = embeddings.shape
+    # tsne_model_en_2d = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
+    # embeddings_en_2d = np.array(tsne_model_en_2d.fit_transform(embeddings.reshape(n * m, k))).reshape(n, m, 2)
 
-    tsne_plot_similar_words(nodes, embeddings_en_2d, node_clusters, 0.7,
-                        EMBEDDING_PLOT)
+    # tsne_plot_similar_words(nodes, embeddings_en_2d, node_clusters, 0.7, EMBEDDING_PLOT)
     
 
 def tsne_plot_similar_words(labels, embeddings2d, word_clusters, a, filename):
     # write plot title
     title = GRAPH_ID + \
-        ": walk length=" + str(WALK_LENGTH) + ", " + str(N_WALKS) + " walks, p=" + str(P_VAL) + ", q=" + str(Q_VAL) + \
+        ": walk length=" + str(WALK_LENGTH) + ", " + str(N_WALKS) + " walks, p=" + str(P_VAL) + ", q=" + str(Q_VAL) + ", k=" + str(DIMENSION) + \
             ", perplexity=" + str(PERPLEXITY) + ", iterations=" + str(N_ITER)
 
     plt.figure(figsize=(16, 9))

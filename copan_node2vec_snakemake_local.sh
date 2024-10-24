@@ -2,4 +2,4 @@
 
 conda activate snakemake
 
-snakemake -c 2 -s Snakefile2 --rerun-incomplete
+snakemake -c 2 --rerun-incomplete

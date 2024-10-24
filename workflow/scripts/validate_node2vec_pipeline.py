@@ -115,7 +115,7 @@ def check_embeddings(nodes, walk_dict_nodes, walk_list_nodes, embeddings_f, mode
     check_two_lists(walk_list_nodes, embedding_nodes, emb_check_f + "_walkListNodes.txt")
 
     return model_nodes, embedding_nodes
-
+    
 
 if __name__ == '__main__':
     main()

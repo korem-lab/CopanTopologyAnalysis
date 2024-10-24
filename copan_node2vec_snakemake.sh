@@ -15,4 +15,4 @@ conda activate snakemake
 cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 
 snakemake --unlock
-snakemake -s Snakefile2 -c 20 -j 20 --rerun-incomplete --keep-going
+snakemake -c 20 -j 20 --rerun-incomplete --keep-going

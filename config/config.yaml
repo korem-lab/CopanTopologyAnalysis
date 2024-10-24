@@ -1,4 +1,4 @@
-# Configuration for the Copan Node2Vec pipeline
+# config.yaml
 
 # Directories
 graphDir: "config/copangraphs"
@@ -11,21 +11,24 @@ edgeEmbeddingsDir: "workflow/out/vectorization_model/edge_embeddings"
 plotsDir: "workflow/out/plots"
 clustersDir: "workflow/out/cluster_dicts"
 
-# Walk parameters
-walk_length: 30  # number of nodes in walk (doesn't include starting node)
-n_walks: 50     # number of walks to perform per node
-p: 1
-q: 1
+# Graph ID
+graph_id: ["copan_0"]
+
+# Walk params
+walk_lengths: [30, 80]  # list of walk lengths
+n_walks: [10, 50]      # list of number of walks to perform per node
+p: [1.0, 0.5, 2.0, 0]             # list of p values
+q: [1.0, 0.5, 2.0, 0]             # list of q values
 seed: 1
 
-# Embedding parameters
-dimensions: 128  # default embedding dimensions in Node2Vec; equivalent to vector size in Word2Vec
+# Embedding params
+dimensions: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150]
 window: 5
 min_count: 5
 sg: 0
 
-# t-SNE parameters
-perplexity: 5
-n_iter: 300
+# t-SNE params
+perplexities: [5, 10, 30, 50, 100]  # list of perplexity values
+n_iters: [500, 1000, 3000, 5000]     # list of n_iter values
 n_components: 2
 random_state: 32
