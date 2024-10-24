@@ -63,8 +63,8 @@ def main():
 def tsne_plot_similar_words(labels, embeddings2d, word_clusters, a, filename):
     # write plot title
     title = GRAPH_ID + \
-        ": walk length=" + WALK_LENGTH + ", " + N_WALKS + " walks, p=" + P_VAL + ", q=" + Q_VAL + \
-            ", perplexity=" + PERPLEXITY + ", iterations=" + N_ITER
+        ": walk length=" + str(WALK_LENGTH) + ", " + str(N_WALKS) + " walks, p=" + str(P_VAL) + ", q=" + str(Q_VAL) + \
+            ", perplexity=" + str(PERPLEXITY) + ", iterations=" + str(N_ITER)
 
     plt.figure(figsize=(16, 9))
     colors = cm.rainbow(np.linspace(0, 1, len(labels)))
