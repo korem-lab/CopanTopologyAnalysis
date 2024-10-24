@@ -35,6 +35,7 @@ rule embed:
         embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings"),
         edge_embeddings=join(config["edgeEmbeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.edge_embeddings")
     params:
+        dimensions="{k}",
         window=config["window"], 
         min_count=config["min_count"], 
         sg=config["sg"]
