@@ -51,7 +51,7 @@ rule getClusters:
         model=join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
         embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
     output:
-        cluster_dict=join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_clusters.json")
+        cluster_dict=join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_clusters.json")
     shell:
         """
         python3 workflow/scripts/cluster_dict.py {input.model} {input.embeddings} {output.cluster_dict}
@@ -83,4 +83,12 @@ rule visualizeTSNE:
         {output.plot} \
         {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
         {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions}
+        """
+
+rule getPairwiseDistances:
+    input: join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
+    output: join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
+    shell:
+        """
+        python3 workflow/scripts/pairwise_distances.py {input} {output}
         """
