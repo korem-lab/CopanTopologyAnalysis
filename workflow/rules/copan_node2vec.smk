@@ -53,9 +53,9 @@ rule getClusters:
     output:
         cluster_dict=join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_clusters.json")
     shell:
-    """
-    python3 workflow/scripts/cluster_dict.py {input.model} {input.embeddings} {output.cluster_dict}
-    """
+        """
+        python3 workflow/scripts/cluster_dict.py {input.model} {input.embeddings} {output.cluster_dict}
+        """
 
 
 rule visualizeTSNE:
