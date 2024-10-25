@@ -90,5 +90,5 @@ rule getPairwiseDistances:
     output: join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
     shell:
         """
-        python3 workflow/scripts/pairwise_distances.py {input} {output}
+        python3 workflow/scripts/pairwise_distance.py {input} {output}
         """
