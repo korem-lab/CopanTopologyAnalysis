@@ -63,15 +63,15 @@ rule all:
        #         q=Q_VALUES,
        #         perplexity=PERPLEXITIES,
        #         n_iter=N_ITERS),
-       #  expand(join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_clusters.json"),
-       #         graph_id=GRAPH_IDS,
-       #         walk_length=WALK_LENGTHS,
-       #         n_walks=N_WALKS,
-       #         p=P_VALUES,
-       #         q=Q_VALUES,
-       #         perplexity=PERPLEXITIES,
-       #         n_iter=N_ITERS, 
-       #         k=DIMENSIONS)
+        expand(join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_clusters.json"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES,
+               perplexity=PERPLEXITIES,
+               n_iter=N_ITERS, 
+               k=DIMENSIONS)
 
 include:
     "workflow/rules/copan_node2vec.smk"
