@@ -4,7 +4,6 @@ from sklearn.manifold import TSNE
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
-import json
 import sys
 
 
@@ -13,19 +12,18 @@ EMBEDDING_F = sys.argv[2]
 WALKS_DICT_F = sys.argv[3]
 
 EMBEDDING_PLOT = sys.argv[4]
-CLUSTER_DICT_F = sys.argv[5]  
 
-GRAPH_ID = str(sys.argv[6])   
-WALK_LENGTH = str(sys.argv[7])  
-N_WALKS = str(sys.argv[8])      
-P_VAL = str(sys.argv[9])        
-Q_VAL = str(sys.argv[10])       
+GRAPH_ID = str(sys.argv[5])   
+WALK_LENGTH = str(sys.argv[6])  
+N_WALKS = str(sys.argv[7])      
+P_VAL = str(sys.argv[8])        
+Q_VAL = str(sys.argv[9])       
 
-PERPLEXITY = int(sys.argv[11]) 
-N_ITER = int(sys.argv[12])   
-N_COMPONENTS = int(sys.argv[13])  
-RAND_STATE = int(sys.argv[14])  
-DIMENSION = str(sys.argv[15])
+PERPLEXITY = int(sys.argv[10]) 
+N_ITER = int(sys.argv[11])   
+N_COMPONENTS = int(sys.argv[12])  
+RAND_STATE = int(sys.argv[13])  
+DIMENSION = str(sys.argv[14])
 
 
 def main():
@@ -35,7 +33,6 @@ def main():
 
     embedding_clusters = []
     node_clusters = []
-    cluster_dict = {}
 
     for node in embedding_kv.key_to_index.keys():
         embeddings = []
@@ -45,19 +42,14 @@ def main():
             embeddings.append(embedding_kv[similar_node])
         embedding_clusters.append(embeddings)
         node_clusters.append(nodes)
-        cluster_dict[node] = nodes
-    
-    # Save node clusters to a JSON file for easy viewing
-    with open(CLUSTER_DICT_F, 'w') as f:
-        json.dump(cluster_dict, f, indent=4)
-    
-    # t-SNE visualization
-    # embeddings = np.array(embedding_clusters)
-    # n, m, k = embeddings.shape
-    # tsne_model_en_2d = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
-    # embeddings_en_2d = np.array(tsne_model_en_2d.fit_transform(embeddings.reshape(n * m, k))).reshape(n, m, 2)
 
-    # tsne_plot_similar_words(nodes, embeddings_en_2d, node_clusters, 0.7, EMBEDDING_PLOT)
+    # t-SNE visualization
+    embeddings = np.array(embedding_clusters)
+    n, m, k = embeddings.shape
+    tsne_model_en_2d = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
+    embeddings_en_2d = np.array(tsne_model_en_2d.fit_transform(embeddings.reshape(n * m, k))).reshape(n, m, 2)
+
+    tsne_plot_similar_words(nodes, embeddings_en_2d, node_clusters, 0.7, EMBEDDING_PLOT)
     
 
 def tsne_plot_similar_words(labels, embeddings2d, word_clusters, a, filename):
