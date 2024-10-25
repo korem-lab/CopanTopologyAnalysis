@@ -10,16 +10,18 @@ GRAPH_F = "config/copangraphs/copan_0.gfa"
 LINKS_F = "workflow/out/link_dicts/copan_0_links.json"
 LINKS_CHECK_F = "workflow/out/validation/nodes_not_in_links.txt"
 
-WALKS_ORIENTED_F = "workflow/out/walk_dicts_oriented/copan_0_30Lw10Nw1.0p1.0q_walks_oriented.json"
-WALKS_VECTORIZED_F = "workflow/out/walk_lists_vectorized/copan_0_30Lw10Nw1.0p1.0q_walks_vectorized.txt"
+WALKS_ORIENTED_F = "workflow/out/walk_dicts_oriented/copan_0_30Lw10Nw1.0p1.0q50k_walks_oriented.json"
+WALKS_VECTORIZED_F = "workflow/out/walk_lists_vectorized/copan_0_30Lw10Nw1.0p1.0q50k_walks_vectorized.txt"
 WALKS_ORIENTED_CHECK_F = "workflow/out/validation/nodes_not_in_walkDict.txt"
 WALKS_VECTORIZED_CHECK_F = "workflow/out/validation/nodes_not_in_walkList.txt"
 
-EMBEDDINGS_F = "workflow/out/vectorization_model/embeddings/copan_0_30Lw10Nw1.0p1.0q_walks.embeddings"
-MODEL_F = "workflow/out/vectorization_model/models/copan_0_30Lw10Nw1.0p1.0q_walks.model"
+EMBEDDINGS_F = "workflow/out/vectorization_model/embeddings/copan_0_30Lw10Nw1.0p1.0q50k_walks.embeddings"
+MODEL_F = "workflow/out/vectorization_model/models/copan_0_30Lw10Nw1.0p1.0q50k_walks.model"
 EMBEDDINGS_CHECK_F = "workflow/out/validation/nodes_not_in_embeddings"
 MODEL_CHECK_F = "workflow/out/validation/nodes_not_in_model"
 
+CLUSTER_F = "workflow/out/cluster_dicts/copan_0_30Lw10Nw1.0p1.0q50k_30perp1000iter_clusters.json"
+CLUSTER_CHECK_F = "workflow/out/validation/nodes_not_in_clusterDict.txt"
 
 
 def main():
@@ -40,6 +42,9 @@ def main():
     emb_nodes = embedding_nodes[1]
     print("Number of nodes in model:" + str(len(set(model_nodes))))
     print("Number of nodes in walks list:" + str(len(set(emb_nodes))))
+
+
+    check_node_clusters(nodes, CLUSTER_F, CLUSTER_CHECK_F)
 
 
 def get_nodes(graph_file):
@@ -115,7 +120,15 @@ def check_embeddings(nodes, walk_dict_nodes, walk_list_nodes, embeddings_f, mode
     check_two_lists(walk_list_nodes, embedding_nodes, emb_check_f + "_walkListNodes.txt")
 
     return model_nodes, embedding_nodes
+
+def check_node_clusters(nodes, cluster_dict_f, cluster_check_f):
+    with open(cluster_dict_f, 'r') as f:
+        cluster_dict = json.load(f)
+
+    cluster_nodes = list(cluster_dict.keys())
     
+    check_two_lists(nodes, cluster_nodes, cluster_check_f)
+
 
 if __name__ == '__main__':
     main()

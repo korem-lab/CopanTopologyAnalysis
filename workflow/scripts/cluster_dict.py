@@ -15,18 +15,12 @@ def main():
 
     embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')
 
-    embedding_clusters = []
-    node_clusters = []
     cluster_dict = {}
 
     for node in embedding_kv.key_to_index.keys():
-        embeddings = []
         nodes = []
         for similar_node, _ in model.wv.most_similar(node, topn=30):
             nodes.append(similar_node)
-            embeddings.append(embedding_kv[similar_node])
-        embedding_clusters.append(embeddings)
-        node_clusters.append(nodes)
         cluster_dict[node] = nodes
     
     # Save node clusters to a JSON file for easy viewing

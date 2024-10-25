@@ -52,7 +52,7 @@ def main():
     tsne_plot_similar_words(nodes, embeddings_en_2d, node_clusters, 0.7, EMBEDDING_PLOT)
     
 
-def tsne_plot_similar_words(labels, embeddings2d, word_clusters, a, filename):
+def tsne_plot_similar_words(labels, embeddings2d, node_clusters, a, filename):
     # write plot title
     title = GRAPH_ID + \
         ": walk length=" + str(WALK_LENGTH) + ", " + str(N_WALKS) + " walks, p=" + str(P_VAL) + ", q=" + str(Q_VAL) + ", k=" + str(DIMENSION) + \
@@ -64,7 +64,7 @@ def tsne_plot_similar_words(labels, embeddings2d, word_clusters, a, filename):
     #     x = embeddings2d[:, 0]
     #     y = embeddings2d[:, 1]
     #     plt.scatter(x, y, c=color, alpha=a, label=label)
-    for embeddings2d, words, color in zip(embeddings2d, word_clusters, colors):
+    for embeddings2d, words, color in zip(embeddings2d, node_clusters, colors):
         x = embeddings2d[:, 0]
         y = embeddings2d[:, 1]
         plt.scatter(x, y, c=color, alpha=a)
