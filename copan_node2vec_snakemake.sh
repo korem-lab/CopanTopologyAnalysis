@@ -3,9 +3,9 @@
 #SBATCH --job-name=copanmake
 #SBATCH --output=workflow/out/job_out/copanmake_%j.out  # Standard output
 #SBATCH --error=workflow/out/job_out/copanmake_%j.err    # Standard error
-#SBATCH --time=05:00:00
+#SBATCH --time=48:00:00
 #SBATCH --nodes=1
-#SBATCH --ntasks-per-node=1
+#SBATCH --ntasks-per-node=2
 #SBATCH --mem=20G
 #SBATCH --account pmg
 
@@ -15,4 +15,4 @@ conda activate snakemake
 cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 
 snakemake --unlock
-snakemake -c 1 -j 1 --rerun-incomplete --keep-going
+snakemake -c 2 -j 2 --rerun-incomplete --keep-going
