@@ -13,3 +13,4 @@ workflow/out/
 .snakemake/
 .DS_Store
 workflow/.DS_Store
+.Rproj.user
