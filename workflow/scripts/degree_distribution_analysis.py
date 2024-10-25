@@ -24,7 +24,13 @@ def main():
         node_j = degree_df['node'].iloc[j]
         degree_i = node_degree_map[node_i]
         degree_j = node_degree_map[node_j]
-        distance_ij = distance_matrix[i, j]
+        
+        # Attempt to access the distance
+        try:
+            distance_ij = distance_matrix_df.loc[node_i, node_j]  # Access distance by label
+        except KeyError as e:
+            print(f"KeyError: {e} for nodes ({node_i}, {node_j})")
+            continue  # Skip this pair if nodes are not found
         
         # Append the information as a row to the data list
         distance_degree_df.append([node_i, degree_i, node_j, degree_j, distance_ij])
