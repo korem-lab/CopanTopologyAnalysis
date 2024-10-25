@@ -28,23 +28,23 @@ def main():
     nodes = get_nodes(GRAPH_F)
     print("Number of nodes:" + str(len(set(nodes))))
 
-    link_nodes = check_links(nodes, LINKS_F, LINKS_CHECK_F)
-    print("Number of nodes in links dict:" + str(len(set(link_nodes))))
+    # link_nodes = check_links(nodes, LINKS_F, LINKS_CHECK_F)
+    # print("Number of nodes in links dict:" + str(len(set(link_nodes))))
 
-    walk_nodes = check_walks(nodes, WALKS_ORIENTED_F, WALKS_VECTORIZED_F, WALKS_ORIENTED_CHECK_F, WALKS_VECTORIZED_CHECK_F)
-    walk_dict_nodes = walk_nodes[0]
-    walk_list_nodes = walk_nodes[1]
-    print("Number of nodes in walks dict:" + str(len(set(walk_dict_nodes))))
-    print("Number of nodes in walks list:" + str(len(set(walk_list_nodes))))
+    # walk_nodes = check_walks(nodes, WALKS_ORIENTED_F, WALKS_VECTORIZED_F, WALKS_ORIENTED_CHECK_F, WALKS_VECTORIZED_CHECK_F)
+    # walk_dict_nodes = walk_nodes[0]
+    # walk_list_nodes = walk_nodes[1]
+    # print("Number of nodes in walks dict:" + str(len(set(walk_dict_nodes))))
+    # print("Number of nodes in walks list:" + str(len(set(walk_list_nodes))))
 
-    embedding_nodes = check_embeddings(nodes, walk_dict_nodes, walk_list_nodes, EMBEDDINGS_F, MODEL_F, EMBEDDINGS_CHECK_F, MODEL_CHECK_F)
-    model_nodes = embedding_nodes[0]
-    emb_nodes = embedding_nodes[1]
-    print("Number of nodes in model:" + str(len(set(model_nodes))))
-    print("Number of nodes in walks list:" + str(len(set(emb_nodes))))
+    # embedding_nodes = check_embeddings(nodes, walk_dict_nodes, walk_list_nodes, EMBEDDINGS_F, MODEL_F, EMBEDDINGS_CHECK_F, MODEL_CHECK_F)
+    # model_nodes = embedding_nodes[0]
+    # emb_nodes = embedding_nodes[1]
+    # print("Number of nodes in model:" + str(len(set(model_nodes))))
+    # print("Number of nodes in walks list:" + str(len(set(emb_nodes))))
 
-
-    check_node_clusters(nodes, CLUSTER_F, CLUSTER_CHECK_F)
+    cluster_nodes = check_node_clusters(nodes, CLUSTER_F, CLUSTER_CHECK_F)
+    print("Number of nodes in clusters dict:" + str(len(set(cluster_nodes))))
 
 
 def get_nodes(graph_file):
@@ -128,6 +128,8 @@ def check_node_clusters(nodes, cluster_dict_f, cluster_check_f):
     cluster_nodes = list(cluster_dict.keys())
     
     check_two_lists(nodes, cluster_nodes, cluster_check_f)
+
+    return cluster_nodes
 
 
 if __name__ == '__main__':
