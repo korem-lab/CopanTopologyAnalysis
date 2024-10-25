@@ -3,7 +3,7 @@
 #SBATCH --job-name=validation
 #SBATCH --output=workflow/out/job_out/validation_%j.out  # Standard output
 #SBATCH --error=workflow/out/job_out/validation_%j.err    # Standard error
-#SBATCH --time=10:00:00
+#SBATCH --time=00:10:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=10G
