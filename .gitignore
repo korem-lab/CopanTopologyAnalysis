@@ -14,3 +14,4 @@ workflow/out/
 .DS_Store
 workflow/.DS_Store
 .Rproj.user
+.R*
