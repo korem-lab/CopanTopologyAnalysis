@@ -8,24 +8,33 @@ DEGREE_F = "workflow/out/node_classification/copan_0_node_degree_classification.
 
 def main():
 
-    distance_matrix_df = pd.read_csv(DISTANCES_F, index_col=0, nrows=10, usecols=[0] + list(range(1, 11)))
+    distance_matrix_df = pd.read_csv(DISTANCES_F, index_col=0, nrows=2, usecols=[0] + list(range(1, 3)))
     degree_df = pd.read_csv(DEGREE_F)
 
-    print(distance_matrix_df)
-    print(distance_matrix_df.index.tolist())
-    # print(degree_df)
+    nodes = distance_matrix_df.index.tolist() # node names, not indeces
 
     # Convert to a NumPy array
     distance_matrix = distance_matrix_df.values
-
-    print(distance_matrix)
-
 
     # Create a dictionary to map nodes to their degrees
     node_degree_map = dict(zip(degree_df['node'], degree_df['degree']))
 
     # # Create only unique pairs (i, j) of nodes and get the degree and distance for each pair
-    # distance_degree_df = []
+    distance_degree_df = []
+
+    # trying to iterate from the distance matrix, not the degree df
+    for i, j in nodes:  # iterate through all node combinations in the list of nodes. i and j are node names, not indeces
+
+        print("i name:" + str(i))
+        print("j name:" + str(j))
+
+        degree_i = node_degree_map[i]
+        degree_j = node_degree_map[j]
+
+        print("i degree:" + str(degree_i))
+        print("j degree:" + str(degree_j))
+
+
     # for i, j in combinations(range(len(degree_df)), 2):  # Only (i, j) where i < j
 
     #     print("i index:" + str(i))

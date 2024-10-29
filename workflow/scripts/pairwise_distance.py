@@ -13,7 +13,7 @@ def main():
     embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')
 
     # Step 1: Get all node names and their corresponding embeddings
-    node_names = list(embedding_kv.key_to_index.keys())[:2]
+    node_names = list(embedding_kv.key_to_index.keys())
     embedding_matrix = np.array([embedding_kv[node] for node in node_names])
 
     # print(embedding_matrix)
