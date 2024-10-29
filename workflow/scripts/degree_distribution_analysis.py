@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
-from itertools import combinations
+from itertools import pairwise
 import sys
 
-DISTANCES_F = "workflow/out/pairwise_distances/copan_0_30Lw10Nw1.0p1.0q50k_pairwiseDistances.csv"
+DISTANCES_F = "workflow/out/pairwise_distances/copan_0_30Lw50Nw1.0p0.1q140k_pairwiseDistances.csv"
 DEGREE_F = "workflow/out/node_classification/copan_0_node_degree_classification.csv"
 
 def main():
@@ -12,11 +12,9 @@ def main():
     degree_df = pd.read_csv(DEGREE_F)
 
     nodes = distance_matrix_df.index.tolist() # node names, not indeces
-
     # Convert to a NumPy array
     distance_matrix = distance_matrix_df.values
-
-    # Create a dictionary to map nodes to their degrees
+    #print(combinations(nodes, 2))
     node_degree_map = dict(zip(degree_df['node'], degree_df['degree']))
 
     # # Create only unique pairs (i, j) of nodes and get the degree and distance for each pair
@@ -33,6 +31,16 @@ def main():
 
         print("i degree:" + str(degree_i))
         print("j degree:" + str(degree_j))
+
+                # Attempt to access the distance
+        try:
+            distance_ij = distance_matrix_df.loc[i, j]  # Access distance by label
+        except KeyError as e:
+            print(f"KeyError: {e} for nodes ({i}, {j})")
+            continue  # Skip this pair if nodes are not found
+        
+        # Append the information as a row to the data list
+        distance_degree_df.append([i, degree_i, j, degree_j, distance_ij])
 
 
     # for i, j in combinations(range(len(degree_df)), 2):  # Only (i, j) where i < j
