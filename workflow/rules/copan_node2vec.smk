@@ -85,6 +85,16 @@ rule visualizeTSNE:
         {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions}
         """
 
+rule getNodeDegrees:
+    input: join(config["linksDir"], "{graph_id}_links.json")
+    output: 
+        json=join(config["degreeDir"], "{graph_id}_node_degrees.json"),
+        csv=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
+    shell:
+        """
+        python3 get_node_degree.py {input} {output.json} {output.csv}
+        """
+
 rule getPairwiseDistances:
     input: join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
     output: join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
@@ -92,3 +102,13 @@ rule getPairwiseDistances:
         """
         python3 workflow/scripts/pairwise_distance.py {input} {output}
         """
+
+rule joinDistanceDegree:
+    input: 
+        distances=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv"),
+        degrees=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
+    output: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
+    shell:
+        """
+        python3 workflow/scripts/join_distance_degree.py {input.distances} {input.degrees} {output}
+        """    

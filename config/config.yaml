@@ -11,6 +11,9 @@ edgeEmbeddingsDir: "workflow/out/vectorization_model/edge_embeddings"
 plotsDir: "workflow/out/plots"
 clustersDir: "workflow/out/cluster_dicts"
 distancesDir: "workflow/out/pairwise_distances"
+distancesDir: "workflow/out/pairwise_distances"
+degreeDir: "workflow/out/node_degrees"
+distDegDir: "workflow/out/distance_degree"
 
 # Graph ID
 graph_id: ["copan_0"]

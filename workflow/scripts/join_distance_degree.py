@@ -3,8 +3,9 @@ import pandas as pd
 from itertools import pairwise
 import sys
 
-DISTANCES_F = "workflow/out/pairwise_distances/copan_0_30Lw50Nw1.0p0.1q140k_pairwiseDistances.csv"
-DEGREE_F = "workflow/out/node_classification/copan_0_node_degree_classification.csv"
+DISTANCES_F = sys.argv[1]
+DEGREE_F = sys.argv[2]
+DISTANCE_DEGREE_F = sys.argv[3]
 
 def main():
 
@@ -37,7 +38,7 @@ def main():
     # Convert to a DataFrame
     df = pd.DataFrame(distance_degree_df, columns=['node_i', 'degree_i', 'node_j', 'degree_j', 'distance'])
 
-    df.to_csv(DEGREE_F, index=False)
+    df.to_csv(DISTANCE_DEGREE_F, index=False)
 
 
 if __name__ == '__main__':
