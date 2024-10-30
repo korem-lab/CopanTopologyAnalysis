@@ -1,6 +1,6 @@
 import numpy as np
 import pandas as pd
-from itertools import pairwise
+from itertools import combinations
 import sys
 
 DISTANCES_F = sys.argv[1]
@@ -15,13 +15,15 @@ def main():
 
     nodes = distance_matrix.index.tolist() # node names, not indeces
     # Convert to a NumPy array
+
+    degree_df.index()
     
     node_degree_map = dict(zip(degree_df['node'], degree_df['degree']))
     
     distance_degree_df = []
 
     # trying to iterate from the distance matrix, not the degree df
-    for i, j in pairwise(nodes):  # iterate through all node combinations in the list of nodes. i and j are node names, not indeces
+    for i, j in combinations(nodes, 2):  # iterate through all node combinations in the list of nodes. i and j are node names, not indeces
 
         degree_i = node_degree_map[i]
         degree_j = node_degree_map[j]
