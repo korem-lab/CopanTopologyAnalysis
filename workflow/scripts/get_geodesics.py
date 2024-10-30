@@ -5,6 +5,7 @@ from itertools import product
 import os
 
 GFA_F = "config/copangraphs/copan_0.gfa"
+# GFA_F = "config/copangraphs/dummy.gfa"
 GEXF_F = GFA_F.replace("gfa", "gexf")  # Desired output GEXF file path
 
 OUTDIR = "workflow/out/geodesics/"
@@ -13,9 +14,11 @@ GEODESICS_F = OUTDIR + os.path.splitext(basename)[0] + "_geodesics.csv"
 
 def main():
     G = make_digraph()
+    print("Done with creating GEXF.")
     # G = nx.read_gexf(GEXF_F)
 
-    geodesic_data = get_geodesics(G)
+    get_geodesics(G)
+    print("Done with geodesics.")
 
 
 def make_digraph():
@@ -64,8 +67,6 @@ def get_geodesics(G):
 
     df = pd.DataFrame(geodesic_data)
     df.to_csv(GEODESICS_F, index=False)
-
-    return geodesic_data
 
 
 if __name__ == '__main__':
