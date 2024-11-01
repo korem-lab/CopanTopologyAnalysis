@@ -61,7 +61,7 @@ def tsne_plot_similar_words(labels, embeddings2d, node_clusters, a, filename):
     for embeddings2d, words in zip(embeddings2d, node_clusters):
         x = embeddings2d[:, 0]
         y = embeddings2d[:, 1]
-        plt.scatter(x, y, alpha=a)
+        plt.scatter(x, y, alpha=a, color = "blue")
         
     # colors = cm.rainbow(np.linspace(0, 1, len(labels)))
     # for label, embeddings2d, words, color in zip(labels, embeddings2d, word_clusters, colors):
@@ -77,8 +77,13 @@ def tsne_plot_similar_words(labels, embeddings2d, node_clusters, a, filename):
         # for i, word in enumerate(words):
         #     plt.annotate(word, alpha=0.5, xy=(x[i], y[i]), xytext=(5, 2),
         #                  textcoords='offset points', ha='right', va='bottom', size=8)
+    # plt.legend(loc=4)
+    # plt.title(title)
+    # plt.grid(True)
+    # if filename:
+    #     plt.savefig(filename, format='png', dpi=150, bbox_inches='tight')
+    # Loop through each cluster of embeddings and plot them with the same color
 
-    plt.legend(loc=4)
     plt.title(title)
     plt.grid(True)
     if filename:
