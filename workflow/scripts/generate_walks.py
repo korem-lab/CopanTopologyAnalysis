@@ -13,11 +13,6 @@ SEED = int(sys.argv[6])
 
 WALKS_DICT_F = sys.argv[7]
 WALKS_LIST_F = sys.argv[8]
-print(NODE_INFO_DICT_F)
-print("all arguemnts:", sys.argv)
-
-print(NODE_INFO_DICT_F)
-print("all arguemnts:", sys.argv)
 
 # Iter through nodes in node_dict
 def main():

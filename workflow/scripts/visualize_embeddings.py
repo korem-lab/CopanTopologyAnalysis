@@ -57,15 +57,21 @@ def tsne_plot_similar_words(labels, embeddings2d, node_clusters, a, filename):
             ", perplexity=" + str(PERPLEXITY) + ", iterations=" + str(N_ITER)
 
     plt.figure(figsize=(16, 9))
-    colors = cm.rainbow(np.linspace(0, 1, len(labels)))
+
+    for embeddings2d, words in zip(embeddings2d, node_clusters):
+        x = embeddings2d[:, 0]
+        y = embeddings2d[:, 1]
+        plt.scatter(x, y, alpha=a)
+        
+    # colors = cm.rainbow(np.linspace(0, 1, len(labels)))
     # for label, embeddings2d, words, color in zip(labels, embeddings2d, word_clusters, colors):
     #     x = embeddings2d[:, 0]
     #     y = embeddings2d[:, 1]
     #     plt.scatter(x, y, c=color, alpha=a, label=label)
-    for embeddings2d, words, color in zip(embeddings2d, node_clusters, colors):
-        x = embeddings2d[:, 0]
-        y = embeddings2d[:, 1]
-        plt.scatter(x, y, c=color, alpha=a)
+    # for embeddings2d, words, color in zip(embeddings2d, node_clusters, colors):
+    #     x = embeddings2d[:, 0]
+    #     y = embeddings2d[:, 1]
+    #     plt.scatter(x, y, c=color, alpha=a)
 
         # label each node point
         # for i, word in enumerate(words):
