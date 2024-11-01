@@ -62,7 +62,8 @@ rule visualizeTSNE:
         model=join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
         embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings"),
         links=join(config["linksDir"], "{graph_id}_links.json")
-    output: join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot.png")
+    output: 
+        join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot.png")
     params:
         dimensions="{k}",
         walk_length="{walk_length}",
@@ -121,8 +122,8 @@ rule getDistDegStats:
         q="{q}",
         graph_id=GRAPH_IDS
     shell:
-    """
-    python3 get_distance_degree_distribution.py {input} {output} \
-    {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
-    """
+        """
+        python3 get_distance_degree_distribution.py {input} {output} \
+        {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
+        """
 
