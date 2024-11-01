@@ -2,8 +2,11 @@ import re
 import json
 import sys
 
-GFA_F = sys.argv[1]
-NODE_INFO_DICT = sys.argv[2]
+# GFA_F = sys.argv[1]
+# NODE_INFO_DICT = sys.argv[2]
+
+GFA_F = "config/copangraphs/dummy.gfa"
+NODE_INFO_DICT = "workflow/out/link_dicts/dummy_graph_links.json"
 
 def main():
     n_seg = 0

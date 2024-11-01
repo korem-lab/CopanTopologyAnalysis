@@ -112,3 +112,20 @@ rule joinDistanceDegree:
         """
         python3 workflow/scripts/join_distance_degree.py {input.distances} {input.degrees} {output}
         """    
+
+rule getDistDegStats:
+    input: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
+    output: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv")
+    params:
+        dimensions="{k}",
+        walk_length="{walk_length}",
+        n_walks="{n_walks}",
+        p="{p}",
+        q="{q}",
+        graph_id=GRAPH_IDS
+    shell:
+    """
+    python3 get_distance_degree_distribution.py {input} {output} \
+    {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
+    """
+

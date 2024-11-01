@@ -1,6 +1,5 @@
 import networkx as nx
 import pandas as pd
-import numpy as np
 from itertools import product
 import os
 
@@ -37,10 +36,10 @@ def make_digraph():
                 src, src_ori = fields[1], fields[2]
                 targ, targ_ori = fields[3], fields[4]
                 
+                # REDUNDANT -- does this actuallyh encode for bidirectionality????
                 # Add directed edges based on the specified orientation
                 if src_ori == '+' and targ_ori == '+':
                     G.add_edge(src, targ)   # forward-forward direction
-
                 elif src_ori == '+' and targ_ori == '-':
                     G.add_edge(src, targ)   # forward-reverse direction
                 elif src_ori == '-' and targ_ori == '+':

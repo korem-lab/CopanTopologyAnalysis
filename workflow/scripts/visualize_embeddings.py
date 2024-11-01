@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import sys
 
-
 MODEL_F = sys.argv[1]
 EMBEDDING_F = sys.argv[2]
 WALKS_DICT_F = sys.argv[3]
@@ -24,7 +23,6 @@ N_ITER = int(sys.argv[11])
 N_COMPONENTS = int(sys.argv[12])  
 RAND_STATE = int(sys.argv[13])  
 DIMENSION = str(sys.argv[14])
-
 
 def main():
     model = Word2Vec.load(MODEL_F)
