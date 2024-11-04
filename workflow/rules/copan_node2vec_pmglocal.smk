@@ -4,7 +4,7 @@ rule getGraphLinks:
     output:
         # final_output=join(config["linksDir"], "{graph_id}_links2.json"),
         # These outputs are temporary files created during the process
-        temp_input_file=join(config["tempDir"], "{graph_id}.gfa"),
+        temp_input_file=temp(join(config["tempDir"], "{graph_id}.gfa")),
         temp_output_file=join(config["tempDir"], "{graph_id}_links_temp.json")
     shell:
         """
