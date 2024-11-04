@@ -3,7 +3,7 @@ import json
 import sys
 
 GFA_F = sys.argv[1]
-NODE_INFO_DICT = sys.argv[1]
+NODE_INFO_DICT = sys.argv[2]
 
 def main():
     n_seg = 0

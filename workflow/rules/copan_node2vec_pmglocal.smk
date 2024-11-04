@@ -1,10 +1,15 @@
+resources:
+    tmpdir=config["tempDir"]
+
 rule getGraphLinks:
     input:
         graph_file=join(config["graphDir"], "{graph_id}.gfa")
     output:
         final_output=join(config["linksDir"], "{graph_id}_links2.json"),
-        temp_input_file=temp(join(config["tempDir"], "{graph_id}.gfa")),
-        temp_output_file=temp(join(config["tempDir"], "{graph_id}_links_temp.json"))
+        # temp_input_file=temp(join(config["tempDir"], "{graph_id}.gfa")),
+        # temp_output_file=temp(join(config["tempDir"], "{graph_id}_links_temp.json"))
+        temp_input_file=temp("{graph_id}.gfa"),
+        temp_output_file=temp("{graph_id}_links_temp.json")
     shell:
         """
         # Copy the original input file to the external temp directory
