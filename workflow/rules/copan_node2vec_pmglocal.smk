@@ -20,8 +20,8 @@ rule randomSampleWalks:
         join(config["linksDir"], "{graph_id}_links.json")
     output:
         temp_input=temp(join(config["tempDir"], "{graph_id}_links.json")),
-        temp_walks_oriented=join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json"),
-        temp_walks_vectorized=join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt"),
+        temp_walks_oriented=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json")),
+        temp_walks_vectorized=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")),
 
         walks_oriented=join(config["walkDictsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json"),
         walks_vectorized=join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")
@@ -172,7 +172,7 @@ rule joinDistanceDegree:
     output: 
         temp_dist=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")),
         temp_deg=temp(join(config["tempDir"], "{graph_id}_node_degrees.csv")),
-        temp_output=join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv"),
+        temp_output=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")),
         final_output=join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
     shell:
         """
