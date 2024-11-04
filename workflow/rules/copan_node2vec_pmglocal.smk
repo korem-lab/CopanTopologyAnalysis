@@ -20,7 +20,7 @@ rule randomSampleWalks:
         join(config["linksDir"], "{graph_id}_links.json")
     output:
         # Temporary files using consistent wildcards
-        temp_input=temp(join(config["tempDir"], "{graph_id}_links.json")),
+        temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_links.json")),
         temp_walks_oriented=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json")),
         temp_walks_vectorized=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")),
         
@@ -44,6 +44,7 @@ rule randomSampleWalks:
         cp {output.temp_walks_oriented} {output.walks_oriented}
         cp {output.temp_walks_vectorized} {output.walks_vectorized}
         """
+
 
 
 rule embed:
