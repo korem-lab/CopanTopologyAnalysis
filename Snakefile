@@ -12,26 +12,17 @@ PERPLEXITIES = config["perplexities"]
 N_ITERS = config["n_iters"]
 DIMENSIONS = config["dimensions"]
 
+
 rule all:
     input:
        expand(join(config["graphDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS),
-       expand(join(config["tempDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS), 
-       expand(join(config["tempDir"], "{graph_id}_links_temp.json"), graph_id=GRAPH_IDS),
        expand(join(config["linksDir"], "{graph_id}_links.json"), graph_id=GRAPH_IDS),
 
-       # walks
-       expand(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt"),
-              graph_id=GRAPH_IDS,
-              walk_length=WALK_LENGTHS,
-              n_walks=N_WALKS,
-              p=P_VALUES,
-              q=Q_VALUES),
-       expand(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json"),
-              graph_id=GRAPH_IDS,
-              walk_length=WALK_LENGTHS,
-              n_walks=N_WALKS,
-              p=P_VALUES,
-              q=Q_VALUES),
+       # Temporary files
+       expand(join(config["tempDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS),
+       expand(join(config["tempDir"], "{graph_id}_links_temp.json"), graph_id=GRAPH_IDS),
+
+       # Walks outputs
        expand(join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt"),
               graph_id=GRAPH_IDS,
               walk_length=WALK_LENGTHS,
@@ -44,6 +35,21 @@ rule all:
               n_walks=N_WALKS,
               p=P_VALUES,
               q=Q_VALUES),
+       
+       # Ensure these temporary outputs are also included in the final output
+       expand(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt"),
+              graph_id=GRAPH_IDS,
+              walk_length=WALK_LENGTHS,
+              n_walks=N_WALKS,
+              p=P_VALUES,
+              q=Q_VALUES),
+       expand(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json"),
+              graph_id=GRAPH_IDS,
+              walk_length=WALK_LENGTHS,
+              n_walks=N_WALKS,
+              p=P_VALUES,
+              q=Q_VALUES)
+
 
     #    # model embeddings
     #    expand(join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
