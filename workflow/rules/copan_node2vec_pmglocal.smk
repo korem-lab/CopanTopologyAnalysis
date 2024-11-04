@@ -30,7 +30,8 @@ rule randomSampleWalks:
         n_walks="{n_walks}",
         p="{p}",
         q="{q}",
-        seed=config["seed"]
+        seed=config["seed"],
+        graph_id=GRAPH_IDS
     shell:
         """
         cp {input} {output.temp_input}
