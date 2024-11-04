@@ -73,28 +73,28 @@ rule all:
               k=DIMENSIONS), 
 
        # pairwise distances
-       # expand(join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv"),
-       #        graph_id=GRAPH_IDS,
-       #        walk_length=WALK_LENGTHS,
-       #        n_walks=N_WALKS,
-       #        p=P_VALUES,
-       #        q=Q_VALUES,
-       #        k=DIMENSIONS), 
+       expand(join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv"),
+              graph_id=GRAPH_IDS,
+              walk_length=WALK_LENGTHS,
+              n_walks=N_WALKS,
+              p=P_VALUES,
+              q=Q_VALUES,
+              k=DIMENSIONS), 
 
        # degree info for each node
-       # expand(join(config["degreeDir"], "{graph_id}_node_degrees.json"),
-       #        graph_id=GRAPH_IDS), 
-       # expand(join(config["degreeDir"], "{graph_id}_node_degrees.csv"),
-       #        graph_id=GRAPH_IDS), 
+       expand(join(config["degreeDir"], "{graph_id}_node_degrees.json"),
+              graph_id=GRAPH_IDS), 
+       expand(join(config["degreeDir"], "{graph_id}_node_degrees.csv"),
+              graph_id=GRAPH_IDS), 
 
        # joining pairwise distances plus degree for each node
-       # expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv"),
-       #        graph_id=GRAPH_IDS,
-       #        walk_length=WALK_LENGTHS,
-       #        n_walks=N_WALKS,
-       #        p=P_VALUES,
-       #        q=Q_VALUES,
-       #        k=DIMENSIONS)
+       expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv"),
+              graph_id=GRAPH_IDS,
+              walk_length=WALK_LENGTHS,
+              n_walks=N_WALKS,
+              p=P_VALUES,
+              q=Q_VALUES,
+              k=DIMENSIONS)
 
 
 include:
