@@ -16,6 +16,8 @@ rule all:
     input:
        expand(join(config["graphDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS),
        expand(join(config["linksDir"], "{graph_id}_links2.json"), graph_id=GRAPH_IDS),
+       expand(join(config["tempDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS),
+       expand(join(config["tempDir"], "{graph_id}_links_temp.json"), graph_id=GRAPH_IDS)
 
        # # walks
        # expand(join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt"),
