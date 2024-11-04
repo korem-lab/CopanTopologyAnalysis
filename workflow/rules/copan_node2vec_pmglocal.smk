@@ -173,17 +173,16 @@ rule joinDistanceDegree:
         temp_dist=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")),
         temp_deg=temp(join(config["tempDir"], "{graph_id}_node_degrees.csv")),
         temp_output=join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv"),
-
         final_output=join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
     shell:
         """
         cp {input.distances} {output.temp_dist}
-        cp (input.degrees} {output.temp_deg}
+        cp {input.degrees} {output.temp_deg}
 
         python3 workflow/scripts/join_distance_degree.py {output.temp_dist} {output.temp_deg} {output.temp_output}
 
         cp {output.temp_output} {output.final_output}
-        """    
+        """
 
 rule getDistDegStats:
     input: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
