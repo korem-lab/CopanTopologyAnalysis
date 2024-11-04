@@ -2,6 +2,9 @@ from os.path import join
 
 configfile: "config/config.yaml"
 
+resources: tmpdir=config["tempDir"]
+
+
 # Define variables for multiple values
 GRAPH_IDS = config["graph_id"]
 WALK_LENGTHS = config["walk_lengths"]
