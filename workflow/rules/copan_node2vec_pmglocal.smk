@@ -33,7 +33,7 @@ rule randomSampleWalks:
         seed=config["seed"]
     shell:
         """
-        cp {input} {temp_input}
+        cp {input} {output.temp_input}
 
         python3 workflow/scripts/generate_walks.py {output.temp_input} \
         {params.walk_length} {params.n_walks} {params.p} {params.q} {params.seed} \
