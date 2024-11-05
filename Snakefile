@@ -55,16 +55,16 @@ rule all:
               q=Q_VALUES, 
               k=DIMENSIONS),
 
-#        # #  plotting embedding with t-SNE
-#        #  expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot.png"),
-#        #         graph_id=GRAPH_IDS,
-#        #         walk_length=WALK_LENGTHS,
-#        #         n_walks=N_WALKS,
-#        #         p=P_VALUES,
-#        #         q=Q_VALUES,
-#        #         perplexity=PERPLEXITIES,
-#        #         n_iter=N_ITERS, 
-#        #         k=DIMENSIONS),
+       #  plotting embedding with t-SNE
+        expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot.png"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES,
+               perplexity=PERPLEXITIES,
+               n_iter=N_ITERS, 
+               k=DIMENSIONS),
 
 #        # cluster dict
        #  expand(join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_clusters.json"),
@@ -85,17 +85,17 @@ rule all:
               k=DIMENSIONS), 
 
 #     #    # # degree info for each node
-#        expand(join(config["degreeDir"], "{graph_id}_node_degrees.csv"),
-#               graph_id=GRAPH_IDS), 
+       expand(join(config["degreeDir"], "{graph_id}_node_degrees.csv"),
+              graph_id=GRAPH_IDS), 
 
-#        # joining pairwise distances plus degree for each node
-#        expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv"),
-#               graph_id=GRAPH_IDS,
-#               walk_length=WALK_LENGTHS,
-#               n_walks=N_WALKS,
-#               p=P_VALUES,
-#               q=Q_VALUES,
-#               k=DIMENSIONS), 
+       # joining pairwise distances plus degree for each node
+       expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv"),
+              graph_id=GRAPH_IDS,
+              walk_length=WALK_LENGTHS,
+              n_walks=N_WALKS,
+              p=P_VALUES,
+              q=Q_VALUES,
+              k=DIMENSIONS), 
 
        #  # summary stats on degree + pairwise distance 
        #  expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv"),
