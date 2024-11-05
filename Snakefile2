@@ -12,6 +12,7 @@ PERPLEXITIES = config["perplexities"]
 N_ITERS = config["n_iters"]
 DIMENSIONS = config["dimensions"]
 
+print(join(config["tempDir"], config["linksDir"], "graph_links.json"))
 
 rule all:
     input:
