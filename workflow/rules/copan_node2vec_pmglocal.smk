@@ -96,117 +96,117 @@ rule getClusters:
         cp {output.temp_cluster_dict} {output.cluster_dict}
         """
 
-rule visualizeTSNE:
-    input:
-        model=join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
-        embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings"),
-        links=join(config["linksDir"], "{graph_id}_links.json")
-    output: 
-        temp_model=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model")),
-        temp_embeddings=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")),
-        temp_links=temp(join(config["tempDir"], "{graph_id}_links.json")), 
-        temp_plot=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot.png")),
+# rule visualizeTSNE:
+#     input:
+#         model=join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
+#         embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings"),
+#         links=join(config["linksDir"], "{graph_id}_links.json")
+#     output: 
+#         temp_model=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model")),
+#         temp_embeddings=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")),
+#         temp_links=temp(join(config["tempDir"], "{graph_id}_links.json")), 
+#         temp_plot=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot.png")),
 
-        plot=join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot.png")
-    params:
-        dimensions="{k}",
-        walk_length="{walk_length}",
-        n_walks="{n_walks}",
-        p="{p}",
-        q="{q}",
-        perplexity="{perplexity}", 
-        n_iter="{n_iter}",
-        n_components=config["n_components"], 
-        rand_state=config["random_state"],
-        graph_id=GRAPH_IDS
-    shell:
-        """
-        cp {input.model} {output.temp_model}
-        cp {input.embeddings} {output.temp_embeddings}
-        cp {input.links} {output.temp_links}
+#         plot=join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot.png")
+#     params:
+#         dimensions="{k}",
+#         walk_length="{walk_length}",
+#         n_walks="{n_walks}",
+#         p="{p}",
+#         q="{q}",
+#         perplexity="{perplexity}", 
+#         n_iter="{n_iter}",
+#         n_components=config["n_components"], 
+#         rand_state=config["random_state"],
+#         graph_id=GRAPH_IDS
+#     shell:
+#         """
+#         cp {input.model} {output.temp_model}
+#         cp {input.embeddings} {output.temp_embeddings}
+#         cp {input.links} {output.temp_links}
 
-        python3 workflow/scripts/visualize_embeddings.py \
-        {output.temp_model} {output.temp_embeddings} {output.temp_links} {output.temp_plot} \
-        {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
-        {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions}
+#         python3 workflow/scripts/visualize_embeddings.py \
+#         {output.temp_model} {output.temp_embeddings} {output.temp_links} {output.temp_plot} \
+#         {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
+#         {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions}
 
-        cp {output.temp_plot} {output.plot}
-        """
+#         cp {output.temp_plot} {output.plot}
+#         """
 
-rule getNodeDegrees:
-    input: join(config["linksDir"], "{graph_id}_links.json")
-    output: 
-        temp_input=temp(join(config["tempDir"], "{graph_id}_links.json")),
-        temp_json=temp(join(config["tempDir"], "{graph_id}_node_degrees.json")),
-        temp_csv=temp(join(config["tempDir"], "{graph_id}_node_degrees.csv")),
+# rule getNodeDegrees:
+#     input: join(config["linksDir"], "{graph_id}_links.json")
+#     output: 
+#         temp_input=temp(join(config["tempDir"], "{graph_id}_links.json")),
+#         temp_json=temp(join(config["tempDir"], "{graph_id}_node_degrees.json")),
+#         temp_csv=temp(join(config["tempDir"], "{graph_id}_node_degrees.csv")),
 
-        json=join(config["degreeDir"], "{graph_id}_node_degrees.json"),
-        csv=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
-    shell:
-        """
-        cp {input} {output.temp_input}
+#         json=join(config["degreeDir"], "{graph_id}_node_degrees.json"),
+#         csv=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
+#     shell:
+#         """
+#         cp {input} {output.temp_input}
 
-        python3 get_node_degree.py {output.temp_input} {output.temp_json} {output.temp_csv}
+#         python3 get_node_degree.py {output.temp_input} {output.temp_json} {output.temp_csv}
 
-        cp {output.temp_json} {output.json}
-        cp {output.temp_csv} {output.csv}
-        """
+#         cp {output.temp_json} {output.json}
+#         cp {output.temp_csv} {output.csv}
+#         """
 
-rule getPairwiseDistances:
-    input: join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
-    output: 
-        temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")),
-        temp_output=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")),
+# rule getPairwiseDistances:
+#     input: join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
+#     output: 
+#         temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")),
+#         temp_output=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")),
 
-        final_output=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
-    shell:
-        """
-        cp {input} {output.temp_input}
+#         final_output=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
+#     shell:
+#         """
+#         cp {input} {output.temp_input}
 
-        python3 workflow/scripts/pairwise_distance.py {output.temp_input} {output.temp_output}
+#         python3 workflow/scripts/pairwise_distance.py {output.temp_input} {output.temp_output}
 
-        cp {output.temp_output} {output.final_output}
-        """
+#         cp {output.temp_output} {output.final_output}
+#         """
 
-rule joinDistanceDegree:
-    input: 
-        distances=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv"),
-        degrees=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
-    output: 
-        temp_dist=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")),
-        temp_deg=temp(join(config["tempDir"], "{graph_id}_node_degrees.csv")),
-        temp_output=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")),
-        final_output=join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
-    shell:
-        """
-        cp {input.distances} {output.temp_dist}
-        cp {input.degrees} {output.temp_deg}
+# rule joinDistanceDegree:
+#     input: 
+#         distances=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv"),
+#         degrees=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
+#     output: 
+#         temp_dist=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")),
+#         temp_deg=temp(join(config["tempDir"], "{graph_id}_node_degrees.csv")),
+#         temp_output=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")),
+#         final_output=join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
+#     shell:
+#         """
+#         cp {input.distances} {output.temp_dist}
+#         cp {input.degrees} {output.temp_deg}
 
-        python3 workflow/scripts/join_distance_degree.py {output.temp_dist} {output.temp_deg} {output.temp_output}
+#         python3 workflow/scripts/join_distance_degree.py {output.temp_dist} {output.temp_deg} {output.temp_output}
 
-        cp {output.temp_output} {output.final_output}
-        """
+#         cp {output.temp_output} {output.final_output}
+#         """
 
-rule getDistDegStats:
-    input: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
-    output: 
-        temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")), 
-        temp_output=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv")),
+# rule getDistDegStats:
+#     input: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
+#     output: 
+#         temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")), 
+#         temp_output=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv")),
 
-        final_output=join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv")
-    params:
-        dimensions="{k}",
-        walk_length="{walk_length}",
-        n_walks="{n_walks}",
-        p="{p}",
-        q="{q}",
-        graph_id=GRAPH_IDS
-    shell:
-        """
-        cp {input} {output.temp_input}
+#         final_output=join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv")
+#     params:
+#         dimensions="{k}",
+#         walk_length="{walk_length}",
+#         n_walks="{n_walks}",
+#         p="{p}",
+#         q="{q}",
+#         graph_id=GRAPH_IDS
+#     shell:
+#         """
+#         cp {input} {output.temp_input}
 
-        python3 get_distance_degree_distribution.py {output.temp_input} {output.temp_output} \
-        {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
+#         python3 get_distance_degree_distribution.py {output.temp_input} {output.temp_output} \
+#         {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
 
-        cp {output.temp_output} {output.final_output}
-        """
+#         cp {output.temp_output} {output.final_output}
+#         """
