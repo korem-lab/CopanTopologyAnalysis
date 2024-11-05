@@ -18,9 +18,10 @@ rule getGraphLinks:
 
 rule randomSampleWalks:
     input:
-        temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_links.json"))
+        join(config["linksDir"], "{graph_id}_links.json")
     output:
         # Temporary files using consistent wildcards
+        temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_links.json")),
         temp_walks_oriented=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json")),
         temp_walks_vectorized=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")),
         
@@ -35,43 +36,15 @@ rule randomSampleWalks:
         seed=config["seed"]
     shell:
         """
-        python3 workflow/scripts/generate_walks.py {input} \
+        cp {input} {output.temp_input}
+
+        python3 workflow/scripts/generate_walks.py {output.temp_input} \
         {params.walk_length} {params.n_walks} {params.p} {params.q} {params.seed} \
         {output.temp_walks_oriented} {output.temp_walks_vectorized}
         
         cp {output.temp_walks_oriented} {output.walks_oriented}
         cp {output.temp_walks_vectorized} {output.walks_vectorized}
         """
-
-# rule randomSampleWalks:
-#     input:
-#         join(config["linksDir"], "{graph_id}_links.json")
-#     output:
-#         # Temporary files using consistent wildcards
-#         temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_links.json")),
-#         temp_walks_oriented=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json")),
-#         temp_walks_vectorized=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")),
-        
-#         # Final output files with the same wildcards
-#         walks_oriented=join(config["walkDictsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json"),
-#         walks_vectorized=join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")
-#     params: 
-#         walk_length="{walk_length}",
-#         n_walks="{n_walks}",
-#         p="{p}",
-#         q="{q}",
-#         seed=config["seed"]
-#     shell:
-#         """
-#         cp {input} {output.temp_input}
-
-#         python3 workflow/scripts/generate_walks.py {output.temp_input} \
-#         {params.walk_length} {params.n_walks} {params.p} {params.q} {params.seed} \
-#         {output.temp_walks_oriented} {output.temp_walks_vectorized}
-        
-#         cp {output.temp_walks_oriented} {output.walks_oriented}
-#         cp {output.temp_walks_vectorized} {output.walks_vectorized}
-#         """
 
 rule embed:
     input: 
