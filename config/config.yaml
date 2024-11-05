@@ -35,7 +35,7 @@ tempDir: "/pmglocal/rc3710"
 # distDegDir: "workflow/out/distance_degree"
 
 # Graph ID
-graph_id: ["copan_0"]
+graph_id: ["copan_0", "camisim_megahit_20_0.02", "sample_1_0_02"]
 
 # # Walk params
 # walk_lengths: [30, 80]  # list of walk lengths
@@ -59,8 +59,8 @@ graph_id: ["copan_0"]
 # random_state: 32
 
 # Walk params
-walk_lengths: [30]  # list of walk lengths
-n_walks: [10]      # list of number of walks to perform per node
+walk_lengths: [50]  # list of walk lengths
+n_walks: [30]      # list of number of walks to perform per node
 # p: [1.0, 0.5, 2.0, 0.1]             # list of p values
 # q: [1.0, 0.5, 2.0, 0.1]             # list of q values
 p: [1.0]             # list of p values
@@ -68,13 +68,13 @@ q: [1.0]             # list of q values
 seed: 1
 
 # Embedding params
-dimensions: [20]
+dimensions: [50]
 window: 5
 min_count: 5
 sg: 0
 
 # t-SNE params
-perplexities: [10]  # list of perplexity values
-n_iters: [1000]     # list of n_iter values
+perplexities: [50]  # list of perplexity values
+n_iters: [3000]     # list of n_iter values
 n_components: 2
 random_state: 32
