@@ -94,8 +94,6 @@ rule all:
               k=DIMENSIONS), 
 
     #    # # degree info for each node
-       expand(join(config["degreeDir"], "{graph_id}_node_degrees.json"),
-              graph_id=GRAPH_IDS), 
        expand(join(config["degreeDir"], "{graph_id}_node_degrees.csv"),
               graph_id=GRAPH_IDS), 
 

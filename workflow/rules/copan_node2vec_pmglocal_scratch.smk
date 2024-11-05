@@ -3,6 +3,7 @@ rule getGraphLinks:
         join(config["storageDir"], config["graphDir"], "{graph_id}.gfa")
     output:
         temp_out=temp(join(config["tempDir"], config["linksDir"], "{graph_id}_links.json"))
+        
     shell:
         """
         mkdir -p {config[tempDir]}/{config[graphDir]}

@@ -137,18 +137,15 @@ rule getNodeDegrees:
     input: join(config["linksDir"], "{graph_id}_links.json")
     output: 
         temp_input=temp(join(config["tempDir"], "{graph_id}_links.json")),
-        temp_json=temp(join(config["tempDir"], "{graph_id}_node_degrees.json")),
         temp_csv=temp(join(config["tempDir"], "{graph_id}_node_degrees.csv")),
 
-        json=join(config["degreeDir"], "{graph_id}_node_degrees.json"),
         csv=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
     shell:
         """
         cp {input} {output.temp_input}
 
-        python3 get_node_degree.py {output.temp_input} {output.temp_json} {output.temp_csv}
+        python3 get_node_degree.py {output.temp_input} {output.temp_csv}
 
-        cp {output.temp_json} {output.json}
         cp {output.temp_csv} {output.csv}
         """
 
@@ -188,7 +185,8 @@ rule joinDistanceDegree:
         """
 
 rule getDistDegStats:
-    input: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
+    input: 
+        join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
     output: 
         temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")), 
         temp_output=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv")),

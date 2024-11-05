@@ -3,9 +3,7 @@ import csv
 import sys
 
 LINKS_F = sys.argv[1]
-DEGREE_CLASS_F = sys.argv[2]
-CSV_F = sys.argv[3]
-
+CSV_F = sys.argv[2]
 
 def main():
     with open(LINKS_F, 'r') as f:
