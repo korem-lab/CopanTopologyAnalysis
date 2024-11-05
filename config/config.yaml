@@ -35,8 +35,8 @@ tempDir: "/pmglocal/rc3710"
 # distDegDir: "workflow/out/distance_degree"
 
 # Graph ID
-# graph_id: ["copan_0", "camisim_megahit_20_0.02", "sample_1_0_02"]
-graph_id: ["sample_1_0_02"]
+graph_id: ["copan_0", "camisim_megahit_20_0.02", "sample_1_0_02"]
+# graph_id: ["sample_1_0_02"]
 
 # # Walk params
 # walk_lengths: [30, 80]  # list of walk lengths

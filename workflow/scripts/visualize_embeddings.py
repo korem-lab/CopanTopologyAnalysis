@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import matplotlib.cm as cm
 import sys
 
-print(sys.argv[10])
 MODEL_F = sys.argv[1]
 EMBEDDING_F = sys.argv[2]
 WALKS_DICT_F = sys.argv[3]
