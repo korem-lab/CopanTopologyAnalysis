@@ -1,10 +1,3 @@
-rule copyTemp:
-    input: {}
-    output: temp_{}
-    shell:
-    """
-    cp {input} {output}
-    """
 
 rule getGraphLinks:
     input:
