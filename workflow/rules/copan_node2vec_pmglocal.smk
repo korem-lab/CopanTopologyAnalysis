@@ -50,6 +50,7 @@ rule embed:
         join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")
     output:
         temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks_vectorized.txt")),
+
         temp_model=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model")),
         temp_embeddings=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")),
         temp_edge_embeddings=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.edge_embeddings")),
@@ -74,6 +75,66 @@ rule embed:
         cp {output.temp_embeddings} {output.embeddings}
         cp {output.temp_edge_embeddings} {output.edge_embeddings}
         """
+
+# rule randomSampleWalks:
+#     input:
+#         join(config["linksDir"], "{graph_id}_links.json")
+#     output:
+#         # Temporary files using consistent wildcards
+#         temp_input=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_links.json")),
+#         temp_walks_oriented=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json")),
+#         temp_walks_vectorized=join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt"),
+        
+#         # Final output files with the same wildcards
+#         walks_oriented=join(config["walkDictsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json"),
+#         walks_vectorized=join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")
+#     params: 
+#         walk_length="{walk_length}",
+#         n_walks="{n_walks}",
+#         p="{p}",
+#         q="{q}",
+#         seed=config["seed"]
+#     shell:
+#         """
+#         cp {input} {output.temp_input}
+
+#         python3 workflow/scripts/generate_walks.py {output.temp_input} \
+#         {params.walk_length} {params.n_walks} {params.p} {params.q} {params.seed} \
+#         {output.temp_walks_oriented} {output.temp_walks_vectorized}
+        
+#         cp {output.temp_walks_oriented} {output.walks_oriented}
+#         cp {output.temp_walks_vectorized} {output.walks_vectorized}
+#         """
+
+# rule embed:
+#     input: 
+#         join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")
+#     output:
+
+#         temp_model=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model")),
+#         temp_embeddings=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")),
+#         temp_edge_embeddings=temp(join(config["tempDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.edge_embeddings")),
+
+#         model=join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
+#         embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings"),
+#         edge_embeddings=join(config["edgeEmbeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.edge_embeddings")
+#     params:
+#         dimensions="{k}",
+#         window=config["window"], 
+#         min_count=config["min_count"], 
+#         sg=config["sg"]
+#     shell:
+#         """
+#         cp {input} {output.temp_input}
+
+#         python3 workflow/scripts/vectorize_embed_nodes.py \
+#         {output.temp_input} {output.temp_model} {output.temp_embeddings} {output.temp_edge_embeddings} \
+#         {params.dimensions} {params.window} {params.min_count} {params.sg}
+
+#         cp {output.temp_model} {output.model}
+#         cp {output.temp_embeddings} {output.embeddings}
+#         cp {output.temp_edge_embeddings} {output.edge_embeddings}
+#         """
 
 rule getClusters:
     input:
