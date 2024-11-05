@@ -17,7 +17,7 @@ distDegDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/distan
 
 # temp dir in pmg local
 tempDir: "/pmglocal/rc3710"
-linksDir: "/workflow/out/link_dicts"
+linksDir: "workflow/out/link_dicts"
 
 # outputDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out"
 # Graph ID
