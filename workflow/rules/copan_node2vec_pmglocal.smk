@@ -1,4 +1,3 @@
-
 rule getGraphLinks:
     input:
         join(config["graphDir"], "{graph_id}.gfa")
@@ -144,7 +143,7 @@ rule getNodeDegrees:
         """
         cp {input} {output.temp_input}
 
-        python3 get_node_degree.py {output.temp_input} {output.temp_csv}
+        python3 workflow/scripts/get_node_degree.py {output.temp_input} {output.temp_csv}
 
         cp {output.temp_csv} {output.csv}
         """
