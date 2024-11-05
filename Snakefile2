@@ -15,8 +15,8 @@ DIMENSIONS = config["dimensions"]
 
 rule all:
     input:
-       expand(join(config["graphDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS) +
-       expand(join(config["tempDir"], "{graph_id}_links_temp.json"), graph_id=GRAPH_IDS)
+       expand(join(config["graphDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS),
+       expand(join(config["tempDir"], config["linksDir"], "{graph_id}_links_temp.json"), graph_id=GRAPH_IDS)
         # expand(join(config["outputDir"], (join(config["graphDir"], "{graph_id}.gfa"))), graph_id=GRAPH_IDS),
         # expand(join(config["tempDir"], config["linksDir"], "{graph_id}_links.json"), graph_id=GRAPH_IDS)
 

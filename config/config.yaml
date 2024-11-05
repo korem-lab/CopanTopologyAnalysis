@@ -2,7 +2,7 @@
 
 # Manitou Directories
 graphDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/copangraphs"
-linksDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/link_dicts"
+#linksDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/link_dicts"
 walkDictsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/walk_dicts_oriented"
 walkListsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/walk_lists_vectorized"
 modelDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/vectorization_model/models"
@@ -17,6 +17,7 @@ distDegDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/distan
 
 # temp dir in pmg local
 tempDir: "/pmglocal/rc3710"
+linksDir: "/workflow/out/link_dicts"
 
 # outputDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out"
 # Graph ID
