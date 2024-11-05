@@ -106,4 +106,4 @@ rule all:
        #        k=DIMENSIONS)
 
 include:
-    "workflow/rules/copan_node2vec_pmglocal.smk"
+    "workflow/rules/copan_node2vec_pmglocal2.smk"
