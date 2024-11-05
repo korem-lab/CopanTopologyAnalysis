@@ -1,7 +1,7 @@
 
 rule getGraphLinks:
     input:
-        join(config["outputDir"], config["graphDir"], "{graph_id}.gfa")
+        join(config["outputDir"], (join(config["graphDir"], "{graph_id}.gfa")))
     output:
         join(config["tempDir"], config["linksDir"], "{graph_id}_links.json")
     shell:
