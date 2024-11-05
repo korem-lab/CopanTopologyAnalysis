@@ -12,6 +12,8 @@ rule getGraphLinks:
 
         python3 workflow/scripts/get_graph_links.py {output.temp_input} {output.temp_output}
 
+        touch {output.temp_input} {output.temp_output}
+
         cp {output.temp_output} {output.final_output}
 
         touch {output.final_output}
@@ -43,6 +45,8 @@ rule randomSampleWalks:
         {params.walk_length} {params.n_walks} {params.p} {params.q} {params.seed} \
         {output.temp_walks_oriented} {output.temp_walks_vectorized}
         
+        touch {output.temp_input} {output.temp_walks_oriented} {output.temp_walks_vectorized}
+
         cp {output.temp_walks_oriented} {output.walks_oriented}
         cp {output.temp_walks_vectorized} {output.walks_vectorized}
 
@@ -75,6 +79,8 @@ rule embed:
         {output.temp_input} {output.temp_model} {output.temp_embeddings} {output.temp_edge_embeddings} \
         {params.dimensions} {params.window} {params.min_count} {params.sg}
 
+        touch {output.temp_input} {output.temp_model} {output.temp_embeddings} {output.temp_edge_embeddings}
+
         cp {output.temp_model} {output.model}
         cp {output.temp_embeddings} {output.embeddings}
         cp {output.temp_edge_embeddings} {output.edge_embeddings}
@@ -99,6 +105,8 @@ rule getClusters:
         cp {input.embeddings} {output.temp_embeddings}
 
         python3 workflow/scripts/cluster_dict.py {output.temp_model} {output.temp_embeddings} {output.temp_cluster_dict}
+
+        touch {output.temp_model} {output.temp_embeddings} {output.temp_cluster_dict}
 
         cp {output.temp_cluster_dict} {output.cluster_dict}
 
@@ -139,6 +147,8 @@ rule visualizeTSNE:
         {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
         {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions}
 
+        touch {output.temp_model} {output.temp_embeddings} {output.temp_links} {output.temp_plot}
+
         cp {output.temp_plot} {output.plot}
 
         touch {output.plot}
@@ -157,6 +167,8 @@ rule getNodeDegrees:
 
         python3 workflow/scripts/get_node_degree.py {output.temp_input} {output.temp_csv}
 
+        touch {output.temp_input} {output.temp_csv}
+
         cp {output.temp_csv} {output.csv}
 
         touch {output.csv}
@@ -174,6 +186,8 @@ rule getPairwiseDistances:
         cp {input} {output.temp_input}
 
         python3 workflow/scripts/pairwise_distance.py {output.temp_input} {output.temp_output}
+
+        touch {output.temp_input} {output.temp_output}
 
         cp {output.temp_output} {output.final_output}
 
@@ -195,6 +209,8 @@ rule joinDistanceDegree:
         cp {input.degrees} {output.temp_deg}
 
         python3 workflow/scripts/join_distance_degree.py {output.temp_dist} {output.temp_deg} {output.temp_output}
+
+        touch {output.temp_deg} {output.temp_dist} {output.temp_output}
 
         cp {output.temp_output} {output.final_output}
 
@@ -222,6 +238,8 @@ rule getDistDegStats:
 
         python3 get_distance_degree_distribution.py {output.temp_input} {output.temp_output} \
         {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
+
+        touch {output.temp_input} {output.temp_output}
 
         cp {output.temp_output} {output.final_output}
 
