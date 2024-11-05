@@ -1,0 +1,25 @@
+from os.path import join
+
+configfile: "config/config.yaml"
+
+# Define variables for multiple values
+GRAPH_IDS = config["graph_id"]
+WALK_LENGTHS = config["walk_lengths"]
+N_WALKS = config["n_walks"]
+P_VALUES = config["p"]
+Q_VALUES = config["q"]
+PERPLEXITIES = config["perplexities"]
+N_ITERS = config["n_iters"]
+DIMENSIONS = config["dimensions"]
+
+
+rule all:
+    input:
+       expand(join(config["graphDir"], "{graph_id}.gfa"), graph_id=GRAPH_IDS),
+       expand(join(config["linksDir"], "{graph_id}_links.json"), graph_id=GRAPH_IDS),
+
+       # Temporary files
+       expand(join(config["tempDir"], config["linksDir"], "{graph_id}_links.json"), graph_id=GRAPH_IDS)
+
+include:
+    "workflow/rules/copan_node2vec_pmglocal_scratch.smk"

@@ -1,3 +1,11 @@
+rule copyTemp:
+    input: {}
+    output: temp_{}
+    shell:
+    """
+    cp {input} {output}
+    """
+
 rule getGraphLinks:
     input:
         join(config["graphDir"], "{graph_id}.gfa")
