@@ -37,9 +37,30 @@ tempDir: "/pmglocal/rc3710"
 # Graph ID
 graph_id: ["copan_0"]
 
+# # Walk params
+# walk_lengths: [30, 80]  # list of walk lengths
+# n_walks: [10, 50]      # list of number of walks to perform per node
+# # p: [1.0, 0.5, 2.0, 0.1]             # list of p values
+# # q: [1.0, 0.5, 2.0, 0.1]             # list of q values
+# p: [1.0]             # list of p values
+# q: [1.0]             # list of q values
+# seed: 1
+
+# # Embedding params
+# dimensions: [20, 60, 100, 140]
+# window: 5
+# min_count: 5
+# sg: 0
+
+# # t-SNE params
+# perplexities: [10, 30, 50, 100]  # list of perplexity values
+# n_iters: [1000, 3000, 5000]     # list of n_iter values
+# n_components: 2
+# random_state: 32
+
 # Walk params
-walk_lengths: [30, 80]  # list of walk lengths
-n_walks: [10, 50]      # list of number of walks to perform per node
+walk_lengths: [30]  # list of walk lengths
+n_walks: [10]      # list of number of walks to perform per node
 # p: [1.0, 0.5, 2.0, 0.1]             # list of p values
 # q: [1.0, 0.5, 2.0, 0.1]             # list of q values
 p: [1.0]             # list of p values
@@ -47,13 +68,13 @@ q: [1.0]             # list of q values
 seed: 1
 
 # Embedding params
-dimensions: [20, 60, 100, 140]
+dimensions: [20]
 window: 5
 min_count: 5
 sg: 0
 
 # t-SNE params
-perplexities: [10, 30, 50, 100]  # list of perplexity values
-n_iters: [1000, 3000, 5000]     # list of n_iter values
+perplexities: [10]  # list of perplexity values
+n_iters: [1000]     # list of n_iter values
 n_components: 2
 random_state: 32
