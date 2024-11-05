@@ -1,8 +1,8 @@
 # config.yaml
 
 # Manitou Directories
-# graphDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/copangraphs"
-#linksDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/link_dicts"
+graphDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/copangraphs"
+linksDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/link_dicts"
 walkDictsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/walk_dicts_oriented"
 walkListsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/walk_lists_vectorized"
 modelDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/vectorization_model/models"
@@ -17,11 +17,23 @@ distDegDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/distan
 
 # temp dir in pmg local
 tempDir: "/pmglocal/rc3710"
-storageDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis"
-graphDir: "workflow/out/copangraphs"
-linksDir: "workflow/out/link_dicts"
+# storageDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis"
 
-# outputDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out"
+# output directories
+# graphDir: "workflow/out/copangraphs"
+# linksDir: "workflow/out/link_dicts"
+# walkDictsDir: "workflow/out/walk_dicts_oriented"
+# walkListsDir: "workflow/out/walk_lists_vectorized"
+# modelDir: "workflow/out/vectorization_model/models"
+# embeddingsDir: "workflow/out/vectorization_model/embeddings"
+# edgeEmbeddingsDir: "workflow/out/vectorization_model/edge_embeddings"
+# plotsDir: "workflow/out/plots"
+# clustersDir: "workflow/out/cluster_dicts"
+# distancesDir: "workflow/out/pairwise_distances"
+# distancesDir: "workflow/out/pairwise_distances"
+# degreeDir: "workflow/out/node_degrees"
+# distDegDir: "workflow/out/distance_degree"
+
 # Graph ID
 graph_id: ["copan_0"]
 

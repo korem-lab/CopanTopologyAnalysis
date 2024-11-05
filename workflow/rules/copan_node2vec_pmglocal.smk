@@ -46,8 +46,6 @@ rule randomSampleWalks:
         cp {output.temp_walks_vectorized} {output.walks_vectorized}
         """
 
-
-
 rule embed:
     input: 
         join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt")
