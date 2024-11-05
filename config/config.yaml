@@ -1,7 +1,7 @@
 # config.yaml
 
 # Manitou Directories
-graphDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/copangraphs"
+# graphDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/copangraphs"
 #linksDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/link_dicts"
 walkDictsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/walk_dicts_oriented"
 walkListsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/walk_lists_vectorized"
@@ -17,6 +17,8 @@ distDegDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/distan
 
 # temp dir in pmg local
 tempDir: "/pmglocal/rc3710"
+storageDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis"
+graphDir: "workflow/out/copangraphs"
 linksDir: "workflow/out/link_dicts"
 
 # outputDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out"
