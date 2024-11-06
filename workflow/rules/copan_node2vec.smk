@@ -86,11 +86,10 @@ rule visualizeTSNE:
 rule getNodeDegrees:
     input: join(config["linksDir"], "{graph_id}_links.json")
     output: 
-        json=join(config["degreeDir"], "{graph_id}_node_degrees.json"),
         csv=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
     shell:
         """
-        python3 workflow/scripts/get_node_degree.py {input} {output.json} {output.csv}
+        python3 workflow/scripts/get_node_degree.py {input} {output.csv}
         """
 
 rule getPairwiseDistances:
