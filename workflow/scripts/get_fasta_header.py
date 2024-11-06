@@ -24,7 +24,7 @@ def main():
                         outfile.write(seq_id + ";" + genome + ";" + info + "\n")
                     
                     else:
-                        outfile.write(seq_id + ";" + description + ";NA" + "\n")
+                        outfile.write(seq_id + ";" + description[0] + ";NA" + "\n")
 
 
 if __name__ == '__main__':
