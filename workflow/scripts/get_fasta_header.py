@@ -1,6 +1,6 @@
 import sys
 
-# fasta_f = sys.argv[1]
+# fasta_f = "dummy.fasta"
 # header_f = sys.argv[2]
 fasta_f = "workflow/out/reference_metagenomes/sample_1_reference_metagenome.fasta"
 header_f = "workflow/out/reference_metagenomes/sample_1_reference_metagenome_ids.txt"
@@ -17,10 +17,14 @@ def main():
                     seq_id = str(header[0])
                     description = header[1].split(",", 1)
 
-                    genome = description[0]
-                    info = description[1]
+                    if len(description) > 1:
+                        genome = description[0]
+                        info = description[1]
 
-                    outfile.write(seq_id + ";" + genome + ";" + info + "\n")
+                        outfile.write(seq_id + ";" + genome + ";" + info + "\n")
+                    
+                    else:
+                        outfile.write(seq_id + ";" + description + ";NA" + "\n")
 
 
 if __name__ == '__main__':
