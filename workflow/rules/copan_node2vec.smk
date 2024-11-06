@@ -90,7 +90,7 @@ rule getNodeDegrees:
         csv=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
     shell:
         """
-        python3 get_node_degree.py {input} {output.json} {output.csv}
+        python3 workflow/scripts/get_node_degree.py {input} {output.json} {output.csv}
         """
 
 rule getPairwiseDistances:
