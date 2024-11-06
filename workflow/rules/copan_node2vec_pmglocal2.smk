@@ -10,13 +10,13 @@ rule getGraphLinks:
         """
         mkdir -p {config[tempDir]}
 
-        cp -f {input} {output.temp_input}
+        cp {input} {output.temp_input}
 
         python3 workflow/scripts/get_graph_links.py {output.temp_input} {output.temp_output}
 
         touch {output.temp_input} {output.temp_output}
 
-        cp -f {output.temp_output} {output.final_output}
+        cp {output.temp_output} {output.final_output}
 
         touch {output.final_output}
         """
@@ -43,7 +43,7 @@ rule randomSampleWalks:
         """
         mkdir -p {config[tempDir]}
 
-        cp -f {input} {output.temp_input}
+        cp {input} {output.temp_input}
 
         python3 workflow/scripts/generate_walks.py {output.temp_input} \
         {params.walk_length} {params.n_walks} {params.p} {params.q} {params.seed} \
@@ -51,8 +51,8 @@ rule randomSampleWalks:
         
         touch {output.temp_input} {output.temp_walks_oriented} {output.temp_walks_vectorized}
 
-        cp -f {output.temp_walks_oriented} {output.walks_oriented}
-        cp -f {output.temp_walks_vectorized} {output.walks_vectorized}
+        cp {output.temp_walks_oriented} {output.walks_oriented}
+        cp {output.temp_walks_vectorized} {output.walks_vectorized}
 
         touch {output.walks_oriented} {output.walks_vectorized}
         """
@@ -79,7 +79,7 @@ rule embed:
         """
         mkdir -p {config[tempDir]}
 
-        cp -f {input} {output.temp_input}
+        cp {input} {output.temp_input}
 
         python3 workflow/scripts/vectorize_embed_nodes.py \
         {output.temp_input} {output.temp_model} {output.temp_embeddings} {output.temp_edge_embeddings} \
@@ -87,9 +87,9 @@ rule embed:
 
         touch {output.temp_input} {output.temp_model} {output.temp_embeddings} {output.temp_edge_embeddings}
 
-        cp -f {output.temp_model} {output.model}
-        cp -f {output.temp_embeddings} {output.embeddings}
-        cp -f {output.temp_edge_embeddings} {output.edge_embeddings}
+        cp {output.temp_model} {output.model}
+        cp {output.temp_embeddings} {output.embeddings}
+        cp {output.temp_edge_embeddings} {output.edge_embeddings}
 
         touch {output.model} {output.embeddings} {output.edge_embeddings}
         """
@@ -109,14 +109,14 @@ rule getClusters:
         """
         mkdir -p {config[tempDir]}
 
-        cp -f {input.model} {output.temp_model}
-        cp -f {input.embeddings} {output.temp_embeddings}
+        cp {input.model} {output.temp_model}
+        cp {input.embeddings} {output.temp_embeddings}
 
         python3 workflow/scripts/cluster_dict.py {output.temp_model} {output.temp_embeddings} {output.temp_cluster_dict}
 
         touch {output.temp_model} {output.temp_embeddings} {output.temp_cluster_dict}
 
-        cp -f {output.temp_cluster_dict} {output.cluster_dict}
+        cp {output.temp_cluster_dict} {output.cluster_dict}
 
         touch {output.cluster_dict}
         """
@@ -148,9 +148,9 @@ rule visualizeTSNE:
         """
         mkdir -p {config[tempDir]}
 
-        cp -f {input.model} {output.temp_model}
-        cp -f {input.embeddings} {output.temp_embeddings}
-        cp -f {input.links} {output.temp_links}
+        cp {input.model} {output.temp_model}
+        cp {input.embeddings} {output.temp_embeddings}
+        cp {input.links} {output.temp_links}
 
         python3 workflow/scripts/visualize_embeddings.py \
         {output.temp_model} {output.temp_embeddings} {output.temp_links} {output.temp_plot} \
@@ -159,7 +159,7 @@ rule visualizeTSNE:
 
         touch {output.temp_model} {output.temp_embeddings} {output.temp_links} {output.temp_plot}
 
-        cp -f {output.temp_plot} {output.plot}
+        cp {output.temp_plot} {output.plot}
 
         touch {output.plot}
         """
@@ -175,13 +175,13 @@ rule getNodeDegrees:
         """
         mkdir -p {config[tempDir]}
 
-        cp -f {input} {output.temp_input}
+        cp {input} {output.temp_input}
 
         python3 workflow/scripts/get_node_degree.py {output.temp_input} {output.temp_csv}
 
         touch {output.temp_input} {output.temp_csv}
 
-        cp -f {output.temp_csv} {output.csv}
+        cp {output.temp_csv} {output.csv}
 
         touch {output.csv}
         """
@@ -197,13 +197,13 @@ rule getPairwiseDistances:
         """
         mkdir -p {config[tempDir]}
 
-        cp -f {input} {output.temp_input}
+        cp {input} {output.temp_input}
 
         python3 workflow/scripts/pairwise_distance.py {output.temp_input} {output.temp_output}
 
         touch {output.temp_input} {output.temp_output}
 
-        cp -f {output.temp_output} {output.final_output}
+        cp {output.temp_output} {output.final_output}
 
         touch {output.final_output}
         """
@@ -221,14 +221,14 @@ rule joinDistanceDegree:
         """
         mkdir -p {config[tempDir]}
 
-        cp -f {input.distances} {output.temp_dist}
-        cp -f {input.degrees} {output.temp_deg}
+        cp {input.distances} {output.temp_dist}
+        cp {input.degrees} {output.temp_deg}
 
         python3 workflow/scripts/join_distance_degree.py {output.temp_dist} {output.temp_deg} {output.temp_output}
 
         touch {output.temp_deg} {output.temp_dist} {output.temp_output}
 
-        cp -f {output.temp_output} {output.final_output}
+        cp {output.temp_output} {output.final_output}
 
         touch {output.final_output}
         """
@@ -251,15 +251,15 @@ rule getDistDegStats:
     shell:
         """
         mkdir -p {config[tempDir]}
-
-        cp -f {input} {output.temp_input}
+        
+        cp {input} {output.temp_input}
 
         python3 get_distance_degree_distribution.py {output.temp_input} {output.temp_output} \
         {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
 
         touch {output.temp_input} {output.temp_output}
 
-        cp -f {output.temp_output} {output.final_output}
+        cp {output.temp_output} {output.final_output}
 
         touch {output.final_output}
         """
