@@ -47,7 +47,7 @@ def main():
     tsne_model_en_2d = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
     embeddings_en_2d = np.array(tsne_model_en_2d.fit_transform(embeddings.reshape(n * m, k))).reshape(n, m, 2)
 
-    tsne_plot_similar_words(nodes, embeddings_en_2d, node_clusters, 0.5, EMBEDDING_PLOT)
+    tsne_plot_similar_words(nodes, embeddings_en_2d, node_clusters, 0.2, EMBEDDING_PLOT)
     
 
 def tsne_plot_similar_words(labels, embeddings2d, node_clusters, a, filename):
