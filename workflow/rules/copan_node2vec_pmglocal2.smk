@@ -8,6 +8,8 @@ rule getGraphLinks:
         final_output=join(config["linksDir"], "{graph_id}_links.json")
     shell:
         """
+        mkdir -p {config[tempDir]}
+
         cp {input} {output.temp_input}
 
         python3 workflow/scripts/get_graph_links.py {output.temp_input} {output.temp_output}
@@ -39,6 +41,8 @@ rule randomSampleWalks:
         seed=config["seed"]
     shell:
         """
+        mkdir -p {config[tempDir]}
+
         cp {input} {output.temp_input}
 
         python3 workflow/scripts/generate_walks.py {output.temp_input} \
@@ -73,6 +77,8 @@ rule embed:
         sg=config["sg"]
     shell:
         """
+        mkdir -p {config[tempDir]}
+
         cp {input} {output.temp_input}
 
         python3 workflow/scripts/vectorize_embed_nodes.py \
@@ -101,6 +107,8 @@ rule getClusters:
         cluster_dict=join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_clusters.json")
     shell:
         """
+        mkdir -p {config[tempDir]}
+
         cp {input.model} {output.temp_model}
         cp {input.embeddings} {output.temp_embeddings}
 
@@ -138,6 +146,8 @@ rule visualizeTSNE:
         graph_id=GRAPH_IDS
     shell:
         """
+        mkdir -p {config[tempDir]}
+
         cp {input.model} {output.temp_model}
         cp {input.embeddings} {output.temp_embeddings}
         cp {input.links} {output.temp_links}
@@ -163,6 +173,8 @@ rule getNodeDegrees:
         csv=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
     shell:
         """
+        mkdir -p {config[tempDir]}
+
         cp {input} {output.temp_input}
 
         python3 workflow/scripts/get_node_degree.py {output.temp_input} {output.temp_csv}
@@ -183,6 +195,8 @@ rule getPairwiseDistances:
         final_output=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
     shell:
         """
+        mkdir -p {config[tempDir]}
+
         cp {input} {output.temp_input}
 
         python3 workflow/scripts/pairwise_distance.py {output.temp_input} {output.temp_output}
@@ -205,6 +219,8 @@ rule joinDistanceDegree:
         final_output=join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
     shell:
         """
+        mkdir -p {config[tempDir]}
+
         cp {input.distances} {output.temp_dist}
         cp {input.degrees} {output.temp_deg}
 
@@ -234,6 +250,8 @@ rule getDistDegStats:
         graph_id=GRAPH_IDS
     shell:
         """
+        mkdir -p {config[tempDir]}
+        
         cp {input} {output.temp_input}
 
         python3 get_distance_degree_distribution.py {output.temp_input} {output.temp_output} \
