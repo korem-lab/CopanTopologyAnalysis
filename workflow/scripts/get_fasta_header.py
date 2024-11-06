@@ -1,7 +1,9 @@
 import sys
 
-fasta_f = sys.argv[1]
-header_f = sys.argv[2]
+# fasta_f = sys.argv[1]
+# header_f = sys.argv[2]
+fasta_f = "workflow/out/reference_metagenomes/sample_1_reference_metagenome.fasta"
+header_f = "workflow/out/reference_metagenomes/sample_1_reference_metagenome_ids.txt"
 
 def main():
     with open(fasta_f, 'r') as infile:
