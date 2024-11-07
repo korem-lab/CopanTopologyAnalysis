@@ -15,4 +15,4 @@ workflow/out/
 workflow/.DS_Store
 .Rproj.user
 .R*
-.Rmd
+*.Rmd
