@@ -8,7 +8,7 @@ header_f = "workflow/out/reference_metagenomes/sample_1_reference_metagenome_ids
 def main():
     with open(fasta_f, 'r') as infile:
         with open(header_f, 'w') as outfile:
-            outfile.write("seqid;genome;info")
+            outfile.write("seqid;genome;info\n")
             for line in infile:
                 if line.startswith(">"):
                     header = line[1:].strip()

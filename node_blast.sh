@@ -17,7 +17,7 @@ source config/config_blast.cfg
 
 blast_db="${dbDir}/${graphID}"
 nodes_fasta="${copangraphDir}/${graphID}.fasta"
-blast_out="${blastOutDir}/${graphID}_blast_results.out"
+blast_out="${blastOutDir}/${graphID}_blast_results_seed9.out"
 
 # Check if BLAST DB exists; if not, create it
 if [ ! -f "${blast_db}.nhr" ]; then
