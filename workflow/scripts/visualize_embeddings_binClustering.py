@@ -1,80 +1,72 @@
-from gensim.models import Word2Vec
 from gensim.models import KeyedVectors
 from sklearn.manifold import TSNE
-import numpy as np
 import matplotlib.pyplot as plt
-import matplotlib.cm as cm
 import sys
+import pandas as pd
+import seaborn as sns
 
-MODEL_F = sys.argv[1]
-EMBEDDING_F = sys.argv[2]
-WALKS_DICT_F = sys.argv[3]
+# Adjusted sys.argv to start from index 1
+EMBEDDING_F = sys.argv[1]  # The embeddings file
+TAX_F = sys.argv[2]        # The species CSV file
 
-EMBEDDING_PLOT = sys.argv[4]
+EMBEDDING_PLOT = sys.argv[3]  # Output plot file
 
-GRAPH_ID = str(sys.argv[5])   
-WALK_LENGTH = str(sys.argv[6])  
-N_WALKS = str(sys.argv[7])      
-P_VAL = str(sys.argv[8])        
-Q_VAL = str(sys.argv[9])       
+GRAPH_ID = str(sys.argv[4])   
+WALK_LENGTH = str(sys.argv[5])  
+N_WALKS = str(sys.argv[6])      
+P_VAL = str(sys.argv[7])        
+Q_VAL = str(sys.argv[8])       
 
-PERPLEXITY = int(sys.argv[10]) 
-N_ITER = int(sys.argv[11])   
-N_COMPONENTS = int(sys.argv[12])  
-RAND_STATE = int(sys.argv[13])  
-DIMENSION = str(sys.argv[14])
+PERPLEXITY = int(sys.argv[9])  # Perplexity for t-SNE
+N_ITER = int(sys.argv[10])     # Number of iterations for t-SNE
+N_COMPONENTS = int(sys.argv[11])  # Number of components for t-SNE (usually 2 for 2D)
+RAND_STATE = int(sys.argv[12])  # Random state for reproducibility
+DIMENSION = str(sys.argv[13])  # Dimension (for example, k for the graph)
+ALPHA = float(sys.argv[14])    # Alpha value for scatter plot transparency
 
 def main():
-    model = Word2Vec.load(MODEL_F)
-
     embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')
+    embedding_vectors = embedding_kv.vectors
 
-    embedding_clusters = []
-    node_clusters = []
+    species_map = load_species_map(TAX_F)
 
-    for node in embedding_kv.key_to_index.keys():
-        embeddings = []
-        nodes = []
-        for similar_node, _ in model.wv.most_similar(node, topn=100):
-            nodes.append(similar_node)
-            embeddings.append(embedding_kv[similar_node])
-        embedding_clusters.append(embeddings)
-        node_clusters.append(nodes)
+    # Get species for each node in the same order as embedding vectors
+    node_species = [species_map[node] for node in embedding_kv.index_to_key]
 
-    # t-SNE visualization
-    embeddings = np.array(embedding_clusters)
-    n, m, k = embeddings.shape
-    tsne_model_en_2d = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
-    embeddings_en_2d = np.array(tsne_model_en_2d.fit_transform(embeddings))
+    # Map species to colors
+    unique_species = list(set(node_species))
+    num_species = len(unique_species)
+    species_to_color = {species: sns.color_palette("hls", num_species)[i] for i, species in enumerate(unique_species)}
+    colors = [species_to_color[species] for species in node_species]
 
-    tsne_plot_similar_words(nodes, embeddings_en_2d, node_clusters, 0.1, EMBEDDING_PLOT)
 
-def tsne_plot_similar_words(labels, embeddings2d, node_clusters, a, filename):
-    # write plot title
-    title = GRAPH_ID + \
-        ": walk length=" + str(WALK_LENGTH) + ", " + str(N_WALKS) + " walks, p=" + str(P_VAL) + ", q=" + str(Q_VAL) + ", k=" + str(DIMENSION) + \
-            ", perplexity=" + str(PERPLEXITY) + ", iterations=" + str(N_ITER)
+    tsne_model = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
+    tsne_results = tsne_model.fit_transform(embedding_vectors)
 
-    plt.figure(figsize=(16, 9))
-        
-    colors = cm.rainbow(np.linspace(0, 1, len(labels)))
+    # Plotting
 
-    for embeddings2d, words, color in zip(embeddings2d, node_clusters, colors):
-        x = embeddings2d[:, 0]
-        y = embeddings2d[:, 1]
-        plt.scatter(x, y, c=color, alpha=a)
+     # Set up plot title
+    title = (f"{GRAPH_ID}: walk length={WALK_LENGTH}, {N_WALKS} walks, "
+             f"p={P_VAL}, q={Q_VAL}, k={DIMENSION}, "
+             f"perplexity={PERPLEXITY}, iterations={N_ITER}")
 
-    plt.legend(loc=4)
-    plt.title(title)
-    plt.grid(True)
-    if filename:
-        plt.savefig(filename, format='png', dpi=150, bbox_inches='tight')
-    # Loop through each cluster of embeddings and plot them with the same color
+    plt.figure(figsize=(10, 10))
+    x = tsne_results[:, 0]
+    y = tsne_results[:, 1]
+    plt.scatter(x, y, alpha=ALPHA, linewidth=0, c=colors)
 
     plt.title(title)
     plt.grid(True)
-    if filename:
-        plt.savefig(filename, format='png', dpi=150, bbox_inches='tight')
+
+    if EMBEDDING_PLOT:
+        plt.savefig(EMBEDDING_PLOT, format='png', dpi=150, bbox_inches='tight')
+
+def load_species_map(species_csv_file):
+    """Load the node-to-species mapping from a CSV file using pandas."""
+    df = pd.read_csv(species_csv_file)
+    # Convert to dictionary (node -> species)
+    species_map = dict(zip(df['node'], df['species']))
+    return species_map
 
 if __name__ == '__main__':
     main()

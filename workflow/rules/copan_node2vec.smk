@@ -74,13 +74,40 @@ rule visualizeTSNE:
         n_iter="{n_iter}",
         n_components=config["n_components"], 
         rand_state=config["random_state"],
-        graph_id=GRAPH_IDS
+        graph_id=GRAPH_IDS, 
+        alpha=config["alpha"]
     shell:
         """
         python3 workflow/scripts/visualize_embeddings.py \
         {input.model} {input.embeddings} {input.links} {output} \
         {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
-        {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions}
+        {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions} {params.alpha}
+        """
+
+rule visualizeTSNE_binClustering:
+    input:
+        embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings"),
+        tax_csv=join(config["taxonomyDir"])
+    output: 
+        join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot_species.png")
+    params:
+        dimensions="{k}",
+        walk_length="{walk_length}",
+        n_walks="{n_walks}",
+        p="{p}",
+        q="{q}",
+        perplexity="{perplexity}", 
+        n_iter="{n_iter}",
+        n_components=config["n_components"], 
+        rand_state=config["random_state"],
+        graph_id=GRAPH_IDS, 
+        alpha=config["alpha"]
+    shell:
+        """
+        python3 workflow/scripts/visualize_embeddings_binClustering.py \
+        {input.embeddings} {input.tax_csv} {output} \
+        {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
+        {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions} {params.alpha}
         """
 
 rule getNodeDegrees:
