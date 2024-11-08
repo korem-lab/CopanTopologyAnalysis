@@ -1,0 +1,87 @@
+---
+title: "degree_distribution"
+output: html_document
+date: "2024-10-25"
+---
+
+```{r}
+library(readr)
+library(ggplot2)
+library(tidyverse)
+library(RColorBrewer)
+# degree_classification <- read_csv("workflow/out/node_degrees/copan_0_node_degrees.csv")
+deg_dist_df <- read_csv("workflow/out/distance_degree/copan_0_30Lw50Nw1.0p0.1q140k_distancesWithDegree.csv")
+
+```
+
+```{r}
+ggplot(subset(degree_classification, degree != 0), aes(x = degree)) +
+  geom_histogram()
+
+```
+
+# Pair degree classification
+```{r}
+
+deg_dist_df_classes <- deg_dist_df %>%
+  mutate(same_degree = case_when(degree_i == degree_j ~ "same_degree", 
+                                degree_i != degree_j ~ "different_degree"), 
+         pair_degree = case_when(degree_i == degree_j ~ degree_i, 
+                                degree_i != degree_j ~ NA)) 
+
+dummy <- dummy %>%
+  mutate(same_degree = case_when(degree_i == degree_j ~ TRUE, 
+                                degree_i != degree_j ~ FALSE), 
+         pair_degree = case_when(degree_i == degree_j ~ degree_i, 
+                                degree_i != degree_j ~ NA)) 
+  
+deg_dist_df_classes$pair_degree <- factor(deg_dist_df_classes$pair_degree, levels = c(1, 2, 3, 4, 5, 6))
+```
+
+
+# Distribution of Pairwise Distances by Degree Class
+```{r}
+ggplot(subset(deg_dist_df_classes, degree_i != 0 | degree_j != 0), aes(x = distance)) +
+  geom_histogram(binwidth = 1, fill = "pink", color = "black") +
+  scale_x_binned(breaks = seq(0, max(subset(deg_dist_df_classes, degree_i != 0 | degree_j != 0)$distance), by = 1)) +
+  theme_bw() +
+  ggtitle("Distribution of Pairwise Distances for All Connected Nodes")
+
+ggplot(subset(deg_dist_df_classes, degree_i != 0 | degree_j != 0), aes(x = distance)) +
+  geom_histogram(binwidth = 1, fill = "pink", color = "black") +
+  scale_x_binned(breaks = seq(0, max(subset(deg_dist_df_classes, degree_i != 0 | degree_j != 0)$distance), by = 1)) +
+  theme_bw() +
+  ggtitle("Distribution of Pairwise Distances for Same vs. Different Degree Pairs") +
+  facet_wrap(~same_degree, nrow = 2)
+
+ggplot(subset(deg_dist_df_classes, same_degree == "same_degree"), aes(x = distance)) +
+  geom_histogram(binwidth = 1, fill = "pink", color = "black") +
+  scale_x_binned(breaks = seq(0, max(subset(deg_dist_df_classes, same_degree == "same_degree")$distance), by = 1)) +
+  theme_bw() +
+  ggtitle("Distribution of Pairwise Distances for Same Degree Pairs") +
+  facet_wrap(~pair_degree, scales = "free_y")
+
+```
+
+
+```{r}
+ggplot(subset(deg_dist_df_classes, degree_i != 0 | degree_j != 0), aes(y = distance, x = same_degree, fill = same_degree)) +
+  geom_violin(width = 1.5) +
+  geom_boxplot(width = 0.1, fill = "white") +
+  theme_bw() +
+  guides(fill = "none") +
+  scale_fill_manual(values = brewer.pal("Set3", n=2)) +
+  xlab("Same vs. Different Degree Pairs") +
+  ggtitle("Pairwise Distances for Same vs. Different Degree Pairs")
+
+
+ggplot(subset(deg_dist_df_classes, same_degree == "same_degree"), aes(y = distance, x = pair_degree, fill = pair_degree)) +
+  geom_violin(width = 1.5) +
+  geom_boxplot(width = 0.1, fill = "white") +
+  theme_bw() +
+  guides(fill = "none") +
+  scale_fill_manual(values = brewer.pal("Pastel2", n=6)) +
+  xlab("Pair Degree") +
+  ggtitle("Pairwise Distances for Same Degree Pairs")
+
+```
