@@ -13,11 +13,25 @@ blast_result <- read_table("workflow/out/blast/sample_1_0_02_blast_results_cover
 genome_seq_ids <- read_delim("workflow/out/blast/sample_1_reference_metagenome_ids.txt", delim = ";", escape_double = FALSE, trim_ws = TRUE, guess_max = 200)
 
 tax_profile <- read_csv("workflow/out/blast/taxonomic_profile_1.csv")
+
+query_ids <- read_table("workflow/out/copangraphs/sample_1_0_02_ids.txt")
 ```
 
 # check if all nodes have blast hits!
 ```{r}
-n_seqs_in_fasta = 63878
+n_qseqs <- length(query_ids$qseqid)
+n_seqs_with_blast_hits <- length(unique(blast_result$qseqid))
+qseqs_with_blast_hits <- unique(blast_result$qseqid)
+
+qseqs_no_hits <- setdiff(query_ids$qseqid, unique(blast_result$qseqid))
+n_qseqs_no_hits <- length(qseqs_no_hits)
+
+n_qseqs_no_hits == n_qseqs - n_seqs_with_blast_hits # validation with tha maths
+
+qseqs_no_hits_df <- as.data.frame(qseqs_no_hits) %>%
+  rename(qseq = qseqs_no_hits) %>%
+  rowwise() %>%
+  mutate(node = strsplit(qseq, ":")[[1]][1])
 
 
 ```
