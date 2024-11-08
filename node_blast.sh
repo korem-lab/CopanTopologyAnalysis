@@ -5,7 +5,7 @@
 #SBATCH --error=job_out/blast_%j.err   # Standard error
 #SBATCH --time=20:00:00
 #SBATCH --cpus-per-task=1
-#SBATCH --mem=50G
+#SBATCH --mem=20G
 #SBATCH --account pmg
 
 # Load configuration
@@ -34,7 +34,7 @@ blast_out_dir="${blastOutDir}"
 blast_db="${dbDir}/${refGenomeName}_blast_db"
 
 # Define the output file for this BLAST run
-blast_out="${blast_out_dir}/${graphID}_blast_results_${refGenomeName}.out"
+blast_out="${blast_out_dir}/${graphID}_blast_results_${refGenomeName}_coverage${coverage}_percid${percid}_seed${wordSize}.out"
 
 # Check if BLAST DB exists; if not, create it
 if [ ! -f "${blast_db}.nhr" ]; then
