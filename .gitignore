@@ -9,9 +9,10 @@ __pycache__/
 .venv/
 .idea/
 
-
 config/copangraphs/
 workflow/out/
+job_out/
+
 .snakemake/
 *.DS_Store
 *.fasta
