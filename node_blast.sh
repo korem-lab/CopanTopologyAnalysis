@@ -11,6 +11,9 @@
 # Load configuration
 source config/config_blast.cfg
 
+source /burg/pmg/users/korem_lab/miniforge3/etc/profile.d/conda.sh
+conda activate blast
+
 # Check if refGenome argument is provided
 if [ -z "$1" ]; then
     echo "Error: No reference genome provided. Usage: ./blast_script.sh <refGenome.fasta>"
