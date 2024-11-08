@@ -36,11 +36,10 @@ cat("calculated n queries with NO blast hits:", length(qseqs_no_hits), "\n")
 exp_n_qseqs_no_hits <- length(query_ids$qseqid) - length(qseqs_with_hits)
 cat("expected n queries with NO blast hits:", exp_n_qseqs_no_hits, "\n")
 
-# nothing makes sense
-# investigating discrepancy by looking at NA values in blast results
-na_subset <- blast_result_filtered[!complete.cases(blast_result_filtered), ]
+# investigate seqs with no blast hits
+View(as.data.frame(qseqs_no_hits))
 
-View(na_subset)
+write_lines(qseqs_no_hits, "workflow/out/blast/qseqs_no_blast_hits.txt")
 ```
 
 
