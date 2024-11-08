@@ -7,12 +7,22 @@ __pycache__/
 
 # Ignore virtual environment directories
 .venv/
+.idea/
+
 
 config/copangraphs/
 workflow/out/
 .snakemake/
-.DS_Store
-workflow/.DS_Store
-.Rproj.user
-.R*
-*.Rmd
+*.DS_Store
+*.fasta
+*.gfa
+
+# Ignore all R-related files except .Rmd files
+*.Rproj.user
+*.RData
+*.Rhistory
+*.Rproj
+*.RDS
+
+# Allow .Rmd files to be tracked
+!*.Rmd
