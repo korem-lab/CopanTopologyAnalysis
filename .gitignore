@@ -27,3 +27,4 @@ job_out/
 
 # Allow .Rmd files to be tracked
 !*.Rmd
+.Rproj.user

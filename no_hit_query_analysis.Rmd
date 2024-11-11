@@ -1,0 +1,14 @@
+---
+title: "no_hit_query_analysis"
+output: html_document
+date: "2024-11-11"
+---
+
+```{r}
+library(readr)
+
+query_ids <- read_table("workflow/out/blast/sample_1_0_02_ids.txt")
+no_hit_query_ids <- read_table("workflow/out/blast/qseqs_no_blast_hits.txt")
+
+
+```
