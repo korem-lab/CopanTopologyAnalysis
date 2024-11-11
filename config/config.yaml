@@ -72,5 +72,5 @@ perplexities: [50]  # list of perplexity values
 n_iters: [3000]     # list of n_iter values
 n_components: 2
 random_state: 32
-alpha: 0.1
+alpha: 0.2
 tax_level: "species"

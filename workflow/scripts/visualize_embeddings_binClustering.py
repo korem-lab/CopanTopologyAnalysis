@@ -58,29 +58,29 @@ def main():
             f.write(f"{node}\n")
 
     # Map species to colors
-    # unique_species = list(set(node_species))
-    # num_species = len(unique_species)
-    # species_to_color = {species: sns.color_palette("hls", num_species)[i] for i, species in enumerate(unique_species)}
-    # colors = [species_to_color[species] for species in node_species]
+    unique_species = list(set(node_species))
+    num_species = len(unique_species)
+    species_to_color = {species: sns.color_palette("hls", num_species)[i] for i, species in enumerate(unique_species)}
+    colors = [species_to_color[species] for species in node_species]
 
     # Run t-SNE
-    # tsne_model = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
-    # tsne_results = tsne_model.fit_transform(filtered_vectors)
+    tsne_model = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
+    tsne_results = tsne_model.fit_transform(filtered_vectors)
 
     # Plotting
-    # title = (f"{GRAPH_ID}: walk length={WALK_LENGTH}, {N_WALKS} walks, "
-    #          f"p={P_VAL}, q={Q_VAL}, k={DIMENSION}, "
-    #          f"perplexity={PERPLEXITY}, iterations={N_ITER}, tax_level={TAX_LEVEL}")
+    title = (f"{GRAPH_ID}: walk length={WALK_LENGTH}, {N_WALKS} walks, "
+             f"p={P_VAL}, q={Q_VAL}, k={DIMENSION}, "
+             f"perplexity={PERPLEXITY}, iterations={N_ITER}, tax_level={TAX_LEVEL}")
 
-    # plt.figure(figsize=(10, 10))
-    # x = tsne_results[:, 0]
-    # y = tsne_results[:, 1]
-    # plt.scatter(x, y, alpha=ALPHA, linewidth=0, c=colors)
-    # plt.title(title)
-    # plt.grid(True)
+    plt.figure(figsize=(10, 10))
+    x = tsne_results[:, 0]
+    y = tsne_results[:, 1]
+    plt.scatter(x, y, alpha=ALPHA, linewidth=0, c=colors)
+    plt.title(title)
+    plt.grid(True)
 
-    # if EMBEDDING_PLOT:
-    #     plt.savefig(EMBEDDING_PLOT, format='png', dpi=150, bbox_inches='tight')
+    if EMBEDDING_PLOT:
+        plt.savefig(EMBEDDING_PLOT, format='png', dpi=150, bbox_inches='tight')
 
 def load_species_map(species_csv_file):
     """Load the node-to-species mapping from a CSV file using pandas."""
