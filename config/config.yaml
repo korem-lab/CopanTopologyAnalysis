@@ -55,9 +55,9 @@ seed: 1
 
 # # Embedding params
 # dimensions: [20, 60, 120]
-# window: 5
-# min_count: 5
-# sg: 0
+window: 5
+min_count: 5
+sg: 0
 
 dimensions: [20]
 

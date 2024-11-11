@@ -32,7 +32,7 @@ def main():
 
     # Filter nodes in embedding vectors based on presence in species_map
     filtered_nodes = [node for node in embedding_kv.index_to_key if node in species_map]
-    filtered_vectors = [embedding_kv[node] for node in filtered_nodes]
+    filtered_vectors = np.array([embedding_kv[node] for node in filtered_nodes])
     node_species = [species_map[node] for node in filtered_nodes]
 
     # Map species to colors
