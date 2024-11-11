@@ -5,24 +5,23 @@ import json
 from gensim.models import Word2Vec
 from gensim.models import KeyedVectors
 
-GRAPH_F = "config/copangraphs/sample_1_0_02.gfa"
+GRAPH_F = "workflow/out/copangraphs/sample_1_0_02.gfa"
 
 LINKS_F = "workflow/out/link_dicts/sample_1_0_02_links.json"
 LINKS_CHECK_F = "workflow/out/validation/nodes_not_in_links.txt"
 
-WALKS_ORIENTED_F = "workflow/out/walk_dicts_oriented/sample_1_0_02_30Lw10Nw1.0p1.0q50k_walks_oriented.json"
-WALKS_VECTORIZED_F = "workflow/out/walk_lists_vectorized/sample_1_0_02_30Lw10Nw1.0p1.0q50k_walks_vectorized.txt"
+WALKS_ORIENTED_F = "workflow/out/walk_dicts_oriented/sample_1_0_02_50Lw30Nw1.0p1.0q_walks_oriented.json"
+WALKS_VECTORIZED_F = "workflow/out/walk_lists_vectorized/sample_1_0_02_50Lw30Nw1.0p1.0q_walks_vectorized.txt"
 WALKS_ORIENTED_CHECK_F = "workflow/out/validation/nodes_not_in_walkDict_sample_1_0_02.txt"
 WALKS_VECTORIZED_CHECK_F = "workflow/out/validation/nodes_not_in_walkList_sample_1_0_02.txt"
 
-EMBEDDINGS_F = "workflow/out/vectorization_model/embeddings/sample_1_0_02_30Lw10Nw1.0p1.0q50k_walks.embeddings"
-MODEL_F = "workflow/out/vectorization_model/models/sample_1_0_02_30Lw10Nw1.0p1.0q50k_walks.model"
+EMBEDDINGS_F = "workflow/out/vectorization_model/embeddings/sample_1_0_02_50Lw30Nw1.0p1.0q50k_walks.embeddings"
+MODEL_F = "workflow/out/vectorization_model/models/sample_1_0_02_50Lw30Nw1.0p1.0q50k_walks.model"
 EMBEDDINGS_CHECK_F = "workflow/out/validation/nodes_not_in_embeddings_sample_1_0_02"
 MODEL_CHECK_F = "workflow/out/validation/nodes_not_in_model_sample_1_0_02"
 
-CLUSTER_F = "workflow/out/cluster_dicts/sample_1_0_02_30Lw10Nw1.0p1.0q50k_30perp1000iter_clusters.json"
-CLUSTER_CHECK_F = "workflow/out/validation/nodes_not_in_clusterDict_sample_1_0_02.txt"
-
+# CLUSTER_F = "workflow/out/cluster_dicts/sample_1_0_02_30Lw10Nw1.0p1.0q50k_30perp1000iter_clusters.json"
+# CLUSTER_CHECK_F = "workflow/out/validation/nodes_not_in_clusterDict_sample_1_0_02.txt"
 
 def main():
     nodes = get_nodes(GRAPH_F)
@@ -43,8 +42,8 @@ def main():
     print("Number of nodes in model:" + str(len(set(model_nodes))))
     print("Number of nodes in walks list:" + str(len(set(emb_nodes))))
 
-    cluster_nodes = check_node_clusters(nodes, CLUSTER_F, CLUSTER_CHECK_F)
-    print("Number of nodes in clusters dict:" + str(len(set(cluster_nodes))))
+    # cluster_nodes = check_node_clusters(nodes, CLUSTER_F, CLUSTER_CHECK_F)
+    # print("Number of nodes in clusters dict:" + str(len(set(cluster_nodes))))
 
 
 def get_nodes(graph_file):

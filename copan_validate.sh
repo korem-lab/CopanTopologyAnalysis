@@ -14,4 +14,4 @@ conda activate snakemake
 
 cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 
-python3 workflow/scripts/degree_distribution_analysis.py
+python3 workflow/scripts/validate_node2vec_pipeline.py
