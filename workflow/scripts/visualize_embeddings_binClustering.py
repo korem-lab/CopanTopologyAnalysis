@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 import sys
 import pandas as pd
 import seaborn as sns
+import numpy as np
 
 # Adjusted sys.argv to start from index 1
 EMBEDDING_F = sys.argv[1]  # The embeddings file
@@ -34,6 +35,10 @@ def main():
     filtered_nodes = [node for node in embedding_kv.index_to_key if node in species_map]
     filtered_vectors = np.array([embedding_kv[node] for node in filtered_nodes])
     node_species = [species_map[node] for node in filtered_nodes]
+
+    print("num filtered vectors:" + str(len(filtered_vectors)))
+    print("num filtered nodes:" + str(len(filtered_nodes)))
+    print("num species:" + str(len(node_species)))
 
     # Map species to colors
     unique_species = list(set(node_species))
