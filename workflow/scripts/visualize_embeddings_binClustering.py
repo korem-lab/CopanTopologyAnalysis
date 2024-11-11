@@ -31,6 +31,7 @@ def main():
     embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')
     species_map = load_species_map(TAX_F)
 
+
     # Filter nodes in embedding vectors based on presence in species_map
     filtered_nodes = [node for node in embedding_kv.index_to_key if node in species_map]
     filtered_vectors = np.array([embedding_kv[node] for node in filtered_nodes])
@@ -39,6 +40,22 @@ def main():
     print("num filtered vectors:" + str(len(filtered_vectors)))
     print("num filtered nodes:" + str(len(filtered_nodes)))
     print("num species:" + str(len(node_species)))
+
+    species_not_in_embedding = set(species_map.keys()) - set(embedding_kv.index_to_key)
+    embedding_not_in_species = set(embedding_kv.index_to_key) - set(species_map.keys())
+
+    print(f"Number of nodes in species_map but not in embedding_kv: {len(species_not_in_embedding)}")
+    print(f"Number of nodes in embedding_kv but not in species_map: {len(embedding_not_in_species)}")
+
+        # Writing species_not_in_embedding to a file
+    with open("job_out/species_not_in_embedding.txt", "w") as f:
+        for node in species_not_in_embedding:
+            f.write(f"{node}\n")
+
+    # Writing embedding_not_in_species to a file
+    with open("job_out/embedding_not_in_species.txt", "w") as f:
+        for node in embedding_not_in_species:
+            f.write(f"{node}\n")
 
     # Map species to colors
     unique_species = list(set(node_species))
@@ -69,7 +86,7 @@ def load_species_map(species_csv_file):
     """Load the node-to-species mapping from a CSV file using pandas."""
     df = pd.read_csv(species_csv_file)
     # Convert to dictionary (node -> species)
-    species_map = dict(zip(df['node'], df[TAX_LEVEL]))
+    species_map = dict(zip(df['node'].astype(str), df[TAX_LEVEL]))
     return species_map
 
 if __name__ == '__main__':
