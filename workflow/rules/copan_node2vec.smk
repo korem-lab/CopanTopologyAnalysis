@@ -87,9 +87,9 @@ rule visualizeTSNE:
 rule visualizeTSNE_binClustering:
     input:
         embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings"),
-        tax_csv=join(config["taxonomyDir"])
+        tax_csv=join(config["taxonomyDir"], "{graph_id}_nodes_by_{tax_level}.csv")
     output: 
-        join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot_species.png")
+        join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot_{tax_level}.png")
     params:
         dimensions="{k}",
         walk_length="{walk_length}",
@@ -101,13 +101,14 @@ rule visualizeTSNE_binClustering:
         n_components=config["n_components"], 
         rand_state=config["random_state"],
         graph_id=GRAPH_IDS, 
-        alpha=config["alpha"]
+        alpha=config["alpha"], 
+        tax_level="{tax_level}"
     shell:
         """
         python3 workflow/scripts/visualize_embeddings_binClustering.py \
         {input.embeddings} {input.tax_csv} {output} \
         {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
-        {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions} {params.alpha}
+        {params.perplexity} {params.n_iter} {params.n_components} {params.rand_state} {params.dimensions} {params.alpha} {params.tax_level}
         """
 
 rule getNodeDegrees:

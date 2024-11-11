@@ -43,182 +43,6 @@ write_lines(qseqs_no_hits, "workflow/out/blast/qseqs_no_blast_hits.txt")
 ```
 
 
-# check if all nodes have blast hits!
-```{r}
-n_qseqs <- length(unique(query_ids$qseqid))
-n_seqs_with_blast_hits <- length(unique(blast_result$qseqid))
-qseqs_with_blast_hits <- unique(blast_result$qseqid)
-
-qseqs_no_hits <- setdiff(query_ids$qseqid, qseqs_with_blast_hits)
-
-n_qseqs_no_hits <- length(qseqs_no_hits)
-
-n_qseqs_no_hits == n_qseqs - n_seqs_with_blast_hits # validation with tha maths
-
-length(unique(subset(query_ids, !(qseqid %in% unique(blast_result$qseqid)))$qseqid))
-length(unique(subset(query_ids, (qseqid %in% unique(blast_result$qseqid)))$qseqid))
-
-
-qseqs_no_hits == subset(query_ids, !(qseqid %in% unique(blast_result$qseqid)))$qseqid
-
-View(setdiff(qseqs_no_hits, )
-
-qseqs_no_hits_df <- as.data.frame(qseqs_no_hits) %>%
-  rename(qseq = qseqs_no_hits) %>%
-  rowwise() %>%
-  mutate(node = strsplit(qseq, ":")[[1]][1]) %>%
-  distinct()
-
-
-# Calculate total unique query IDs
-n_qseqs <- length(unique(query_ids$qseqid))
-
-# Calculate unique query IDs with BLAST hits
-n_seqs_with_blast_hits <- length(qseqs_with_blast_hits)
-
-# Calculate unique query IDs without BLAST hits using setdiff
-qseqs_no_hits <- setdiff(query_ids$qseqid, qseqs_with_blast_hits)
-n_qseqs_no_hits <- length(qseqs_no_hits)
-
-# Compare results
-n_qseqs_no_hits == (n_qseqs - n_seqs_with_blast_hits) # Should be TRUE if calculations match
-
-qseqs_no_hits_direct <- query_ids$qseqid[!(query_ids$qseqid %in% qseqs_with_blast_hits)]
-identical(qseqs_no_hits, unique(qseqs_no_hits_direct))
-
-expected_no_hits <- unique(query_ids$qseqid[!(query_ids$qseqid %in% blast_result$qseqid)])
-identical(qseqs_no_hits, expected_no_hits) # Should be TRUE if sets match
-
-mismatches <- setdiff(expected_no_hits, qseqs_no_hits)
-cat("Mismatches found:", mismatches, "\n")
-
-```
-
-# LLM solution to verification
-```{r}
-
-# Step-by-step validation script for calculating `n_qseqs_no_hits`
-
-# Load libraries (if necessary)
-# library(dplyr)
-
-# 1. Calculate total unique query sequences
-n_qseqs <- length(unique(query_ids$qseqid))
-cat("Total unique queries (n_qseqs):", n_qseqs, "\n")
-
-# 2. Calculate unique query sequences with BLAST hits
-n_seqs_with_blast_hits <- length(unique(blast_result$qseqid))
-cat("Unique queries with BLAST hits (n_seqs_with_blast_hits):", n_seqs_with_blast_hits, "\n")
-
-# 3. Define qseqs_with_blast_hits as the unique qseqid values in blast_result
-qseqs_with_blast_hits <- unique(blast_result$qseqid)
-
-# 4. Calculate query sequences with no BLAST hits using setdiff
-qseqs_no_hits <- setdiff(query_ids$qseqid, qseqs_with_blast_hits)
-n_qseqs_no_hits <- length(qseqs_no_hits)
-cat("Calculated no-hit queries (n_qseqs_no_hits):", n_qseqs_no_hits, "\n")
-
-# 5. Validation using the equation n_qseqs - n_seqs_with_blast_hits
-expected_n_qseqs_no_hits <- n_qseqs - n_seqs_with_blast_hits
-cat("Expected no-hit queries (n_qseqs - n_seqs_with_blast_hits):", expected_n_qseqs_no_hits, "\n")
-
-# 6. Check if the calculated no-hit queries match the expected value
-if (n_qseqs_no_hits == expected_n_qseqs_no_hits) {
-  cat("Validation passed: n_qseqs_no_hits matches expected value.\n")
-} else {
-  cat("Validation failed: n_qseqs_no_hits does not match expected value.\n")
-
-  # 7. Investigate further by comparing setdiff-based result with a direct logical filter approach
-  qseqs_no_hits_direct <- unique(query_ids$qseqid[!(query_ids$qseqid %in% qseqs_with_blast_hits)])
-  cat("Direct calculation of qseqs_no_hits using logical filter yields:", length(qseqs_no_hits_direct), "\n")
-  
-  # Compare qseqs_no_hits and qseqs_no_hits_direct
-  if (!identical(qseqs_no_hits, qseqs_no_hits_direct)) {
-    cat("Mismatch found between setdiff-based qseqs_no_hits and logical filter-based qseqs_no_hits.\n")
-    
-    # Find the mismatched elements
-    mismatches_setdiff <- setdiff(qseqs_no_hits, qseqs_no_hits_direct)
-    mismatches_logical <- setdiff(qseqs_no_hits_direct, qseqs_no_hits)
-    
-    cat("Mismatches in setdiff-based approach (missing in logical):", mismatches_setdiff, "\n")
-    cat("Mismatches in logical filter-based approach (missing in setdiff):", mismatches_logical, "\n")
-  } else {
-    cat("Both setdiff and logical filter approaches match but still do not match expected count.\n")
-  }
-}
-
-# 8. Check for duplicates in query_ids and blast_result qseqid columns
-duplicates_in_query_ids <- sum(duplicated(query_ids$qseqid))
-duplicates_in_blast_result <- sum(duplicated(blast_result$qseqid))
-cat("Duplicates in query_ids$qseqid:", duplicates_in_query_ids, "\n")
-cat("Duplicates in blast_result$qseqid:", duplicates_in_blast_result, "\n")
-
-# 9. Check for any NA values in query_ids and blast_result
-nas_in_query_ids <- sum(is.na(query_ids$qseqid))
-nas_in_blast_result <- sum(is.na(blast_result$qseqid))
-cat("NA values in query_ids$qseqid:", nas_in_query_ids, "\n")
-cat("NA values in blast_result$qseqid:", nas_in_blast_result, "\n")
-
-# Summary
-cat("\nSummary:\n")
-cat("n_qseqs:", n_qseqs, "\n")
-cat("n_seqs_with_blast_hits:", n_seqs_with_blast_hits, "\n")
-cat("n_qseqs_no_hits (calculated):", n_qseqs_no_hits, "\n")
-cat("Expected n_qseqs_no_hits:", expected_n_qseqs_no_hits, "\n")
-cat("Discrepancy:", n_qseqs_no_hits != expected_n_qseqs_no_hits, "\n")
-
-# Final Comparison
-identical_result <- identical(qseqs_no_hits, qseqs_no_hits_direct)
-cat("Final check if both methods yield identical no-hit sets:", identical_result, "\n")
-
-
-```
-# LLM round 2
-```{r}
-# Step-by-step validation script with handling for duplicates in blast_result
-
-# 1. Calculate total unique query sequences
-n_qseqs <- length(unique(query_ids$qseqid))
-cat("Total unique queries (n_qseqs):", n_qseqs, "\n")
-
-# 2. Calculate unique hits by removing duplicates in blast_result$qseqid
-unique_blast_hits <- unique(blast_result$qseqid)
-n_seqs_with_blast_hits_deduped <- length(unique_blast_hits)
-cat("Unique queries with BLAST hits after deduplication (n_seqs_with_blast_hits_deduped):", n_seqs_with_blast_hits_deduped, "\n")
-
-# 3. Calculate `qseqs_no_hits` with deduplicated blast hits
-qseqs_no_hits <- setdiff(query_ids$qseqid, unique_blast_hits)
-n_qseqs_no_hits <- length(qseqs_no_hits)
-cat("Calculated no-hit queries (n_qseqs_no_hits):", n_qseqs_no_hits, "\n")
-
-# 4. Recalculate expected no-hit queries using deduplicated counts
-expected_n_qseqs_no_hits_deduped <- n_qseqs - n_seqs_with_blast_hits_deduped
-cat("Expected no-hit queries (n_qseqs - n_seqs_with_blast_hits_deduped):", expected_n_qseqs_no_hits_deduped, "\n")
-
-# 5. Check if the recalculated `n_qseqs_no_hits` matches expected value
-if (n_qseqs_no_hits == expected_n_qseqs_no_hits_deduped) {
-  cat("Validation passed after handling duplicates: n_qseqs_no_hits matches expected value.\n")
-} else {
-  cat("Validation still failed after handling duplicates.\n")
-  # Optional: Print out a sample of `qseqid`s with multiple hits in `blast_result`
-  cat("Investigating duplicate qseqids in blast_result...\n")
-  duplicated_qseqids <- blast_result$qseqid[duplicated(blast_result$qseqid)]
-  unique_dup_qseqids <- unique(duplicated_qseqids)
-  cat("Sample of duplicate qseqids in blast_result:", head(unique_dup_qseqids), "\n")
-  cat("Total unique qseqids with duplicates:", length(unique_dup_qseqids), "\n")
-}
-
-# Summary after deduplication
-cat("\nSummary After Deduplication:\n")
-cat("n_qseqs:", n_qseqs, "\n")
-cat("n_seqs_with_blast_hits (deduped):", n_seqs_with_blast_hits_deduped, "\n")
-cat("n_qseqs_no_hits (calculated):", n_qseqs_no_hits, "\n")
-cat("Expected n_qseqs_no_hits (deduped):", expected_n_qseqs_no_hits_deduped, "\n")
-
-```
-
-
-
 ```{r}
 tax_table <- tax_profile %>%
   rowwise() %>%
@@ -233,7 +57,7 @@ tax_table <- tax_profile %>%
   # mutate(species_stripped = paste(strsplit(species, " ")[[1]][1:2], collapse = " "))
 
 
-genome_node_clusters <- blast_result %>%
+genome_node_clusters <- blast_result_filtered %>%
   rowwise %>%
   mutate(node = strsplit(qseqid, ":")[[1]][1]) %>%
   left_join(., genome_seq_ids, by = c("sseqid" = "seqid")) %>%
@@ -249,6 +73,19 @@ genome_node_clusters <- blast_result %>%
   left_join(., tax_table, by = c("species"))
 
 genome_node_clusters[genome_node_clusters == ""] <- NA
+
+species_node_clusters <- genome_node_clusters %>%
+  select(node, species) %>%
+  filter(!is.na(species)) %>%
+  distinct() %>%
+  group_by(node) %>%
+  mutate(mult_species = ifelse(n() > 1, 
+                               "multiple_species", 
+                                species)) %>%
+  ungroup() %>%
+  select(node, mult_species) %>%
+  distinct()
+
 
 genus_node_clusters <- genome_node_clusters %>%
   rowwise() %>%
@@ -274,6 +111,22 @@ genus_node_clusters$Genera[genus_node_clusters$genus == "Peptoclostridium"] <- "
 genus_node_clusters$genus[genus_node_clusters$Genera == "128827"] <- "Erysipelotrichaceae"
 genus_node_clusters$genus[genus_node_clusters$Genera == "39491"] <- "Agathobacter"
 genus_node_clusters$genus[genus_node_clusters$Genera == "2815775"] <- "Berryella"
+
+genus_node_clusters_filtered <- genus_node_clusters %>%
+  select(node, genus) %>%
+  filter(!is.na(genus)) %>%
+  distinct() %>%
+  group_by(node) %>%
+  mutate(mult_genera = ifelse(n() > 1, 
+                               "multiple_genera", 
+                                genus)) %>%
+  ungroup() %>%
+  select(node, mult_genera) %>%
+  distinct()
+
+write.csv(genus_node_clusters_filtered, "workflow/out/blast/sample1_nodes_by_genus.csv")
+write.csv(species_node_clusters, "workflow/out/blast/sample1_nodes_by_species.csv")
+
 
 # determine how we should group clusters by on a genus level -- by genus or genera
 nrow(subset(genus_node_clusters, is.na(genus)))

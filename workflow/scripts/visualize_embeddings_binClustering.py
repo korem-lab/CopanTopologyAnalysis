@@ -24,14 +24,16 @@ RAND_STATE = int(sys.argv[12])  # Random state for reproducibility
 DIMENSION = str(sys.argv[13])  # Dimension (for example, k for the graph)
 ALPHA = float(sys.argv[14])    # Alpha value for scatter plot transparency
 
+TAX_LEVEL = str(sys.argv[15])
+
 def main():
     embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')
-    embedding_vectors = embedding_kv.vectors
-
     species_map = load_species_map(TAX_F)
 
-    # Get species for each node in the same order as embedding vectors
-    node_species = [species_map[node] for node in embedding_kv.index_to_key]
+    # Filter nodes in embedding vectors based on presence in species_map
+    filtered_nodes = [node for node in embedding_kv.index_to_key if node in species_map]
+    filtered_vectors = [embedding_kv[node] for node in filtered_nodes]
+    node_species = [species_map[node] for node in filtered_nodes]
 
     # Map species to colors
     unique_species = list(set(node_species))
@@ -39,22 +41,19 @@ def main():
     species_to_color = {species: sns.color_palette("hls", num_species)[i] for i, species in enumerate(unique_species)}
     colors = [species_to_color[species] for species in node_species]
 
-
+    # Run t-SNE
     tsne_model = TSNE(perplexity=PERPLEXITY, n_components=N_COMPONENTS, init='pca', n_iter=N_ITER, random_state=RAND_STATE)
-    tsne_results = tsne_model.fit_transform(embedding_vectors)
+    tsne_results = tsne_model.fit_transform(filtered_vectors)
 
     # Plotting
-
-     # Set up plot title
     title = (f"{GRAPH_ID}: walk length={WALK_LENGTH}, {N_WALKS} walks, "
              f"p={P_VAL}, q={Q_VAL}, k={DIMENSION}, "
-             f"perplexity={PERPLEXITY}, iterations={N_ITER}")
+             f"perplexity={PERPLEXITY}, iterations={N_ITER}, tax_level={TAX_LEVEL}")
 
     plt.figure(figsize=(10, 10))
     x = tsne_results[:, 0]
     y = tsne_results[:, 1]
     plt.scatter(x, y, alpha=ALPHA, linewidth=0, c=colors)
-
     plt.title(title)
     plt.grid(True)
 
@@ -65,7 +64,7 @@ def load_species_map(species_csv_file):
     """Load the node-to-species mapping from a CSV file using pandas."""
     df = pd.read_csv(species_csv_file)
     # Convert to dictionary (node -> species)
-    species_map = dict(zip(df['node'], df['species']))
+    species_map = dict(zip(df['node'], df[TAX_LEVEL]))
     return species_map
 
 if __name__ == '__main__':

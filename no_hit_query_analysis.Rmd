@@ -6,9 +6,42 @@ date: "2024-11-11"
 
 ```{r}
 library(readr)
+library(ggplot2)
+library(tidyverse)
 
 query_ids <- read_table("workflow/out/blast/sample_1_0_02_ids.txt")
 no_hit_query_ids <- read_table("workflow/out/blast/qseqs_no_blast_hits.txt")
-
+seq_lengths <- read_csv("workflow/out/blast/sample_1_0_02_seqLengths.csv")
 
 ```
+
+
+```{r}
+seq_lengths_hits <- seq_lengths %>%
+  mutate(blast_hit = ifelse(qseqid %in% no_hit_query_ids$qseqid, 
+                            "no", 
+                            "yes"))
+
+# check
+nrow(subset(seq_lengths_hits, blast_hit == "no"))
+nrow(subset(seq_lengths_hits, blast_hit == "yes"))
+nrow(no_hit_query_ids)
+nrow(query_ids)
+nrow(query_ids) - nrow(no_hit_query_ids)
+```
+
+
+```{r}
+ggplot(seq_lengths_hits, aes(y = length, x = blast_hit)) + 
+  geom_boxplot()
+
+ggplot(seq_lengths_hits, aes(x = length, color = blast_hit, fill = blast_hit)) + 
+  geom_density()
+
+ggplot(subset(seq_lengths_hits, length < 1000), aes(y = length, x = blast_hit, color = blast_hit)) + 
+  geom_boxplot()
+
+ggplot(subset(seq_lengths_hits, length < 1000), aes(x = length, color = blast_hit, fill = blast_hit)) + 
+  geom_density(alpha = 0.3)
+```
+
