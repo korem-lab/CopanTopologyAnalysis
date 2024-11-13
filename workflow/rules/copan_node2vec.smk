@@ -169,10 +169,10 @@ rule validate:
         model_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_model.txt"),
         embeddings_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_embeddings.txt")
     shell:
-    """
-    python3 workflow/scripts/validate_node2vec_pipeline.py {input.graph} \
-    {input.links} {output.links_check} \
-    {input.walks_oriented} {input.walks_vectorized} {output.walks_oriented_check} {output.walks_vectorized_check} \
-    {input.model} {input.embeddings} {output.mode_check} {output.embeddings_check} 
-    """
+        """
+        python3 workflow/scripts/validate_node2vec_pipeline.py {input.graph} \
+        {input.links} {output.links_check} \
+        {input.walks_oriented} {input.walks_vectorized} {output.walks_oriented_check} {output.walks_vectorized_check} \
+        {input.model} {input.embeddings} {output.mode_check} {output.embeddings_check} 
+        """
 
