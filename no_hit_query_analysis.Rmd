@@ -12,7 +12,7 @@ library(tidyverse)
 query_ids <- read_table("workflow/out/blast/sample_1_0_02_ids.txt")
 no_hit_query_ids <- read_table("workflow/out/blast/qseqs_no_blast_hits.txt")
 seq_lengths <- read_csv("workflow/out/blast/sample_1_0_02_seqLengths.csv")
-
+embeddings_not_in_species_map <- read_table("workflow/out/blast/embedding_not_in_species.txt")
 ```
 
 
@@ -43,5 +43,10 @@ ggplot(subset(seq_lengths_hits, length < 1000), aes(y = length, x = blast_hit, c
 
 ggplot(subset(seq_lengths_hits, length < 1000), aes(x = length, color = blast_hit, fill = blast_hit)) + 
   geom_density(alpha = 0.3)
+```
+
+# node embeddings not making it into the species map
+```{r}
+
 ```
 
