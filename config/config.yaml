@@ -34,6 +34,7 @@ distancesDir: "workflow/out/pairwise_distances"
 degreeDir: "workflow/out/node_degrees"
 distDegDir: "workflow/out/distance_degree"
 taxonomyDir: "workflow/out/taxonomy"
+validationDir: "workflow/out/validation"
 
 # Graph ID
 graph_id: ["sample_1_0_02"]
