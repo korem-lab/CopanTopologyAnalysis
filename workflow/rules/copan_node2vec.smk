@@ -132,11 +132,25 @@ rule joinDistanceDegree:
     input: 
         distances=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv"),
         degrees=join(config["degreeDir"], "{graph_id}_node_degrees.csv")
-    output: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
+    output: 
+        join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
     shell:
         """
         python3 workflow/scripts/join_distance_degree.py {input.distances} {input.degrees} {output}
-        """    
+        """  
+
+rule joinDistanceTax:
+    input: 
+        distances=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv"),
+        tax_csv=join(config["taxonomyDir"], "{graph_id}_nodes_by_{tax_level}.csv")
+    output: 
+        join(config["taxonomyDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{tax_level}_distancesWithTax.csv")
+    params:
+        tax_level="{tax_level}"
+    shell:
+        """
+        python3 workflow/scripts/join_distance_species.py {input.distances} {input.tax_csv} {output} {params.tax_level}
+        """      
 
 rule getDistDegStats:
     input: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv")
