@@ -163,9 +163,9 @@ rule validate:
         model=join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
         embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
     output:
-        links_check=join(config["validationDir"], "{graph_id}_nodes_no_in_links.txt"), 
-        walks_oriented_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_nodes_not_in_walksOriented.txt"),
-        walks_vectorized_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_nodes_not_in_walksVectorized.txt"),
+        links_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_no_in_links.txt"), 
+        walks_oriented_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_walksOriented.txt"),
+        walks_vectorized_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_walksVectorized.txt"),
         model_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_model.txt"),
         embeddings_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_embeddings.txt")
     shell:
