@@ -4,24 +4,22 @@ Check that all nodes in copangraph are accounted for in every file in the node2v
 import json
 from gensim.models import Word2Vec
 from gensim.models import KeyedVectors
+import sys
 
-GRAPH_F = "workflow/out/copangraphs/sample_1_0_02.gfa"
+GRAPH_F = sys.argv[1]
 
-LINKS_F = "workflow/out/link_dicts/sample_1_0_02_links.json"
-LINKS_CHECK_F = "workflow/out/validation/nodes_not_in_links.txt"
+LINKS_F = sys.argv[2]
+LINKS_CHECK_F = sys.argv[3]
 
-WALKS_ORIENTED_F = "workflow/out/walk_dicts_oriented/sample_1_0_02_50Lw30Nw1.0p1.0q_walks_oriented.json"
-WALKS_VECTORIZED_F = "workflow/out/walk_lists_vectorized/sample_1_0_02_50Lw30Nw1.0p1.0q_walks_vectorized.txt"
-WALKS_ORIENTED_CHECK_F = "workflow/out/validation/nodes_not_in_walkDict_sample_1_0_02.txt"
-WALKS_VECTORIZED_CHECK_F = "workflow/out/validation/nodes_not_in_walkList_sample_1_0_02.txt"
+WALKS_ORIENTED_F = sys.argv[4]
+WALKS_VECTORIZED_F = sys.argv[5]
+WALKS_ORIENTED_CHECK_F = sys.argv[6]
+WALKS_VECTORIZED_CHECK_F = sys.argv[7]
 
-EMBEDDINGS_F = "workflow/out/vectorization_model/embeddings/sample_1_0_02_50Lw30Nw1.0p1.0q50k_walks.embeddings"
-MODEL_F = "workflow/out/vectorization_model/models/sample_1_0_02_50Lw30Nw1.0p1.0q50k_walks.model"
-EMBEDDINGS_CHECK_F = "workflow/out/validation/nodes_not_in_embeddings_sample_1_0_02"
-MODEL_CHECK_F = "workflow/out/validation/nodes_not_in_model_sample_1_0_02"
-
-# CLUSTER_F = "workflow/out/cluster_dicts/sample_1_0_02_30Lw10Nw1.0p1.0q50k_30perp1000iter_clusters.json"
-# CLUSTER_CHECK_F = "workflow/out/validation/nodes_not_in_clusterDict_sample_1_0_02.txt"
+MODEL_F = sys.argv[8]
+EMBEDDINGS_F = sys.argv[9]
+MODEL_CHECK_F = sys.argv[10]
+EMBEDDINGS_CHECK_F = sys.argv[11]
 
 def main():
     nodes = get_nodes(GRAPH_F)

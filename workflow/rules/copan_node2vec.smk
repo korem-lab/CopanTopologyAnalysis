@@ -154,3 +154,25 @@ rule getDistDegStats:
         {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
         """
 
+rule validate:
+    input:
+        graph=join(config["graphDir"], "{graph_id}.gfa"), 
+        links=join(config["linksDir"], "{graph_id}_links.json"), 
+        walks_oriented=join(config["walkDictsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_oriented.json"),
+        walks_vectorized=join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized.txt"), 
+        model=join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
+        embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
+    output:
+        links_check=join(config["validation"], "{graph_id}_nodes_no_in_links.txt"), 
+        walks_oriented_check=join(config["validation"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_nodes_not_in_walksOriented.txt"),
+        walks_vectorized_check=join(config["validation"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_nodes_not_in_walksVectorized.txt"),
+        model_check=join(config["validation"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_model.txt"),
+        embeddings_check=join(config["validation"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_embeddings.txt")
+    shell:
+    """
+    python3 workflow/scripts/validate_node2vec_pipeline.py {input.graph} \
+    {input.links} {output.links_check} \
+    {input.walks_oriented} {input.walks_vectorized} {output.walks_oriented_check} {output.walks_vectorized_check} \
+    {input.model} {input.embeddings} {output.mode_check} {output.embeddings_check} 
+    """
+
