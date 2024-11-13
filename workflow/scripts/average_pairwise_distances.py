@@ -9,23 +9,34 @@ def main():
     # Load the input CSV with pairwise distances and species
     df = pd.read_csv(DIST_F)
 
-    # Calculate the average pairwise distance within each species
-    avg_distances_df = calculate_average_distance(df)
+    # Ensure necessary columns exist
+    required_columns = ['node_i', 'species_i', 'node_j', 'species_j', 'distance']
+
+    # Calculate the average pairwise distances for same-species and cross-species pairs
+    avg_distances_df = calculate_average_distances(df)
 
     # Save the result to a CSV file
     avg_distances_df.to_csv(AVG_DIST_F, index=False)
 
-def calculate_average_distance(df):
-    # Pre-filter rows: Exclude same node pairs (i.e., node_i == node_j) and ensure nodes are in the same species
-    df_filtered = df[(df['species_i'] == df['species_j']) & (df['node_i'] != df['node_j'])]
+def calculate_average_distances(df):
+    # Filter for same-species pairs (excluding node_i == node_j)
+    same_species_df = df[(df['species_i'] == df['species_j']) & (df['node_i'] != df['node_j'])]
+    
+    # Filter for cross-species pairs (species_i != species_j)
+    cross_species_df = df[(df['species_i'] != df['species_j'])]
 
-    # Group by species and calculate the average distance using numpy's efficient operations
-    avg_distances = df_filtered.groupby('species_i')['distance'].agg(np.mean).reset_index()
+    # Group by species and calculate the average pairwise distance for both cases
+    avg_same_species = same_species_df.groupby('species_i')['distance'].agg(np.mean).reset_index()
+    avg_same_species.columns = ['species', 'average_pw_euclidean_distance_same_species']
 
-    # Rename the columns for clarity
-    avg_distances.columns = ['species', 'average_pw_euclidean_distance']
+    avg_cross_species = cross_species_df.groupby('species_i')['distance'].agg(np.mean).reset_index()
+    avg_cross_species.columns = ['species', 'average_pw_euclidean_distance_cross_species']
 
-    return avg_distances
+    # Merge both results on 'species'
+    avg_distances_df = pd.merge(avg_same_species, avg_cross_species, on='species', how='outer')
+
+    return avg_distances_df
+
 
 if __name__ == '__main__':
     main()
