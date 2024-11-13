@@ -168,6 +168,16 @@ rule getDistDegStats:
         {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
         """
 
+rule getAverageDist:
+    input: 
+        join(config["taxonomyDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{tax_level}_distancesWithTax.csv")
+    output:
+        join(config["taxonomyDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{tax_level}_averageDistance.csv")
+    shell:
+        """
+        python3 workflow/scripts/average_pairwise_distances.py {input} {output}
+        """
+
 rule validate:
     input:
         graph=join(config["graphDir"], "{graph_id}.gfa"), 

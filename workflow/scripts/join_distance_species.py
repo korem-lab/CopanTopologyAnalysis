@@ -12,7 +12,6 @@ def main():
 
     distance_matrix = pd.read_csv(DISTANCES_F, index_col=0)
     distance_matrix.columns = distance_matrix.columns.astype('int')
-    tax_df = pd.read_csv(TAX_F)
     species_map = load_species_map(TAX_F)
 
     nodes = distance_matrix.index.tolist() # node names, not indeces
@@ -21,8 +20,6 @@ def main():
     # Convert to a NumPy array
     
     distance_degree_df = []
-
-    print(filtered_nodes[0:5])
 
     # trying to iterate from the distance matrix, not the degree df
     for i, j in combinations(filtered_nodes, 2):  # iterate through all node combinations in the list of nodes. i and j are node names, not indeces
@@ -48,7 +45,7 @@ def load_species_map(species_csv_file):
     """Load the node-to-species mapping from a CSV file using pandas."""
     df = pd.read_csv(species_csv_file)
     # Convert to dictionary (node -> species)
-    species_map = dict(zip(df['node'].astype(str), df[TAX_LEVEL]))
+    species_map = dict(zip(df['node'].astype(int), df[TAX_LEVEL]))
     return species_map
 
 

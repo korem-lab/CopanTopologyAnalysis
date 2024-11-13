@@ -118,6 +118,14 @@ rule all:
               q=Q_VALUES,
               k=DIMENSIONS, 
               tax_level=TAX_LEVEL),
+       expand(join(config["taxonomyDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{tax_level}_averageDistance.csv"),
+              graph_id=GRAPH_IDS,
+              walk_length=WALK_LENGTHS,
+              n_walks=N_WALKS,
+              p=P_VALUES,
+              q=Q_VALUES,
+              k=DIMENSIONS, 
+              tax_level=TAX_LEVEL)
 
        #  # summary stats on degree + pairwise distance 
        #  expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv"),
