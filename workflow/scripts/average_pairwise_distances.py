@@ -23,7 +23,7 @@ def calculate_average_distances(df):
     same_species_df = df[(df['species_i'] == df['species_j']) & (df['node_i'] != df['node_j'])]
     
     # Filter for cross-species pairs (species_i != species_j)
-    cross_species_df = df[(df['species_i'] != df['species_j'])]
+    cross_species_df = df[(df['species_i'] != df['species_j']) & (df['node_i'] != df['node_j'])]
 
     # Group by species and calculate the average pairwise distance for both cases
     avg_same_species = same_species_df.groupby('species_i')['distance'].agg(np.mean).reset_index()

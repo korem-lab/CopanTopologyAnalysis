@@ -60,7 +60,7 @@ window: 5
 min_count: 5
 sg: 0
 
-dimensions: [150, 200]
+dimensions: [150]
 
 # # t-SNE params
 # perplexities: [10, 30, 50, 100]  # list of perplexity values
@@ -69,8 +69,8 @@ dimensions: [150, 200]
 # random_state: 32
 
 # t-SNE params
-perplexities: [100, 120]  # list of perplexity values
-n_iters: [8000, 10000]     # list of n_iter values
+perplexities: [100]  # list of perplexity values
+n_iters: [8000]     # list of n_iter values
 n_components: 2
 random_state: 32
 alpha: 0.2
