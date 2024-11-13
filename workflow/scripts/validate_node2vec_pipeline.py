@@ -38,7 +38,7 @@ def main():
     model_nodes = embedding_nodes[0]
     emb_nodes = embedding_nodes[1]
     print("Number of nodes in model:" + str(len(set(model_nodes))))
-    print("Number of nodes in walks list:" + str(len(set(emb_nodes))))
+    print("Number of nodes in embeddings:" + str(len(set(emb_nodes))))
 
     # cluster_nodes = check_node_clusters(nodes, CLUSTER_F, CLUSTER_CHECK_F)
     # print("Number of nodes in clusters dict:" + str(len(set(cluster_nodes))))

@@ -163,7 +163,7 @@ rule validate:
         model=join(config["modelDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.model"),
         embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
     output:
-        links_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_no_in_links.txt"), 
+        links_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_links.txt"), 
         walks_oriented_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_walksOriented.txt"),
         walks_vectorized_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_walksVectorized.txt"),
         model_check=join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_model.txt"),
@@ -173,6 +173,6 @@ rule validate:
         python3 workflow/scripts/validate_node2vec_pipeline.py {input.graph} \
         {input.links} {output.links_check} \
         {input.walks_oriented} {input.walks_vectorized} {output.walks_oriented_check} {output.walks_vectorized_check} \
-        {input.model} {input.embeddings} {output.mode_check} {output.embeddings_check} 
+        {input.model} {input.embeddings} {output.model_check} {output.embeddings_check} 
         """
 
