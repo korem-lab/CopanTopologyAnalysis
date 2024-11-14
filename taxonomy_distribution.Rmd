@@ -9,5 +9,47 @@ library(readr)
 library(ggplot2)
 library(tidyverse)
 
+avg_dist_df <- read_csv("workflow/out/taxonomy/sample_1_0_02_30Lw30Nw1.0p1.0q150k_species_averageDistance.csv")
+dist_species_df <- read_csv("workflow/out/taxonomy/sample_1_0_02_30Lw30Nw1.0p1.0q150k_species_distancesWithTax.csv", guess_max = 10000)
+```
+
+# inter vs intra species avg pairwise euclidean distances
+```{r}
+ggplot(subset(avg_dist_df, species != "multiple_species"), aes(x = average_pw_euclidean_distance_same_species, average_pw_euclidean_distance_cross_species)) +
+  geom_point() +
+  xlab(paste("Avg pairwise euclidean distance", "for same-species node pairs", sep="\n")) +
+  ylab(paste("Avg pairwise euclidean distance", "for cross-species node pairs", sep="\n")) +
+  ggtitle("Same- vs. cross-species average pairwise euclidean distances")
+
+
+avg_dist_df_long <- avg_dist_df
+  pivot_longer(!species, names_to = "species_grouping", values_to = "avg_pairwise_euclidean_distance")
+
+avg_dist_df_long$species_grouping[avg_dist_df_long$species_grouping == "average_pw_euclidean_distance_same_species"] <- "same_species"
+
+avg_dist_df_long$species_grouping[avg_dist_df_long$species_grouping == "average_pw_euclidean_distance_cross_species"] <- "cross_species"
+  
+ggplot(subset(avg_dist_df_long, species != "multiple_species"), aes(x = species_grouping, avg_pairwise_euclidean_distance)) +
+  geom_boxplot() 
+  xlab(paste("Avg pairwise euclidean distance", "for same-species node pairs", sep="\n")) +
+  ylab(paste("Avg pairwise euclidean distance", "for cross-species node pairs", sep="\n")) +
+  ggtitle("Same- vs. cross-species average pairwise euclidean distances")
 
 ```
+
+
+```{r}
+dist_species_df_classes <- dist_species_df %>%
+  mutate(same_species = case_when(species_i == species_j ~ "same_species", 
+                                species_i != species_j ~ "different_species"), 
+         pair_species = case_when(species_i == species_j ~ species_i, 
+                                species_i != species_j ~ NA)) 
+```
+
+```{r}
+ggplot(subset(dist_species_df_classes, species_i != "multiple_species" | species_j != "multiple_species"), aes(x = distance, color = same_species)) +
+  geom_density()
+
+
+```
+

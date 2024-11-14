@@ -15,6 +15,7 @@ genome_seq_ids <- read_delim("workflow/out/blast/sample_1_reference_metagenome_i
 tax_profile <- read_csv("workflow/out/blast/taxonomic_profile_1.csv")
 
 query_ids <- read_table("workflow/out/blast/sample_1_0_02_ids.txt")
+
 ```
 
 

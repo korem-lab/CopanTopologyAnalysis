@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import sys
 
-DIST_DEG_F = sys.argv[1]
+DIST_SPECIES_F = sys.argv[1]
 DISTRIBUTION_F = sys.argv[2]
 STATS_F = sys.argv[3]
 DIMENSIONS=sys.argv[4]
