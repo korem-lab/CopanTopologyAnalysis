@@ -11,6 +11,8 @@ library(tidyverse)
 
 avg_dist_df <- read_csv("workflow/out/taxonomy/sample_1_0_02_30Lw30Nw1.0p1.0q150k_species_averageDistance.csv")
 dist_species_df <- read_csv("workflow/out/taxonomy/sample_1_0_02_30Lw30Nw1.0p1.0q150k_species_distancesWithTax.csv", guess_max = 10000)
+species_df <- read_csv("workflow/out/node_classification/sample_1_0_02_nodes_by_species.csv", guess_max = 100000)
+degree_df <- read_csv("workflow/out/node_classification/sample_1_0_02_node_degrees.csv", guess_max = 100000)
 ```
 
 # inter vs intra species avg pairwise euclidean distances
@@ -44,6 +46,8 @@ dist_species_df_classes <- dist_species_df %>%
                                 species_i != species_j ~ "different_species"), 
          pair_species = case_when(species_i == species_j ~ species_i, 
                                 species_i != species_j ~ NA)) 
+
+
 ```
 
 ```{r}
@@ -52,4 +56,10 @@ ggplot(subset(dist_species_df_classes, species_i != "multiple_species" | species
 
 
 ```
+
+```{r}
+species_deg_nodes <- species_df %>%
+  
+```
+
 

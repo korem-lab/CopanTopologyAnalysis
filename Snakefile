@@ -100,7 +100,7 @@ rule all:
        expand(join(config["degreeDir"], "{graph_id}_node_degrees.csv"),
               graph_id=GRAPH_IDS), 
 
-       joining pairwise distances plus degree for each node
+       # joining pairwise distances plus degree for each node
        expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree.csv"),
               graph_id=GRAPH_IDS,
               walk_length=WALK_LENGTHS,

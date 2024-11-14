@@ -16,16 +16,20 @@ def main():
 
     nodes = distance_matrix.index.tolist() # node names, not indeces
 
-    filtered_nodes = [node for node in nodes if node in species_map]
+    # filtered_nodes = [node for node in nodes if node in species_map]
     # Convert to a NumPy array
     
     distance_degree_df = []
 
     # trying to iterate from the distance matrix, not the degree df
-    for i, j in combinations(filtered_nodes, 2):  # iterate through all node combinations in the list of nodes. i and j are node names, not indeces
+    for i, j in combinations(nodes, 2):  # iterate through all node combinations in the list of nodes. i and j are node names, not indeces
 
-        species_i = species_map[i]
-        species_j = species_map[j]
+        # species_i = species_map[i]
+        # species_j = species_map[j]
+
+        # Assign species; default to "No BLAST hit" if the node is not in species_map
+        species_i = species_map.get(i, "No BLAST hit")
+        species_j = species_map.get(j, "No BLAST hit")
 
         try:
             distance_ij = distance_matrix.loc[i, j]  # Access distance by label

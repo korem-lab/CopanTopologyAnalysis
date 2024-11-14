@@ -16,7 +16,7 @@ def main():
     nodes = distance_matrix.index.tolist() # node names, not indeces
     # Convert to a NumPy array
 
-    degree_df.index()
+    # degree_df.index()
     
     node_degree_map = dict(zip(degree_df['node'], degree_df['degree']))
     
