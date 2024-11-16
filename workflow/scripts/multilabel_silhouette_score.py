@@ -4,7 +4,7 @@ import sys
 
 DIST_F = sys.argv[1]
 SPECIES_DF = sys.argv[2]
-OUTPUT_CSV = sys.argv[3]
+# OUTPUT_CSV = sys.argv[3]
 
 def main():
     dist_matrix = pd.read_csv(DIST_F, index_col=0)
@@ -33,6 +33,7 @@ def multi_label_silhouette(dist_matrix, species_dict):
     """
 
     nodes = dist_matrix.index
+    print("n nodes:" + str(len(nodes)))
     scores = []
 
     # Precompute species membership mask for each node
@@ -40,6 +41,7 @@ def multi_label_silhouette(dist_matrix, species_dict):
                            for other_node in nodes if node != other_node} for node in nodes}
 
     for node in nodes:
+        print(node)
         # Intra-species distances (a(i)): Nodes sharing at least one species
         intra_distances = [dist_matrix.loc[node, other_node] 
                            for other_node in nodes if species_masks[node][other_node]]
@@ -52,6 +54,10 @@ def multi_label_silhouette(dist_matrix, species_dict):
 
         # Silhouette score for this node
         s_i = (b_i - a_i) / max(a_i, b_i) if a_i != 0 or b_i != np.inf else 0
+        print(s_i)
         scores.append(s_i)
 
     return np.mean(scores)
+
+if __name__ == '__main__':
+    main()
