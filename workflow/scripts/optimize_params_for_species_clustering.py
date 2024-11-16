@@ -4,6 +4,7 @@ import sys
 
 DIST_SPECIES_F = sys.argv[1]
 DISTRIBUTION_F = sys.argv[2]
+
 STATS_F = sys.argv[3]
 DIMENSIONS=sys.argv[4]
 WALK_LENGTH = sys.argv[5]

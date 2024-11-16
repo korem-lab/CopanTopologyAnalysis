@@ -200,3 +200,13 @@ rule validate:
         {input.model} {input.embeddings} {output.model_check} {output.embeddings_check} 
         """
 
+rule silhouetteScore:
+    input: 
+        distances=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
+        species_df=tax_csv=join(config["taxonomyDir"], "{graph_id}_nodes_by_{tax_level}_multilabel.csv")
+    output:
+        join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_silhouetteScore.txt")
+    shell:
+        """
+        python3 workflow/scripts/multilabel_silhouette_score.py {input.distances} {input.species_df} {output}
+        """

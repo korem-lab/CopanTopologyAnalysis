@@ -31,7 +31,6 @@ def main():
     embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')
     species_map = load_species_map(TAX_F)
 
-
     # Filter nodes in embedding vectors based on presence in species_map
     filtered_nodes = [node for node in embedding_kv.index_to_key if node in species_map]
     filtered_vectors = np.array([embedding_kv[node] for node in filtered_nodes])

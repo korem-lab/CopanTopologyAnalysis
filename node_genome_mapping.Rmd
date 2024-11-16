@@ -71,22 +71,27 @@ genome_node_clusters <- blast_result_filtered %>%
                                paste(strsplit(genome, " ")[[1]][1:2], collapse = " "),
                              str_detect(genome, "\\bsp\\.") ~ 
                                paste(strsplit(genome, " ")[[1]][1:3], collapse = " "))) %>%
-  left_join(., tax_table, by = c("species"))
+  left_join(., tax_table, by = c("species")) %>%
+  filter(!is.na(genome))
 
 genome_node_clusters[genome_node_clusters == ""] <- NA
+
+write.csv("workflow/out/node_classification/nodes_by_genome_multilabel.csv")
 
 species_node_clusters <- genome_node_clusters %>%
   select(node, species) %>%
   filter(!is.na(species)) %>%
   distinct() %>%
   group_by(node) %>%
-  mutate(mult_species = ifelse(n() > 1, 
-                               "multiple_species", 
-                                species)) %>%
-  ungroup() %>%
-  select(node, mult_species) %>%
+  summarise(species = paste(species, collapse = ";")) %>%
+  # mutate(mult_species = ifelse(n() > 1, 
+                               # "multiple_species", 
+                               #  species)) %>%
+  # ungroup() %>%
+  # select(node, mult_species) %>%
   distinct()
 
+write.csv(species_node_clusters, "workflow/out/blast/sample_1_0_02_nodes_by_species_multilabel.csv")
 
 genus_node_clusters <- genome_node_clusters %>%
   rowwise() %>%
