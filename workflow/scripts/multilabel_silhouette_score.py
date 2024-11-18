@@ -19,10 +19,16 @@ def main():
 
     # Filter the distance matrix and species_dict to only include nodes that are in species_df
     nodes_in_species = set(species_df['node'])
+    print("n nodes in species dict: " + str(len(nodes_in_species)))
     
     # Filter the distance matrix to only include rows and columns for nodes in species_df
     dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(nodes_in_species), 
                                   dist_matrix.columns.intersection(nodes_in_species)]
+    
+    print("n nodes in dist matrix after filtering: " + str(len(dist_matrix.columns.to_list)))
+
+    print("nodes in either set but not in both: " + str(nodes_in_species.symmetric_difference(set(dist_matrix.columns.to_list))))
+
     
     score = multi_label_silhouette(dist_matrix, species_dict)
     print(f"Silhouette Score: {score}")
