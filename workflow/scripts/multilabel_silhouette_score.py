@@ -37,19 +37,23 @@ def main():
 
     print("n nodes in both: " + str(len(common_nodes)))
 
+    filtered_species_dict = {node: species_dict[node] for node in common_nodes}
+
+    print("n nodes in species dict after filtering:" + str(len(filtered_species_dict.keys())))
+
     # Filter the distance matrix to only include rows and columns for nodes in species_df
-    dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(species_nodes), 
-                                  dist_matrix.columns.intersection(species_nodes)]
+    dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(common_nodes), 
+                                  dist_matrix.columns.intersection(common_nodes)]
     
     filtered_dist_file = "workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
     dist_matrix.to_csv(filtered_dist_file)
     
     print("n nodes in dist matrix after filtering: " + str(len(dist_matrix.columns.to_list())))
 
-    print("nodes in either set but not in both: " + str(species_nodes.symmetric_difference(set(dist_matrix.columns.to_list()))))
+    # print("nodes in either set but not in both: " + str(species_nodes.symmetric_difference(set(dist_matrix.columns.to_list()))))
 
     
-    score = multi_label_silhouette(dist_matrix, species_dict)
+    score = multi_label_silhouette(dist_matrix, filtered_species_dict)
     print(f"Silhouette Score: {score}")
 
 def multi_label_silhouette(dist_matrix, species_dict):
