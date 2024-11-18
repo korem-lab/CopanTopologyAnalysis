@@ -2,8 +2,10 @@ import pandas as pd
 import numpy as np
 import sys
 
-DIST_F = sys.argv[1]
-SPECIES_DF = sys.argv[2]
+# DIST_F = sys.argv[1]
+# SPECIES_DF = sys.argv[2]
+DIST_F = "workflow/out/pairwise_distances/sample_1_0_02_30Lw30Nw1.0p0.1q20k_pairwiseDistances.csv"
+SPECIES_DF = "workflow/out/taxonomy/pract_nodes_by_species_multilabel.csv"
 # OUTPUT_CSV = sys.argv[3]
 
 def main():
@@ -25,9 +27,12 @@ def main():
     dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(nodes_in_species), 
                                   dist_matrix.columns.intersection(nodes_in_species)]
     
-    print("n nodes in dist matrix after filtering: " + str(len(dist_matrix.columns.to_list)))
+    filtered_dist_file = "workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
+    dist_matrix.to_csv(filtered_dist_file)
+    
+    print("n nodes in dist matrix after filtering: " + str(len(dist_matrix.columns.to_list())))
 
-    print("nodes in either set but not in both: " + str(nodes_in_species.symmetric_difference(set(dist_matrix.columns.to_list))))
+    print("nodes in either set but not in both: " + str(nodes_in_species.symmetric_difference(set(dist_matrix.columns.to_list()))))
 
     
     score = multi_label_silhouette(dist_matrix, species_dict)
