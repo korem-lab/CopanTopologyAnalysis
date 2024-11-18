@@ -148,15 +148,15 @@ def validate_silhouette_score(dist_matrix, species_dict):
     # Create a submatrix of distances for nodes that belong to exactly one species
     sub_species_dict = {node: species_dict[node] for node in single_species_nodes}
     sub_dist_matrix = dist_matrix.loc[single_species_nodes, single_species_nodes]
+    sub_dist_array = dist_matrix.loc[single_species_nodes, single_species_nodes].to_numpy()
+
+    print(sub_dist_array)
 
     # Assign the single species label for all these nodes (since they belong to only one species)
     labels = [next(iter(sub_species_dict[node])) for node in single_species_nodes]  # Get the first species label for each node
-    # Convert species labels to integers for sklearn's silhouette function
-    label_map = {species: idx for idx, species in enumerate(set(labels))}
-    numeric_labels = [label_map[species] for species in labels]
-
+    print("labels:" + str(labels))
     # Calculate silhouette score for each node using sklearn's silhouette_samples
-    silhouette_scores = silhouette_samples(sub_dist_matrix, numeric_labels)
+    silhouette_scores = silhouette_samples(sub_dist_array, labels)
 
     print(f"Silhouette Scores for each node: {dict(zip(single_species_nodes, silhouette_scores))}")
 
@@ -165,7 +165,7 @@ def validate_silhouette_score(dist_matrix, species_dict):
     print(f"Mean Silhouette Score: {mean_silhouette_score}")
 
     # Calculate silhouette score using sklearn for validation
-    sklearn_score = silhouette_score(sub_dist_matrix, numeric_labels)
+    sklearn_score = silhouette_score(sub_dist_array, labels)
     print(f"Silhouette Score from sklearn for single-species nodes: {sklearn_score}")
 
     # Calculate silhouette score using your custom method for validation
