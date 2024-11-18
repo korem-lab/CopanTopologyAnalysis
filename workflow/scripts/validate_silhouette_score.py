@@ -25,7 +25,8 @@ print(f"Number of nodes with a single species: {len(single_species_df)}")
 dist_matrix = pd.read_csv(DIST_F, index_col=0)
 
 # Ensure that the 'node' column in species_df and the indices/columns of dist_matrix are of the same type
-single_species_df['node'] = single_species_df['node'].astype(int)
+# single_species_df['node'] = single_species_df['node'].astype(int)
+single_species_df.loc[:, 'node'] = single_species_df['node'].astype(int)
 dist_matrix.index = dist_matrix.index.astype(int)
 dist_matrix.columns = dist_matrix.columns.astype(int)
 
@@ -34,7 +35,7 @@ common_nodes = set(single_species_df['node']).intersection(dist_matrix.index)
 
 # Filter the species DataFrame and distance matrix for these common nodes
 filtered_species_df = single_species_df[single_species_df['node'].isin(common_nodes)]
-filtered_dist_matrix = dist_matrix.loc[common_nodes, common_nodes]
+filtered_dist_matrix = dist_matrix.loc[list(common_nodes), list(common_nodes)]
 
 # Check the filtered data
 print(f"Filtered distance matrix size: {filtered_dist_matrix.shape}")
