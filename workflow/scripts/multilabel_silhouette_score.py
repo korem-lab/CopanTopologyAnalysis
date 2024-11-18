@@ -20,17 +20,20 @@ def main():
         species_dict[row['node']] = set(row['species'].split(';'))
 
     # Filter the distance matrix and species_dict to only include nodes that are in species_df
-    species_nodes = set(species_df.keys())
+    # species_nodes = set(species_df['nodes'])
+    species_nodes = set(species_dict.keys())
     print("n nodes in species dict: " + str(len(species_nodes)))
+    print(species_nodes)
 
-    dist_nodes = set(dist_matrix.index)  # Nodes in dist_matrix
+    dist_nodes = set(dist_matrix.index.to_list())  # Nodes in dist_matrix
 
     # Find the common nodes
     common_nodes = dist_nodes.intersection(species_nodes)
 
     print("n nodes in dist matrix before filtering: " + str(len(dist_matrix.columns.to_list())))
+    print(dist_nodes[0:5])
 
-    print("nodes in both: " + common_nodes)
+    print("nodes in both: " + str(common_nodes))
 
     # Filter the distance matrix to only include rows and columns for nodes in species_df
     dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(species_nodes), 
@@ -41,7 +44,7 @@ def main():
     
     print("n nodes in dist matrix after filtering: " + str(len(dist_matrix.columns.to_list())))
 
-    print("nodes in either set but not in both: " + str(nodes_in_species.symmetric_difference(set(dist_matrix.columns.to_list()))))
+    print("nodes in either set but not in both: " + str(species_nodes.symmetric_difference(set(dist_matrix.columns.to_list()))))
 
     
     score = multi_label_silhouette(dist_matrix, species_dict)
