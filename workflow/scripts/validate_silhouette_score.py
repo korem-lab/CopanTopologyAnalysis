@@ -1,4 +1,4 @@
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_score, silhouette_samples
 import pandas as pd
 import numpy as np
 import sys
@@ -130,7 +130,7 @@ def multi_label_silhouette(dist_matrix, species_dict):
 
         # Silhouette score for this node
         s_i = (b_i - a_i) / max(a_i, b_i) if a_i != 0 or b_i != np.inf else 0
-        # print(f"Silhouette score for node {node}: {s_i}")
+        print(f"Silhouette score for node {node}: {s_i}")
         scores.append(s_i)
 
     return np.mean(scores)
@@ -151,9 +151,21 @@ def validate_silhouette_score(dist_matrix, species_dict):
 
     # Assign the single species label for all these nodes (since they belong to only one species)
     labels = [next(iter(sub_species_dict[node])) for node in single_species_nodes]  # Get the first species label for each node
+    # Convert species labels to integers for sklearn's silhouette function
+    label_map = {species: idx for idx, species in enumerate(set(labels))}
+    numeric_labels = [label_map[species] for species in labels]
+
+    # Calculate silhouette score for each node using sklearn's silhouette_samples
+    silhouette_scores = silhouette_samples(sub_dist_matrix, numeric_labels)
+
+    print(f"Silhouette Scores for each node: {dict(zip(single_species_nodes, silhouette_scores))}")
+
+    # Calculate the mean silhouette score for validation
+    mean_silhouette_score = silhouette_scores.mean()
+    print(f"Mean Silhouette Score: {mean_silhouette_score}")
 
     # Calculate silhouette score using sklearn for validation
-    sklearn_score = silhouette_score(sub_dist_matrix, labels)
+    sklearn_score = silhouette_score(sub_dist_matrix, numeric_labels)
     print(f"Silhouette Score from sklearn for single-species nodes: {sklearn_score}")
 
     # Calculate silhouette score using your custom method for validation
