@@ -28,7 +28,7 @@ def main():
     # print(species_nodes)
 
     dist_nodes = dist_matrix.index.to_list() # Nodes in dist_matrix
-    print(dist_nodes[0:5])
+    # print(dist_nodes[0:5])
     print("n nodes in dist matrix before filtering: " + str(len(dist_nodes)))
 
     # Find the common nodes
@@ -42,18 +42,18 @@ def main():
     print("n nodes in species dict after filtering:" + str(len(filtered_species_dict.keys())))
 
     # Filter the distance matrix to only include rows and columns for nodes in species_df
-    dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(common_nodes), 
+    filtered_dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(common_nodes), 
                                   dist_matrix.columns.intersection(common_nodes)]
     
     filtered_dist_file = "workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
     dist_matrix.to_csv(filtered_dist_file)
     
-    print("n nodes in dist matrix after filtering: " + str(len(dist_matrix.columns.to_list())))
+    print("n nodes in dist matrix after filtering: " + str(len(filtered_dist_matrix.columns.to_list())))
 
     # print("nodes in either set but not in both: " + str(species_nodes.symmetric_difference(set(dist_matrix.columns.to_list()))))
 
     
-    score = multi_label_silhouette(dist_matrix, filtered_species_dict)
+    score = multi_label_silhouette(filtered_dist_matrix, filtered_species_dict)
     print(f"Silhouette Score: {score}")
 
 def multi_label_silhouette(dist_matrix, species_dict):
@@ -68,29 +68,56 @@ def multi_label_silhouette(dist_matrix, species_dict):
     - float: The silhouette-like score.
     """
 
-    nodes = dist_matrix.index
+    # Check if the nodes in dist_matrix and species_dict match
+    dist_nodes = set(dist_matrix.index)
+    species_nodes = set(species_dict.keys())
+
+    # Find nodes that are in one set but not the other
+    missing_in_dist = species_nodes - dist_nodes  # Species nodes not in dist_matrix
+    missing_in_species = dist_nodes - species_nodes  # Dist_matrix nodes not in species_dict
+
+    # If there are any mismatches, print them in a readable way
+    if missing_in_dist or missing_in_species:
+        print(f"Error: Mismatch between nodes in dist_matrix and species_dict.")
+        
+        if missing_in_dist:
+            print(f"Nodes in species_dict but not in dist_matrix: {list(missing_in_dist)[:10]}... ({len(missing_in_dist)} total)")
+        
+        if missing_in_species:
+            print(f"Nodes in dist_matrix but not in species_dict: {list(missing_in_species)[:10]}... ({len(missing_in_species)} total)")
+        
+        return None  # Or raise an exception if you prefer
+
+    nodes = dist_matrix.index.to_list()
     print("n nodes:" + str(len(nodes)))
     scores = []
 
     # Precompute species membership mask for each node
-    species_masks = {node: {other_node: bool(species_dict[node] & species_dict[other_node]) 
-                           for other_node in nodes if node != other_node} for node in nodes}
+    # species_masks = {node: {other_node: bool(species_dict[node] & species_dict[other_node]) 
+    #                        for other_node in nodes if node != other_node} for node in nodes}
+    
+    # species_masks = {node: {other_node: bool(species_dict.get(node, set()) & species_dict.get(other_node, set())) 
+    #                        for other_node in nodes if node != other_node} 
+    #                  for node in nodes}
 
     for node in nodes:
-        print(node)
         # Intra-species distances (a(i)): Nodes sharing at least one species
-        intra_distances = [dist_matrix.loc[node, other_node] 
-                           for other_node in nodes if species_masks[node][other_node]]
+        intra_distances = [
+            dist_matrix.loc[node, other_node] 
+            for other_node in nodes if species_dict[node] & species_dict[other_node]
+        ]
         a_i = np.mean(intra_distances) if intra_distances else 0
 
         # Inter-species distances (b(i)): Nodes with no shared species
-        inter_distances = [dist_matrix.loc[node, other_node] 
-                           for other_node in nodes if not species_masks[node][other_node]]
+        inter_distances = [
+            dist_matrix.loc[node, other_node] 
+            for other_node in nodes if not species_dict[node] & species_dict[other_node]
+        ]
         b_i = np.mean(inter_distances) if inter_distances else np.inf
 
         # Silhouette score for this node
         s_i = (b_i - a_i) / max(a_i, b_i) if a_i != 0 or b_i != np.inf else 0
-        print(s_i)
+        print(f"Silhouette score for node {node}: {s_i}")
         scores.append(s_i)
 
     return np.mean(scores)
