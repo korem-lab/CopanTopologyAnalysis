@@ -1,3 +1,4 @@
+from sklearn.metrics import silhouette_score
 import pandas as pd
 import numpy as np
 import sys
@@ -55,6 +56,9 @@ def main():
     
     score = multi_label_silhouette(filtered_dist_matrix, filtered_species_dict)
     print(f"Silhouette Score: {score}")
+
+    # Validation for nodes belonging to one species
+    validate_silhouette_score(filtered_dist_matrix, filtered_species_dict)
 
 def multi_label_silhouette(dist_matrix, species_dict):
     """
@@ -117,10 +121,41 @@ def multi_label_silhouette(dist_matrix, species_dict):
 
         # Silhouette score for this node
         s_i = (b_i - a_i) / max(a_i, b_i) if a_i != 0 or b_i != np.inf else 0
-        print(f"Silhouette score for node {node}: {s_i}")
+        # print(f"Silhouette score for node {node}: {s_i}")
         scores.append(s_i)
 
     return np.mean(scores)
+
+def validate_silhouette_score(dist_matrix, species_dict):
+    # Get nodes that belong to exactly one species
+    single_species_nodes = [node for node, species in species_dict.items() if len(species) == 1]
+
+    if not single_species_nodes:
+        print("No nodes belong to exactly one species.")
+        return
+
+    print(f"Validating silhouette score for nodes with a single species: {len(single_species_nodes)} nodes.")
+
+    # Create a submatrix of distances for nodes that belong to exactly one species
+    sub_dist_matrix = dist_matrix.loc[single_species_nodes, single_species_nodes]
+
+    # Assign the single species label for all these nodes (since they belong to only one species)
+    labels = [next(iter(species_dict[node])) for node in single_species_nodes]  # Get the first species label for each node
+
+    # Calculate silhouette score using sklearn for validation
+    sklearn_score = silhouette_score(sub_dist_matrix, labels)
+    print(f"Silhouette Score from sklearn for single-species nodes: {sklearn_score}")
+
+    # Calculate silhouette score using your custom method for validation
+    custom_score = multi_label_silhouette(sub_dist_matrix, {node: species_dict[node] for node in single_species_nodes})
+    print(f"Custom Silhouette Score for single-species nodes: {custom_score}")
+
+    # Compare the scores
+    if np.isclose(sklearn_score, custom_score, atol=1e-6):
+        print("Validation successful: The silhouette scores match.")
+    else:
+        print(f"Validation failed: The silhouette scores do not match (sklearn: {sklearn_score}, custom: {custom_score}).")
+
 
 if __name__ == '__main__':
     main()
