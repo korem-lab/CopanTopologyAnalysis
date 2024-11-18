@@ -20,12 +20,21 @@ def main():
         species_dict[row['node']] = set(row['species'].split(';'))
 
     # Filter the distance matrix and species_dict to only include nodes that are in species_df
-    nodes_in_species = set(species_df['node'])
-    print("n nodes in species dict: " + str(len(nodes_in_species)))
-    
+    species_nodes = set(species_df.keys())
+    print("n nodes in species dict: " + str(len(species_nodes)))
+
+    dist_nodes = set(dist_matrix.index)  # Nodes in dist_matrix
+
+    # Find the common nodes
+    common_nodes = dist_nodes.intersection(species_nodes)
+
+    print("n nodes in dist matrix before filtering: " + str(len(dist_matrix.columns.to_list())))
+
+    print("nodes in both: " + common_nodes)
+
     # Filter the distance matrix to only include rows and columns for nodes in species_df
-    dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(nodes_in_species), 
-                                  dist_matrix.columns.intersection(nodes_in_species)]
+    dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(species_nodes), 
+                                  dist_matrix.columns.intersection(species_nodes)]
     
     filtered_dist_file = "workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
     dist_matrix.to_csv(filtered_dist_file)
