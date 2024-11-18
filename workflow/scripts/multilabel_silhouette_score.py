@@ -25,13 +25,13 @@ def main():
     print("n nodes in species dict: " + str(len(species_nodes)))
     print(species_nodes)
 
-    dist_nodes = set(dist_matrix.index.to_list())  # Nodes in dist_matrix
+    dist_nodes = dist_matrix.index.to_list() # Nodes in dist_matrix
+    print(dist_nodes[0:5])
+    print("n nodes in dist matrix before filtering: " + str(len(dist_nodes)))
 
     # Find the common nodes
+    dist_nodes = set(dist_nodes)
     common_nodes = dist_nodes.intersection(species_nodes)
-
-    print("n nodes in dist matrix before filtering: " + str(len(dist_matrix.columns.to_list())))
-    print(dist_nodes[0:5])
 
     print("nodes in both: " + str(common_nodes))
 
