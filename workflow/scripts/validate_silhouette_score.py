@@ -12,173 +12,48 @@ SPECIES_DF = "workflow/out/taxonomy/sample_1_0_02_nodes_by_species_multilabel.cs
 
 # OUTPUT_CSV = sys.argv[3]
 
-def main():
-    dist_matrix = pd.read_csv(DIST_F, index_col=0)
-    dist_matrix.index = dist_matrix.index.astype(int)
-    dist_matrix.columns = dist_matrix.columns.astype(int)
+# Load the species DataFrame (adjust file path as needed)
+species_df = pd.read_csv(SPECIES_DF)
 
-    species_df = pd.read_csv(SPECIES_DF)
-    species_df['node'] = species_df['node'].astype(int)
-    species_dict = {}
-    for _, row in species_df.iterrows():
-        species_dict[row['node']] = set(row['species'].split(';'))
+# Filter for rows where nodes have exactly one species
+single_species_df = species_df[species_df['species'].str.count(';') == 0]
 
-    # Filter the distance matrix and species_dict to only include nodes that are in species_df
-    # species_nodes = set(species_df['nodes'])
-    species_nodes = set(species_dict.keys())
-    print("n nodes in species dict: " + str(len(species_nodes)))
-    # print(species_nodes)
+# Check how many nodes have only one species
+print(f"Number of nodes with a single species: {len(single_species_df)}")
 
-    dist_nodes = dist_matrix.index.to_list() # Nodes in dist_matrix
-    # print(dist_nodes[0:5])
-    print("n nodes in dist matrix before filtering: " + str(len(dist_nodes)))
+# Load the pairwise distance matrix (adjust file path as needed)
+dist_matrix = pd.read_csv(DIST_F, index_col=0)
 
-    # Find the common nodes
-    dist_nodes = set(dist_nodes)
-    # common_nodes = dist_nodes.intersection(species_nodes)
+# Ensure that the 'node' column in species_df and the indices/columns of dist_matrix are of the same type
+single_species_df['node'] = single_species_df['node'].astype(int)
+dist_matrix.index = dist_matrix.index.astype(int)
+dist_matrix.columns = dist_matrix.columns.astype(int)
 
-    ### SAMPLING FOR PRACT/TROUBLESHOOTING
-    common_nodes = set(dist_matrix.index).intersection(species_dict.keys())
+# Find the common nodes between the distance matrix and species dataframe
+common_nodes = set(single_species_df['node']).intersection(dist_matrix.index)
 
-    print("n nodes in both: " + str(len(common_nodes)))
+# Filter the species DataFrame and distance matrix for these common nodes
+filtered_species_df = single_species_df[single_species_df['node'].isin(common_nodes)]
+filtered_dist_matrix = dist_matrix.loc[common_nodes, common_nodes]
 
-    sample_size = 10
-    sampled_nodes = random.sample(list(common_nodes), sample_size)
+# Check the filtered data
+print(f"Filtered distance matrix size: {filtered_dist_matrix.shape}")
+print(f"Filtered species dataframe size: {filtered_species_df.shape}")
 
-    print(f"Sampled nodes for testing: {sampled_nodes}")
+# Get the labels (species) for each node
+# Here we assume there's a single species per node (because we filtered for that)
+labels = filtered_species_df['species'].values
 
-    # Create the filtered species dictionary and distance matrix for the sampled nodes
-    filtered_species_dict = {node: species_dict[node] for node in sampled_nodes}
-    filtered_dist_matrix = dist_matrix.loc[sampled_nodes, sampled_nodes]
+# Convert the distance matrix to a NumPy array
+sub_dist_matrix = filtered_dist_matrix.to_numpy()
 
-    # filtered_species_dict = {node: species_dict[node] for node in common_nodes}
+# Calculate silhouette scores for each node
+silhouette_vals = silhouette_samples(sub_dist_matrix, labels)
 
-    print("n nodes in species dict after filtering:" + str(len(filtered_species_dict.keys())))
+# Print silhouette score for each node
+for node, score in zip(filtered_dist_matrix.index, silhouette_vals):
+    print(f"Silhouette score for node {node}: {score}")
 
-    # Filter the distance matrix to only include rows and columns for nodes in species_df
-    # filtered_dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(common_nodes), 
-                                  # dist_matrix.columns.intersection(common_nodes)]
-    
-    # filtered_dist_file = "workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
-    # dist_matrix.to_csv(filtered_dist_file)
-    
-    print("n nodes in dist matrix after filtering: " + str(len(filtered_dist_matrix.columns.to_list())))
-
-    # print("nodes in either set but not in both: " + str(species_nodes.symmetric_difference(set(dist_matrix.columns.to_list()))))
-
-    
-    # score = multi_label_silhouette(filtered_dist_matrix, filtered_species_dict)
-    # print(f"Silhouette Score: {score}")
-
-    # Validation for nodes belonging to one species
-    validate_silhouette_score(filtered_dist_matrix, filtered_species_dict)
-
-    # Validation for nodes belonging to multiple species
-    # validate_multiple_species_silhouette_score(filtered_dist_matrix, filtered_species_dict)
-
-
-def multi_label_silhouette(dist_matrix, species_dict):
-    """
-    Calculate a silhouette-like score for multi-label clusters using precomputed pairwise distances.
-    
-    Parameters:
-    - dist_matrix (pd.DataFrame): Square matrix of pairwise distances with nodes as both index and columns.
-    - species_dict (dict): Dictionary mapping node to a set of species (multiple species separated by semicolon).
-    
-    Returns:
-    - float: The silhouette-like score.
-    """
-
-    # Check if the nodes in dist_matrix and species_dict match
-    dist_nodes = set(dist_matrix.index)
-    species_nodes = set(species_dict.keys())
-
-    # Find nodes that are in one set but not the other
-    missing_in_dist = species_nodes - dist_nodes  # Species nodes not in dist_matrix
-    missing_in_species = dist_nodes - species_nodes  # Dist_matrix nodes not in species_dict
-
-    # If there are any mismatches, print them in a readable way
-    if missing_in_dist or missing_in_species:
-        print(f"Error: Mismatch between nodes in dist_matrix and species_dict.")
-        
-        if missing_in_dist:
-            print(f"Nodes in species_dict but not in dist_matrix: {list(missing_in_dist)[:10]}... ({len(missing_in_dist)} total)")
-        
-        if missing_in_species:
-            print(f"Nodes in dist_matrix but not in species_dict: {list(missing_in_species)[:10]}... ({len(missing_in_species)} total)")
-        
-        return None  # Or raise an exception if you prefer
-
-    nodes = dist_matrix.index.to_list()
-    print("n nodes:" + str(len(nodes)))
-    scores = []
-
-    for node in nodes:
-        # Intra-species distances (a(i)): Nodes sharing at least one species
-        intra_distances = [
-            dist_matrix.loc[node, other_node] 
-            for other_node in nodes if species_dict[node] & species_dict[other_node]
-        ]
-        a_i = np.mean(intra_distances) if intra_distances else 0
-
-        # Inter-species distances (b(i)): Nodes with no shared species
-        inter_distances = [
-            dist_matrix.loc[node, other_node] 
-            for other_node in nodes if not species_dict[node] & species_dict[other_node]
-        ]
-        b_i = np.mean(inter_distances) if inter_distances else np.inf
-
-        # Silhouette score for this node
-        s_i = (b_i - a_i) / max(a_i, b_i) if a_i != 0 or b_i != np.inf else 0
-        print(f"Silhouette score for node {node}: {s_i}")
-        scores.append(s_i)
-
-    return np.mean(scores)
-
-def validate_silhouette_score(dist_matrix, species_dict):
-    # Get nodes that belong to exactly one species
-    single_species_nodes = [node for node, species in species_dict.items() if len(species) == 1]
-
-    if not single_species_nodes:
-        print("No nodes belong to exactly one species.")
-        return
-
-    print(f"Validating silhouette score for nodes with a single species: {len(single_species_nodes)} nodes.")
-
-    # Create a submatrix of distances for nodes that belong to exactly one species
-    sub_species_dict = {node: species_dict[node] for node in single_species_nodes}
-    sub_dist_matrix = dist_matrix.loc[single_species_nodes, single_species_nodes]
-    sub_dist_array = dist_matrix.loc[single_species_nodes, single_species_nodes].to_numpy()
-
-    print(sub_dist_array)
-
-    # Assign the single species label for all these nodes (since they belong to only one species)
-    labels = [next(iter(sub_species_dict[node])) for node in single_species_nodes]  # Get the first species label for each node
-    print("labels:" + str(labels))
-    # Calculate silhouette score for each node using sklearn's silhouette_samples
-    silhouette_scores = silhouette_samples(sub_dist_array, labels)
-
-    print(f"Silhouette Scores for each node: {dict(zip(single_species_nodes, silhouette_scores))}")
-
-    # Calculate the mean silhouette score for validation
-    mean_silhouette_score = silhouette_scores.mean()
-    print(f"Mean Silhouette Score: {mean_silhouette_score}")
-
-    # Calculate silhouette score using sklearn for validation
-    sklearn_score = silhouette_score(sub_dist_array, labels)
-    print(f"Silhouette Score from sklearn for single-species nodes: {sklearn_score}")
-
-    # Calculate silhouette score using your custom method for validation
-    custom_score = multi_label_silhouette(sub_dist_matrix, sub_species_dict)
-    print(f"Custom Silhouette Score for single-species nodes: {custom_score}")
-
-    # Compare the scores
-    if np.isclose(sklearn_score, custom_score, atol=1e-6):
-        print("Validation successful: The silhouette scores match.")
-    else:
-        print(f"Validation failed: The silhouette scores do not match (sklearn: {sklearn_score}, custom: {custom_score}).")
-
-
-
-if __name__ == '__main__':
-    main()
+# Calculate the mean silhouette score
+mean_silhouette_score = np.mean(silhouette_vals)
+print(f"Mean Silhouette Score: {mean_silhouette_score}")
