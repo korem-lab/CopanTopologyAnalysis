@@ -5,7 +5,9 @@ import sys
 # DIST_F = sys.argv[1]
 # SPECIES_DF = sys.argv[2]
 DIST_F = "workflow/out/pairwise_distances/sample_1_0_02_30Lw30Nw1.0p0.1q20k_pairwiseDistances.csv"
-SPECIES_DF = "workflow/out/taxonomy/pract_nodes_by_species_multilabel.csv"
+# SPECIES_DF = "workflow/out/taxonomy/pract_nodes_by_species_multilabel.csv"
+SPECIES_DF = "workflow/out/taxonomy/sample_1_0_02_nodes_by_species_multilabel.csv"
+
 # OUTPUT_CSV = sys.argv[3]
 
 def main():
@@ -23,7 +25,7 @@ def main():
     # species_nodes = set(species_df['nodes'])
     species_nodes = set(species_dict.keys())
     print("n nodes in species dict: " + str(len(species_nodes)))
-    print(species_nodes)
+    # print(species_nodes)
 
     dist_nodes = dist_matrix.index.to_list() # Nodes in dist_matrix
     print(dist_nodes[0:5])
@@ -33,7 +35,7 @@ def main():
     dist_nodes = set(dist_nodes)
     common_nodes = dist_nodes.intersection(species_nodes)
 
-    print("nodes in both: " + str(common_nodes))
+    print("n nodes in both: " + str(len(common_nodes)))
 
     # Filter the distance matrix to only include rows and columns for nodes in species_df
     dist_matrix = dist_matrix.loc[dist_matrix.index.intersection(species_nodes), 
