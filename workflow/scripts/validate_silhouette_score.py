@@ -113,14 +113,6 @@ def multi_label_silhouette(dist_matrix, species_dict):
     print("n nodes:" + str(len(nodes)))
     scores = []
 
-    # Precompute species membership mask for each node
-    # species_masks = {node: {other_node: bool(species_dict[node] & species_dict[other_node]) 
-    #                        for other_node in nodes if node != other_node} for node in nodes}
-    
-    # species_masks = {node: {other_node: bool(species_dict.get(node, set()) & species_dict.get(other_node, set())) 
-    #                        for other_node in nodes if node != other_node} 
-    #                  for node in nodes}
-
     for node in nodes:
         # Intra-species distances (a(i)): Nodes sharing at least one species
         intra_distances = [
@@ -174,35 +166,6 @@ def validate_silhouette_score(dist_matrix, species_dict):
     else:
         print(f"Validation failed: The silhouette scores do not match (sklearn: {sklearn_score}, custom: {custom_score}).")
 
-def validate_multiple_species_silhouette_score(dist_matrix, species_dict):
-    # Get nodes that belong to more than one species
-    multiple_species_nodes = [node for node, species in species_dict.items() if len(species) > 1]
-
-    if not multiple_species_nodes:
-        print("No nodes belong to multiple species.")
-        return
-
-    print(f"Validating silhouette score for nodes with multiple species: {len(multiple_species_nodes)} nodes.")
-
-    # Create a submatrix of distances for nodes that belong to multiple species
-    sub_dist_matrix = dist_matrix.loc[multiple_species_nodes, multiple_species_nodes]
-
-    # Create a label for each node based on the species set
-    labels = [",".join(sorted(species_dict[node])) for node in multiple_species_nodes]  # Concatenate species as a label
-
-    # Calculate silhouette score using sklearn for validation
-    sklearn_score = silhouette_score(sub_dist_matrix, labels, metric="precomputed")
-    print(f"Silhouette Score from sklearn for multiple-species nodes: {sklearn_score}")
-
-    # Calculate silhouette score using your custom method for validation
-    custom_score = multi_label_silhouette(sub_dist_matrix, {node: species_dict[node] for node in multiple_species_nodes})
-    print(f"Custom Silhouette Score for multiple-species nodes: {custom_score}")
-
-    # Compare the scores
-    if np.isclose(sklearn_score, custom_score, atol=1e-6):
-        print("Validation successful: The silhouette scores match.")
-    else:
-        print(f"Validation failed: The silhouette scores do not match (sklearn: {sklearn_score}, custom: {custom_score}).")
 
 
 if __name__ == '__main__':
