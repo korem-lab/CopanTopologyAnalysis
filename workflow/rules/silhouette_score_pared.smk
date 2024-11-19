@@ -19,3 +19,11 @@ rule walkAndEmbed:
         {params.walk_length} {params.n_walks} {params.p} {params.q} {params.seed} \
         {params.dimensions} {params.window} {params.min_count} {params.sg}
         """
+
+rule getPairwiseDistances:
+    input: join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
+    output: join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
+    shell:
+        """
+        python3 workflow/scripts/pairwise_distance.py {input} {output}
+        """

@@ -41,8 +41,8 @@ graph_id: ["sample_1_0_02"]
 # "camisim_megahit_20_0.02"
 
 # Walk params
-walk_lengths: [30, 50, 80, 100]  # list of walk lengths
-n_walks: [30, 50, 80]      # list of number of walks to perform per node
+walk_lengths: [30, 50, 100]  # list of walk lengths
+n_walks: [30, 50]      # list of number of walks to perform per node
 p: [0.1, 0.5, 1.0, 0.3, 0.8]             # list of p values
 q: [0.1, 0.5, 1.0, 0.3, 0.8]             # list of q values
 seed: 1
@@ -55,7 +55,7 @@ seed: 1
 # seed: 1
 
 # # Embedding params
-dimensions: [20, 50, 80, 100, 130, 150, 180]
+dimensions: [20, 60, 100, 120, 150]
 window: 5
 min_count: 5
 sg: 0

@@ -3,7 +3,9 @@ import pandas as pd
 import numpy as np
 import sys
 import random
-
+import os
+import re
+import csv
 
 # DIST_F = sys.argv[1]
 # SPECIES_DF = sys.argv[2]
@@ -12,7 +14,7 @@ SPECIES_DF = "workflow/out/taxonomy/pract_nodes_by_species_multilabel.csv"
 DIST_F = "workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
 # SPECIES_DF = "workflow/out/taxonomy/nodes_by_species_multilabel_pract.csv"
 
-# OUTPUT_CSV = sys.argv[3]
+OUTPUT_CSV = sys.argv[3]
 
 def main():
     dist_matrix = pd.read_csv(DIST_F, index_col=0)
@@ -69,6 +71,9 @@ def main():
     # overall_score = validated_scores[1]
     # print(f"Sklearn's Mean Sample Silhouette Score: {sample_score}")
     # print(f"Sklearn's Overall Silhouette Score: {overall_score}")
+
+    add_silhouette_score(DIST_F, OUTPUT_CSV, score)
+
 
 def multi_label_silhouette(dist_matrix, species_dict):
 
@@ -146,7 +151,45 @@ def validate_silhouette_score(dist_matrix, species_df):
 
     # Calculate the mean silhouette score
     return np.mean(silhouette_vals), validated_score
-    
+
+def add_silhouette_score(infile, outfile, score):
+
+    file_name = os.path.basename(infile)
+    pattern = r"(sample_\d+_\d+_\d+)_([0-9]+)Lw([0-9]+)Nw([0-9.]+)p([0-9.]+)q([0-9]+)k_pairwiseDistances.csv"
+    match = re.match(pattern, file_name)
+
+    if match:
+        graph_id = match.group(1)
+        walk_length = match.group(2)
+        n_walks = match.group(3)
+        p = match.group(4)
+        q = match.group(5)
+        dimensions = match.group(6)
+    else:
+        print(f"Warning: Unable to extract details from filename {file_name}")
+        graph_id = walk_length = n_walks = p = q = dimensions = None
+        
+        # Prepare result as a dictionary
+    result = {
+        'embedding_file': file_name,
+        'graph_id': graph_id,
+        'walk_length': walk_length,
+        'n_walks': n_walks,
+        'p': p,
+        'q': q,
+        'dimensions': dimensions,
+        'ari': score,
+    }
+
+    # Append result to CSV file
+    file_exists = os.path.isfile(outfile)
+    with open(outfile, mode='a', newline='') as file:
+        writer = csv.DictWriter(file, fieldnames=result.keys())
+        if not file_exists:
+            writer.writeheader()
+        writer.writerow(result)
+
+    print(f"Processed {DIST_F} with : {score}")
 
 if __name__ == '__main__':
     main()

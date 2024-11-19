@@ -17,11 +17,10 @@ WINDOW = int(sys.argv[9])
 MIN_COUNT = int(sys.argv[10])
 SG = int(sys.argv[11])
 
-# Iter through nodes in node_dict
 def main():
     walks_list = sample_walks(NODE_INFO_DICT_F)
 
-        # Train Word2Vec model incrementally
+    # Train Word2Vec model incrementally
     node_model = Word2Vec(vector_size=DIMENSIONS, window=WINDOW, min_count=MIN_COUNT, sg=SG)
     node_model.build_vocab(walks_list)
     node_model.train(walks_list, total_examples=node_model.corpus_count, epochs=node_model.epochs)
