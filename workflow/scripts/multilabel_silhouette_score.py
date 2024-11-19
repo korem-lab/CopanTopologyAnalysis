@@ -40,12 +40,15 @@ def main():
 
     print("n nodes in both: " + str(len(common_nodes)))
 
-    sample_size = 10
+    sample_size = len(common_nodes)
     sampled_nodes = random.sample(list(common_nodes), sample_size)
 
-    print(f"Sampled nodes for testing: {sampled_nodes}")
+    # print(f"Sampled nodes for testing: {sampled_nodes}")
 
     # Create the filtered species dictionary and distance matrix for the sampled nodes
+    # filtered_species_dict = {node: species_dict[node] for node in sampled_nodes}
+    # filtered_dist_matrix = dist_matrix.loc[sampled_nodes, sampled_nodes]
+
     filtered_species_dict = {node: species_dict[node] for node in sampled_nodes}
     filtered_dist_matrix = dist_matrix.loc[sampled_nodes, sampled_nodes]
 
@@ -60,7 +63,7 @@ def main():
     print(f"Silhouette Score: {score}")
 
     # filtered_species_df = species_df[species_df['node'].isin(common_nodes)]
-    # Validation for nodes belonging to one species
+    # # Validation for nodes belonging to one species
     # validated_scores = validate_silhouette_score(filtered_dist_matrix, filtered_species_df)
     # sample_score = validated_scores[0]
     # overall_score = validated_scores[1]
@@ -119,10 +122,18 @@ def multi_label_silhouette(dist_matrix, species_dict):
     return np.mean(scores)
 
 def validate_silhouette_score(dist_matrix, species_df):
-    labels = species_df['species'].values
+    # labels = species_df['species'].values
+
+    # Extract the order of nodes from the distance matrix
+    nodes_order = dist_matrix.index.tolist()
+    node_to_species = dict(zip(species_df['node'], species_df['species']))
+    labels = [node_to_species[node] for node in nodes_order]
 
     # Convert the distance matrix to a NumPy array
     sub_dist_matrix = dist_matrix.to_numpy()
+
+    print(labels)
+    print(sub_dist_matrix)
 
     # Calculate silhouette scores for each node
     silhouette_vals = silhouette_samples(sub_dist_matrix, labels, metric="precomputed")
