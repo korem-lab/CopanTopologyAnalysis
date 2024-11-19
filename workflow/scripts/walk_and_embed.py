@@ -30,8 +30,9 @@ def main():
 
 def sample_walks(file):
     with open(file, 'r') as f:
-        node_dict = json.load(f)
+            node_dict = json.load(f)
 
+    walks_dict_wOrientation = {}
     walks_list_noOrientation = []
 
     for start_node in node_dict.keys():

@@ -2,7 +2,7 @@ rule walkAndEmbed:
     input:
         join(config["linksDir"], "{graph_id}_links.json")
     output:
-        joinDistanceDegreeoin(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
+        join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
     params: 
         walk_length="{walk_length}",
         n_walks="{n_walks}",
