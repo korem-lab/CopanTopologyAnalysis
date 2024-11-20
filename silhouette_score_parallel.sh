@@ -18,7 +18,7 @@ cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 species_f="workflow/out/taxonomy/sample_1_0_02_nodes_by_species_multilabel.csv"
 ss_f="workflow/out/clustering_accuracy/silhouette_score.csv"
 
-distance_files="workflow/outpairwise_distances/sample_1_0_02_30Lw50Nw0.3p0.8q60k_pairwiseDistances.csv"
+distance_files="workflow/out/pairwise_distances/sample_1_0_02_30Lw50Nw0.3p0.8q60k_pairwiseDistances.csv"
 
 # Run compute_ari.py in parallel for each embedding file
 for distance_file in $distance_files; do
