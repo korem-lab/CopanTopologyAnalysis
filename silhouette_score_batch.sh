@@ -1,13 +1,24 @@
 #!/bin/bash
+#
+#SBATCH --job-name=ss_batch
+#SBATCH --output=job_out/ss_batch_%j.out  # Standard output
+#SBATCH --error=job_out/ss_batch_%j.err    # Standard error
+#SBATCH --time=05:00:00
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --mem=10G
+#SBATCH --account pmg
 
 source /burg/pmg/users/korem_lab/miniforge3/etc/profile.d/conda.sh
 conda activate snakemake
 
 cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 
-distance_files=$(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv")
+#distance_files=$(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv")
 species_f="workflow/out/taxonomy/sample_1_0_02_nodes_by_species_multilabel.csv"
 ss_f="workflow/out/clustering_accuracy/silhouette_score.csv"
+
+distance_files="workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
 
 # Run compute_ari.py in parallel for each embedding file
 for distance_file in $distance_files; do

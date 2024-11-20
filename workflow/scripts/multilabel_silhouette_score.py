@@ -7,14 +7,13 @@ import os
 import re
 import csv
 
-# DIST_F = sys.argv[1]
-# SPECIES_DF = sys.argv[2]
-# DIST_F = "workflow/out/pairwise_distances/sample_1_0_02_30Lw30Nw1.0p0.1q20k_pairwiseDistances.csv"
-SPECIES_DF = "workflow/out/taxonomy/pract_nodes_by_species_multilabel.csv"
-DIST_F = "workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
-# SPECIES_DF = "workflow/out/taxonomy/nodes_by_species_multilabel_pract.csv"
-
+DIST_F = sys.argv[1]
+SPECIES_DF = sys.argv[2]
 OUTPUT_CSV = sys.argv[3]
+# DIST_F = "workflow/out/pairwise_distances/sample_1_0_02_30Lw30Nw1.0p0.1q20k_pairwiseDistances.csv"
+# SPECIES_DF = "workflow/out/taxonomy/pract_nodes_by_species_multilabel.csv"
+# DIST_F = "workflow/out/pairwise_distances/pract_pairwiseDistances.csv"
+# SPECIES_DF = "workflow/out/taxonomy/nodes_by_species_multilabel_pract.csv"
 
 def main():
     dist_matrix = pd.read_csv(DIST_F, index_col=0)
