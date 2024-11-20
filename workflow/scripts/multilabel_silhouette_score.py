@@ -163,7 +163,7 @@ def add_silhouette_score(infile, outfile, score):
         'p': p,
         'q': q,
         'dimensions': dimensions,
-        'ari': score,
+        'silhouette_score': score,
     }
 
     # Append result to CSV file
