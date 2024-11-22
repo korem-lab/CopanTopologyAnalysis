@@ -67,13 +67,14 @@ rule all:
        #         k=DIMENSIONS),
 
        #  plotting embedding with PCA
-        expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_PCA.png"),
+        expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_PCA_{tax_level}.png"),
                graph_id=GRAPH_IDS,
                walk_length=WALK_LENGTHS,
                n_walks=N_WALKS,
                p=P_VALUES,
                q=Q_VALUES,
-               k=DIMENSIONS)
+               k=DIMENSIONS, 
+               tax_level=TAX_LEVEL)
 
        # colored by species!
         # expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot_{tax_level}.png"),

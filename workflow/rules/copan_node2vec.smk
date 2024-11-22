@@ -226,8 +226,8 @@ rule validate:
 
 rule silhouetteScore:
     input: 
-        distances=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv")
-        species_df=tax_csv=join(config["taxonomyDir"], "{graph_id}_nodes_by_{tax_level}_multilabel.csv")
+        distances=join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_pairwiseDistances.csv"),
+        species_df=join(config["taxonomyDir"], "{graph_id}_nodes_by_{tax_level}_multilabel.csv")
     output:
         join(config["distancesDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_silhouetteScore.txt")
     shell:
