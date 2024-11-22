@@ -19,7 +19,7 @@ cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 # Define input parameters
 # distance_files=$(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv")
 mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv")
-n_batches=50
+n_batches=2
 total_files=${#distance_files[@]}
 files_per_batch=$(( (total_files + n_batches - 1) / n_batches ))
 
@@ -31,15 +31,22 @@ for batch_number in $(seq 0 $((n_batches - 1))); do
     start_index=$((batch_number * files_per_batch))
     end_index=$((start_index + files_per_batch))
 
+    echo $batch_number
+    echo $start_index
+
     if [ $end_index -gt $total_files ]; then
         end_index=$total_files
     fi
+
+    echo $end_index
 
     ss_f="workflow/out/clustering_accuracy/silhouette_score_batch_${batch_number}.csv"
 
     # Check if the output file already exists
     if [ ! -f "$ss_f" ]; then
         echo "Output file $ss_f does not exist. Submitting batch $batch_number."
+
+        echo silhouette_score_batch.sh "${distance_files[@]}" $start_index $end_index $species_f $ss_f
 
         sbatch silhouette_score_batch.sh "${distance_files[@]}" $start_index $end_index $species_f $ss_f
 

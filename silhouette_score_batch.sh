@@ -3,7 +3,7 @@
 #SBATCH --job-name=ss_batch
 #SBATCH --output=job_out/batches/ss_batch_%j.out  # Standard output
 #SBATCH --error=job_out/batches/ss_batch_%j.err    # Standard error
-#SBATCH --time=30:00:00
+#SBATCH --time=00:05:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=10G
@@ -35,8 +35,14 @@ end_index=${!#-2}    # Third to last argument
 species_f=${!#-1}    # Last argument before the output file
 ss_f=${!#}           # Output file
 
+echo $distance_files
+echo $start_index
+echo $end_index
+
 # Slice the distance files for this batch
 batched_files=("${distance_files[@]:$start_index:$((end_index - start_index))}")
+
+echo $batched_files
 
 # Process the files
 for file in "${batched_files[@]}"; do
