@@ -18,11 +18,11 @@ N_WALKS = str(sys.argv[6])
 P_VAL = str(sys.argv[7])        
 Q_VAL = str(sys.argv[8])       
 
-N_COMPONENTS = int(sys.argv[11]) 
-DIMENSION = str(sys.argv[13])  # Dimension (k)
-ALPHA = float(sys.argv[14])    # Alpha value for scatter plot
+N_COMPONENTS = int(sys.argv[9]) 
+DIMENSION = str(sys.argv[10])  # Dimension (k)
+ALPHA = float(sys.argv[11])    # Alpha value for scatter plot
 
-TAX_LEVEL = str(sys.argv[15])
+TAX_LEVEL = str(sys.argv[12])
 
 def main():
     embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')

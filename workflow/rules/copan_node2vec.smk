@@ -129,10 +129,10 @@ rule PCA:
         tax_level="{tax_level}"
     shell:
         """
-        python3 workflow/scripts/visualize_embeddings_binClustering.py \
+        python3 workflow/scripts/pca_viz.py \
         {input.embeddings} {input.tax_csv} {output} \
         {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
-        {params.n_components} params.dimensions} {params.alpha} {params.tax_level}
+        {params.n_components} {params.dimensions} {params.alpha} {params.tax_level}
         """
 
 rule getNodeDegrees:
