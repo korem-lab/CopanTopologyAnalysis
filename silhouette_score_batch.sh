@@ -28,16 +28,18 @@ cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 #     python3 workflow/scripts/multilabel_silhouette_score.py "$file" "$species_f" "$ss_f"
 # done
 
-# Get the list of distance files passed as arguments
-distance_files=("${@:1:$#-4}")  # Get all arguments except the last four
-start_index=${!#-3}  # Second to last argument
-end_index=${!#-2}    # Third to last argument
-species_f=${!#-1}    # Last argument before the output file
-ss_f=${!#}           # Output file
+mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*100k_pairwiseDistances.csv")
 
-echo $distance_files
+# Get the list of distance files passed as arguments
+start_index=$1  # Second to last argument
+end_index=$2    # Third to last argument
+species_f=$3    # Last argument before the output file
+ss_f=$4           # Output file
+
 echo $start_index
 echo $end_index
+echo $species_f
+echo $ss_f
 
 # Slice the distance files for this batch
 batched_files=("${distance_files[@]:$start_index:$((end_index - start_index))}")
@@ -45,6 +47,6 @@ batched_files=("${distance_files[@]:$start_index:$((end_index - start_index))}")
 echo $batched_files
 
 # Process the files
-for file in "${batched_files[@]}"; do
-    python3 workflow/scripts/multilabel_silhouette_score.py "$file" "$species_f" "$ss_f"
-done
+# for file in "${batched_files[@]}"; do
+#     python3 workflow/scripts/multilabel_silhouette_score.py "$file" "$species_f" "$ss_f"
+# done
