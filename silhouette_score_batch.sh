@@ -32,17 +32,19 @@ mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -nam
 
 # Get the list of distance files passed as arguments
 start_index=$1  # Second to last argument
-end_index=$2    # Third to last argument
+files_per_batch=$2    # Third to last argument
 species_f=$3    # Last argument before the output file
 ss_f=$4           # Output file
 
 echo $start_index
-echo $end_index
+echo $files_per_batch
 echo $species_f
 echo $ss_f
 
+echo $distance_files
+
 # Slice the distance files for this batch
-batched_files=("${distance_files[@]:$start_index:$((end_index - start_index))}")
+batched_files=("${distance_files[@]:$start_index:$files_per_batch}")
 
 echo $batched_files
 

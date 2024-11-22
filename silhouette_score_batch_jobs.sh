@@ -61,6 +61,8 @@ n_batches=2
 total_files=${#distance_files[@]}
 files_per_batch=$(( (total_files + n_batches - 1) / n_batches ))
 
+echo $files_per_batch
+
 # Define other parameters
 species_f="workflow/out/taxonomy/sample_1_0_02_nodes_by_species_multilabel.csv"
 
@@ -84,9 +86,9 @@ for batch_number in $(seq 0 $((n_batches - 1))); do
     if [ ! -f "$ss_f" ]; then
         echo "Output file $ss_f does not exist. Submitting batch $batch_number."
 
-        echo silhouette_score_batch.sh $start_index $end_index $species_f $ss_f
+        echo silhouette_score_batch.sh $start_index $files_per_batch $species_f $ss_f
 
-        sbatch silhouette_score_batch.sh $start_index $end_index $species_f $ss_f
+        sbatch silhouette_score_batch.sh $start_index $files_per_batch $species_f $ss_f
 
     else
         echo "Output file $ss_f already exists. Skipping batch $batch_number."
