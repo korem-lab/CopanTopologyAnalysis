@@ -56,12 +56,12 @@ cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 # done
 
 
-mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*100k_pairwiseDistances.csv")
+mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*1.0p1.0q100k_pairwiseDistances.csv")
 n_batches=2
 total_files=${#distance_files[@]}
 files_per_batch=$(( (total_files + n_batches - 1) / n_batches ))
 
-echo $files_per_batch
+# echo $files_per_batch
 
 # Define other parameters
 species_f="workflow/out/taxonomy/sample_1_0_02_nodes_by_species_multilabel.csv"
@@ -71,14 +71,14 @@ for batch_number in $(seq 0 $((n_batches - 1))); do
     start_index=$((batch_number * files_per_batch))
     end_index=$((start_index + files_per_batch))
 
-    echo $batch_number
-    echo $start_index
+    # echo $batch_number
+    # echo $start_index
 
     if [ $end_index -gt $total_files ]; then
         end_index=$total_files
     fi
 
-    echo $end_index
+    # echo $end_index
 
     ss_f="workflow/out/clustering_accuracy/silhouette_score_batch_${batch_number}.csv"
 
@@ -86,9 +86,9 @@ for batch_number in $(seq 0 $((n_batches - 1))); do
     if [ ! -f "$ss_f" ]; then
         echo "Output file $ss_f does not exist. Submitting batch $batch_number."
 
-        echo silhouette_score_batch.sh $start_index $files_per_batch $species_f $ss_f
+        # echo silhouette_score_batch.sh $start_index $end_index $species_f $ss_f
 
-        sbatch silhouette_score_batch.sh $start_index $files_per_batch $species_f $ss_f
+        sbatch silhouette_score_batch.sh $start_index $end_index $species_f $ss_f
 
     else
         echo "Output file $ss_f already exists. Skipping batch $batch_number."
