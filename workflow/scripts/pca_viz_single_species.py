@@ -24,7 +24,7 @@ def main():
     
     # Filter unique species with more than 10 nodes
     unique_species = [species for species, count in species_count.items() if count > NODE_THRESHOLD]
-    
+
     for species in unique_species:
         
         species_nodes = [node for node in filtered_nodes if species_map[node] == species]
@@ -46,9 +46,11 @@ def main():
         plt.title(title)
         plt.grid(True)
 
-        plot_f = "workflow/out/plots/single_species" + basename + "_" + species.replace(" ", "_") + ".csv"
+        plot_f = "workflow/out/plots/" + basename + "_single_species_" + species.replace(" ", "_") + ".png"
 
         plt.savefig(plot_f, format='png', dpi=150, bbox_inches='tight')
+
+        plt.close()
 
 def load_species_map(species_csv_file):
     """Load the node-to-species mapping from a CSV file using pandas."""
