@@ -36,13 +36,15 @@ def main():
 
         # Plotting
         basename = os.path.basename(EMBEDDING_F)
-        basename = basename.split(".")[0]
+        basename = basename.rsplit(".", 1)
         title = basename + " , " + species
 
         plt.figure(figsize=(10, 10))
         x = pca_results[:, 0]
         y = pca_results[:, 1]
         plt.scatter(x, y, alpha=ALPHA, linewidth=0, c="black")
+        plt.xlim(-10, 7)
+        plt.ylim(-3, 9)
         plt.title(title)
         plt.grid(True)
 
