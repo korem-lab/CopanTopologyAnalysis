@@ -4,20 +4,27 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import numpy as np
 import os
+from collections import Counter
 
 EMBEDDING_F = "workflow/out/vectorization_model/embeddings/sample_1_0_02_50Lw50Nw1.0p1.0q60k_walks.embeddings"
 TAX_F = "workflow/out/taxonomy/sample_1_0_02_nodes_by_species.csv"
 
 N_COMPONENTS = 2
 ALPHA = 0.3
+NODE_THRESHOLD = 10
 
 def main():
     embedding_kv = KeyedVectors.load(EMBEDDING_F, mmap='r')
     species_map = load_species_map(TAX_F)
 
     filtered_nodes = [node for node in embedding_kv.index_to_key if node in species_map]
-    unique_species = list(set([species_map[node] for node in filtered_nodes]))
 
+     # Count the nodes for each species using Counter
+    species_count = Counter([species_map[node] for node in filtered_nodes])
+    
+    # Filter unique species with more than 10 nodes
+    unique_species = [species for species, count in species_count.items() if count > NODE_THRESHOLD]
+    
     for species in unique_species:
         
         species_nodes = [node for node in filtered_nodes if species_map[node] == species]
