@@ -14,7 +14,12 @@ conda activate snakemake
 
 cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 
-mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv")
+# Path to the exclusion list file
+exclude_file="config/silhouette_score_batchTrial1_files.txt"
+
+# Find and filter distance files, excluding specified files
+mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv" \
+    | grep -v -F -f "$exclude_file")
 
 # Get the list of distance files passed as arguments
 start_index=$1  # Second to last argument

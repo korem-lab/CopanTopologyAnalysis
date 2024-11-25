@@ -16,7 +16,13 @@ conda activate snakemake
 # Navigate to the project directory
 cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 
-mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv")
+# Path to the exclusion list file
+exclude_file="config/silhouette_score_batchTrial1_files.txt"
+
+# Find and filter distance files, excluding specified files
+mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv" \
+    | grep -v -F -f "$exclude_file")
+
 n_batches=50
 total_files=${#distance_files[@]}
 files_per_batch=$(( (total_files + n_batches - 1) / n_batches ))
@@ -33,7 +39,7 @@ for batch_number in $(seq 0 $((n_batches - 1))); do
         end_index=$total_files
     fi
 
-    ss_f="workflow/out/clustering_accuracy/silhouette_score_batch${batch_number}_${start_index}to${end_index}.csv"
+    ss_f="workflow/out/clustering_accuracy/silhouette_score_batch${batch_number}_${start_index}to${end_index}_02.csv"
 
     # Check if the output file already exists
     if [ ! -f "$ss_f" ]; then
