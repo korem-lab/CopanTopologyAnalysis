@@ -1,0 +1,39 @@
+---
+title: "silhouette_score_analysis"
+output: html_document
+date: "2024-11-25"
+---
+
+```{r}
+library(readr)
+library(tidyverse)
+library(ggplot2)
+
+s_score_df <- read_csv("workflow/out/clustering_accuracy/silhouette_score_allBatches.csv")
+```
+
+```{r}
+s_score_df <- s_score_df %>%
+  rowwise() %>%
+  distinct() %>%
+  mutate(p_q_ratio = p/q)
+
+s_score_df$n_walks <- factor(s_score_df$n_walks)
+s_score_df$walk_length <- factor(s_score_df$walk_length)
+```
+
+
+```{r}
+ggplot(s_score_df, aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = n_walks)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("Silhouette score vs. P/Q")
+
+ggplot(subset(s_score_df, n_walks == 50), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = walk_length)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("Silhouette score vs. P/Q")
+  
+```

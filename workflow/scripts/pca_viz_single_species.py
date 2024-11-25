@@ -36,7 +36,7 @@ def main():
 
         # Plotting
         basename = os.path.basename(EMBEDDING_F)
-        basename = basename.rsplit(".", 1)
+        basename = basename.rsplit(".", 1)[0]
         title = basename + " , " + species
 
         plt.figure(figsize=(10, 10))
