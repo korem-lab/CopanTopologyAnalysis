@@ -3,7 +3,7 @@ import numpy as np
 import random
 
 DIST_F = "workflow/out/pairwise_distances/sample_1_0_02_30Lw50Nw1.0p1.0q60k_pairwiseDistances.csv"
-SPECIES_DF = "workflow/out/taxonomy/pract_nodes_by_species_multilabel.csv"
+SPECIES_DF = "workflow/out/taxonomy/sample_1_0_02_nodes_by_species_multilabel.csv"
 OUTPUT_CSV = "workflow/out/clustering_accuracy/sample_1_0_02_30Lw50Nw1.0p1.0q60k_node_silhouetteScores.csv"
 
 def main():
