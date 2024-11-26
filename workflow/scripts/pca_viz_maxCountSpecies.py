@@ -39,7 +39,7 @@ def main():
         pca_results = pca_model.fit_transform(species_vectors)
 
         file_name = os.path.basename(file)
-        pattern = r"(sample_\d+_\d+_\d+)_([0-9]+)Lw([0-9]+)Nw([0-9.]+)p([0-9.]+)q([0-9]+)k_pairwiseDistances.csv"
+        pattern = r"(sample_\d+_\d+_\d+)_([0-9]+)Lw([0-9]+)Nw([0-9.]+)p([0-9.]+)q([0-9]+)k_walks\.embeddings"
         match = re.match(pattern, file_name)
 
         if match:

@@ -10,7 +10,7 @@ library(ggplot2)
 library(tidyverse)
 library(RColorBrewer)
 # degree_classification <- read_csv("workflow/out/node_degrees/copan_0_node_degrees.csv")
-deg_dist_df <- read_csv("workflow/out/distance_degree/copan_0_30Lw50Nw1.0p0.1q140k_distancesWithDegree.csv")
+deg_dist_df <- read_csv("workflow/out/node_degrees/copan_0_30Lw50Nw1.0p0.1q140k_distancesWithDegree.csv")
 
 ```
 

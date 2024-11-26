@@ -84,14 +84,19 @@ species_node_clusters <- genome_node_clusters %>%
   distinct() %>%
   group_by(node) %>%
   summarise(species = paste(species, collapse = ";")) %>%
-  # mutate(mult_species = ifelse(n() > 1, 
-                               # "multiple_species", 
-                               #  species)) %>%
-  # ungroup() %>%
-  # select(node, mult_species) %>%
   distinct()
 
-write.csv(species_node_clusters, "workflow/out/blast/sample_1_0_02_nodes_by_species_multilabel.csv")
+write.csv(species_node_clusters, "workflow/out/taxonomy/sample_1_0_02_nodes_by_species_multilabel.csv")
+
+genus_node_clusters <- genome_node_clusters %>%
+  select(node, genus) %>%
+  filter(!is.na(genus)) %>%
+  distinct() %>%
+  group_by(node) %>%
+  summarise(species = paste(genus, collapse = ";")) %>%
+  distinct()
+
+write.csv(genus_node_clusters, "workflow/out/taxonomy/sample_1_0_02_nodes_by_genera_multilabel.csv")
 
 genus_node_clusters <- genome_node_clusters %>%
   rowwise() %>%
