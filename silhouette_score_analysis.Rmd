@@ -10,7 +10,8 @@ library(tidyverse)
 library(ggplot2)
 library(stringr)
 
-s_score_df <- read_csv("workflow/out/clustering_accuracy/silhouette_score_allBatches.csv")
+# s_score_df <- read_csv("workflow/out/clustering_accuracy/silhouette_score_allBatches.csv")
+s_score_df <- read_csv("workflow/out/clustering_accuracy/silhouette_score_01_02.csv")
 
 node_scores <- read_csv("workflow/out/clustering_accuracy/sample_1_0_02_30Lw50Nw1.0p1.0q60k_node_silhouetteScores.csv")
 node_degrees <- read_csv("workflow/out/node_degrees/sample_1_0_02_node_degrees.csv")
@@ -24,26 +25,24 @@ s_score_df <- s_score_df %>%
   distinct() %>%
   mutate(p_q_ratio = p/q)
 
-s_score_df$n_walks <- factor(s_score_df$n_walks)
-s_score_df$walk_length <- factor(s_score_df$walk_length)
 ```
 
 
 ```{r}
-ggplot(s_score_df, aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = n_walks)) +
+ggplot(subset(s_score_df, n_walks > 50), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
   geom_point(alpha = 0.5) +
   theme_classic() +
   scale_color_viridis_c() +
   ggtitle("Silhouette score vs. P/Q")
 
-ggplot(subset(s_score_df, n_walks == 50), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = walk_length)) +
+ggplot(subset(s_score_df, n_walks > 50), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(walk_length))) +
   geom_point(alpha = 0.5) +
   theme_classic() +
   scale_color_viridis_c() +
   ggtitle("Silhouette score vs. P/Q")
 
 
-ggplot(subset(s_score_df, n_walks == 50 & dimensions == 60), aes(x = p, y = silhouette_score, color = dimensions, shape = n_walks)) +
+ggplot(subset(s_score_df, n_walks == 50 & dimensions == 60), aes(x = p, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
   geom_point(alpha = 0.5) +
   theme_classic() +
   scale_color_viridis_c() +
@@ -71,6 +70,13 @@ ggplot(subset(s_score_df, n_walks == 50), aes(x = q, y = silhouette_score, color
   scale_color_viridis_c() +
   ggtitle("P vs. Q")
   
+
+ggplot(subset(s_score_df, n_walks > 50 & dimensions > 50), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("Silhouette score vs. P/Q")
+
 ```
 
 ```{r}
