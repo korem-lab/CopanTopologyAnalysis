@@ -3,7 +3,7 @@
 #SBATCH --job-name=ss_batch
 #SBATCH --output=job_out/batches/ss_batch_%j.out  # Standard output
 #SBATCH --error=job_out/batches/ss_batch_%j.err    # Standard error
-#SBATCH --time=20:00:00
+#SBATCH --time=72:00:00
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
 #SBATCH --mem=10G
@@ -15,7 +15,7 @@ conda activate snakemake
 cd /burg/pmg/users/rc3710/CopanTopologyAnalysis
 
 # Path to the exclusion list file
-exclude_file="config/silhouette_score_batchTrial2_files.txt"
+exclude_file="config/silhouette_score_batchTrial5_files.txt"
 
 # Find and filter distance files, excluding specified files
 mapfile -t distance_files < <(find workflow/out/pairwise_distances/ -type f -name "sample_1_0_02_*k_pairwiseDistances.csv" \

@@ -11,7 +11,7 @@ library(ggplot2)
 library(stringr)
 
 # s_score_df <- read_csv("workflow/out/clustering_accuracy/silhouette_score_allBatches.csv")
-s_score_df <- read_csv("workflow/out/clustering_accuracy/silhouette_score_01_02.csv")
+s_score_df <- read_csv("workflow/out/clustering_accuracy/silhouette_score_01_02_03_04_05.csv")
 
 node_scores <- read_csv("workflow/out/clustering_accuracy/sample_1_0_02_30Lw50Nw1.0p1.0q60k_node_silhouetteScores.csv")
 node_degrees <- read_csv("workflow/out/node_degrees/sample_1_0_02_node_degrees.csv")
@@ -20,64 +20,247 @@ node_score_deg_species <- read_csv("workflow/out/clustering_accuracy/node_score_
 ```
 
 ```{r}
+s_score_df <- s_score_df[!is.na(as.numeric(as.character(s_score_df$p))),]
+
 s_score_df <- s_score_df %>%
   rowwise() %>%
   distinct() %>%
+  mutate_at(c("walk_length", "silhouette_score", "n_walks", "p", "q", "dimensions", "silhouette_score"), as.numeric) %>%
   mutate(p_q_ratio = p/q)
 
 ```
 
 
 ```{r}
-ggplot(subset(s_score_df, n_walks > 50), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
+min_score = quantile(s_score_df$silhouette_score, 0.75)
+
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
   geom_point(alpha = 0.5) +
   theme_classic() +
   scale_color_viridis_c() +
   ggtitle("Silhouette score vs. P/Q")
 
-ggplot(subset(s_score_df, n_walks > 50), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(walk_length))) +
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(walk_length))) +
   geom_point(alpha = 0.5) +
   theme_classic() +
   scale_color_viridis_c() +
   ggtitle("Silhouette score vs. P/Q")
 
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = p, y = silhouette_score, color = dimensions)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("Silhouette score vs. P/Q") +
+  facet_wrap(~factor(n_walks))
 
-ggplot(subset(s_score_df, n_walks == 50 & dimensions == 60), aes(x = p, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = p, y = silhouette_score, color = dimensions)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("Silhouette score vs. P/Q") +
+  facet_wrap(~factor(walk_length))
+
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = p, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
   geom_point(alpha = 0.5) +
   theme_classic() +
   scale_color_viridis_c() +
   ggtitle("Silhouette score vs. P")
 
-ggplot(subset(s_score_df, n_walks == 50 & dimensions == 60), aes(x = q, color = silhouette_score, y = p)) +
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = q, color = silhouette_score, y = p, shape = factor(walk_length))) +
   geom_point(position = "jitter") +
   theme_classic() +
   scale_color_viridis_c() +
   ggtitle("P vs. Q")
 
-ggplot(subset(s_score_df, n_walks == 50), aes(x = silhouette_score, color = factor(q))) +
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = silhouette_score, color = factor(q))) +
   geom_density() +
   theme_classic() +
   ggtitle("Silhouette score vs. Q")
 
-ggplot(subset(s_score_df, n_walks == 50), aes(x = silhouette_score, color = factor(p))) +
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = silhouette_score, color = factor(p))) +
   geom_density() +
   theme_classic() +
   ggtitle("Silhouette score vs. P")
 
-ggplot(subset(s_score_df, n_walks == 50), aes(x = q, y = silhouette_score, color = p_q_ratio)) +
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = q, y = silhouette_score, color = p_q_ratio)) +
   geom_point(alpha = 0.2) +
   theme_classic() +
   scale_color_viridis_c() +
   ggtitle("P vs. Q")
   
 
-ggplot(subset(s_score_df, n_walks > 50 & dimensions > 50), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = p_q_ratio, y = silhouette_score, color = dimensions, shape = factor(n_walks))) +
   geom_point(alpha = 0.5) +
   theme_classic() +
   scale_color_viridis_c() +
   ggtitle("Silhouette score vs. P/Q")
 
 ```
+```{r}
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = n_walks, y = silhouette_score, color = dimensions)) +
+  geom_point(alpha = 0.3) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("n Walks")
+
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = walk_length, y = silhouette_score, color = dimensions)) +
+  geom_point(alpha = 0.3) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("n Walks")
+
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = dimensions, y = silhouette_score, color = walk_length)) +
+  geom_point(alpha = 0.3) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("n Walks") +
+  facet_wrap(~factor(n_walks))
+
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = dimensions, y = silhouette_score)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  scale_color_viridis_c() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(walk_length))
+
+ggplot(subset(s_score_df, silhouette_score > min_score & n_walks %in% c(120, 200)), aes(x = factor(dimensions), y = silhouette_score)) +
+  geom_boxplot() +
+  theme_classic() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(walk_length))
+
+ggplot(subset(s_score_df, silhouette_score == silhouette_score), aes(x = factor(dimensions), y = silhouette_score)) +
+  geom_boxplot() +
+  theme_classic() +
+  ggtitle("n walks") +
+  facet_wrap(~factor(n_walks))
+
+ggplot(subset(s_score_df, silhouette_score > min_score), aes(x = factor(dimensions), y = silhouette_score)) +
+  geom_boxplot() +
+  theme_classic() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(walk_length))
+
+walk_len = 50
+dimension = 200
+n_walks = 120
+min_p = 2
+min_q = 2
+
+ggplot(subset(s_score_df, silhouette_score > min_score & n_walks %in% c(120, 200)), aes(x = p, y = silhouette_score)) +
+  geom_point(alpha = 0.5) +
+  scale_color_viridis_b() +
+  theme_classic() +
+  facet_wrap(~q)
+
+ggplot(subset(s_score_df, n_walks == n_walks & dimensions == dimensions & walk_len == walk_len), aes(x = q, y = silhouette_score)) +
+  geom_point(alpha = 0.5) +
+  scale_color_viridis_b() +
+  theme_classic() +
+  facet_wrap(~p)
+
+ggplot(subset(s_score_df, n_walks == n_walks & dimensions == dimension & walk_len == walk_len), aes(x = q, color = silhouette_score, y = p)) +
+  geom_point(position = "jitter") +
+  scale_color_viridis_b() +
+  theme_classic()
+
+```
+
+# n walks
+```{r}
+min_walks = 50
+max_walks = 300
+walks = 200
+
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks > min_walks & n_walks < max_walks), aes(x = factor(dimensions), y = silhouette_score)) +
+  geom_boxplot() +
+  theme_classic() +
+  ggtitle("n walks") +
+  facet_wrap(~factor(n_walks))
+
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks > min_walks & n_walks < max_walks), aes(x = factor(walk_length), y = silhouette_score)) +
+  geom_boxplot() +
+  theme_classic() +
+  ggtitle("n walks") +
+  facet_wrap(~factor(n_walks))
+
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks > min_walks & n_walks < max_walks), aes(x = factor(p), y = silhouette_score)) +
+  geom_boxplot() +
+  theme_classic() +
+  ggtitle("n walks") +
+  facet_wrap(~factor(n_walks))
+
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks > min_walks & n_walks < max_walks), aes(x = factor(q), y = silhouette_score)) +
+  geom_boxplot() +
+  theme_classic() +
+  ggtitle("n walks") +
+  facet_wrap(~factor(n_walks))
+
+# what variable is causing the separation for n_walks = 200? 
+# WALK LENGTH
+# vs. dimensions
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks == walks), aes(x = factor(dimensions), y = silhouette_score)) +
+  geom_point(position = "jitter", alpha = 0.5) +
+  theme_classic() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(walk_length))
+
+# vs. p
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks == walks), aes(x = factor(p), y = silhouette_score)) +
+  geom_point(position = "jitter", alpha = 0.5) +
+  theme_classic() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(walk_length))
+
+# vs. q
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks == walks), aes(x = factor(q), y = silhouette_score)) +
+  geom_point(position = "jitter", alpha = 0.5) +
+  theme_classic() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(walk_length))
+
+# DIMENSIONS
+# vs. p
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks == walks), aes(x = factor(p), y = silhouette_score)) +
+  geom_point(position = "jitter", alpha = 0.5) +
+  theme_classic() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(dimensions))
+
+# vs. q
+ggplot(subset(s_score_df, silhouette_score == silhouette_score & n_walks == walks), aes(x = factor(q), y = silhouette_score)) +
+  geom_point(position = "jitter", alpha = 0.5) +
+  theme_classic() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(dimensions))
+
+# multi variable
+ggplot(subset(s_score_df, n_walks == walks), aes(x = dimensions, y = silhouette_score, shape = factor(walk_length), color = q)) +
+  geom_point(alpha = 0.5) +
+  scale_color_viridis_b() +
+  theme_classic() +
+  ggtitle("walk length") +
+  facet_wrap(~factor(p))
+
+# dimensions saturation
+ggplot(subset(s_score_df, n_walks == walks), aes(x = walk_length, y = silhouette_score)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  ggtitle("walk length")
+
+ggplot(subset(s_score_df, n_walks == n_walks), aes(x = n_walks, y = silhouette_score)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  ggtitle("walk length")
+
+ggplot(subset(s_score_df, n_walks == n_walks), aes(x = q, y = silhouette_score)) +
+  geom_point(alpha = 0.5) +
+  theme_classic() +
+  ggtitle("walk length")
+
+
+```
+
 
 ```{r}
 node_score_deg_species <- full_join(node_scores, node_degrees, by = "node")

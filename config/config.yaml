@@ -1,24 +1,5 @@
 # config.yaml
 
-# Manitou Directories
-# graphDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/copangraphs"
-# linksDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/link_dicts"
-# walkDictsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/walk_dicts_oriented"
-# walkListsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/walk_lists_vectorized"
-# modelDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/vectorization_model/models"
-# embeddingsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/vectorization_model/embeddings"
-# edgeEmbeddingsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/vectorization_model/edge_embeddings"
-# plotsDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/plots"
-# clustersDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/cluster_dicts"
-# distancesDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/pairwise_distances"
-# distancesDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/pairwise_distances"
-# degreeDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/node_degrees"
-# distDegDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis/workflow/out/distance_degree"
-
-# temp dir in pmg local
-tempDir: "/pmglocal/rc3710"
-# storageDir: "/manitou/pmg/users/rc3710/CopanTopologyAnalysis"
-
 # output directories
 graphDir: "workflow/out/copangraphs"
 linksDir: "workflow/out/link_dicts"
@@ -38,33 +19,36 @@ validationDir: "workflow/out/validation"
 
 # Graph ID
 graph_id: ["sample_1_0_02"]
-# "camisim_megahit_20_0.02"
 
 # Walk params
-walk_lengths: [50, 100]  # list of walk lengths
-n_walks: [50, 80, 100, 120]      # list of number of walks to perform per node
-p: [0.1, 0.5, 1.0, 0.3, 0.8]             # list of p values
-q: [0.1, 0.5, 1.0, 0.3, 0.8]             # list of q values
+walk_lengths: [50, 100, 150, 200]
+n_walks: [100,
+  120, 140, 160, 180, 200,
+  220, 240, 260, 280, 300
+]
+p: [
+  0.01, 0.05, 0.1,
+  0.2, 0.4, 0.6, 0.8, 1.0,
+  2.0, 5.0, 10.0, 
+  20
+]
+q: [
+  0.01, 0.05, 0.1,
+  0.2, 0.4, 0.6, 0.8, 1.0,
+  2.0, 5.0, 10.0, 
+  20
+]
 seed: 1
 
-# Walk params
-# walk_lengths: [30]  # list of walk lengths
-# n_walks: [30]      # list of number of walks to perform per node
-# p: [1.0]             # list of p values
-# q: [1.0]             # list of q values
-# seed: 1
-
 # # Embedding params
-dimensions: [20, 60, 100, 120, 150]
+dimensions: [
+  20, 60, 100,
+  120, 160, 200,
+  250, 300, 500
+]
 window: 5
 min_count: 5
 sg: 0
-
-# # t-SNE params
-# perplexities: [10, 30, 50, 100]  # list of perplexity values
-# n_iters: [1000, 3000, 5000]     # list of n_iter values
-# n_components: 2
-# random_state: 32
 
 # t-SNE params
 perplexities: [100]  # list of perplexity values

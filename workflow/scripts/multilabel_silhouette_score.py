@@ -49,6 +49,8 @@ def main():
     filtered_species_dict = {node: species_dict[node] for node in sampled_nodes}
     filtered_dist_matrix = dist_matrix.loc[sampled_nodes, sampled_nodes]
 
+    print(filtered_species_dict)
+
     score = multi_label_silhouette(filtered_dist_matrix, filtered_species_dict)
 
     # print(f"Silhouette Score: {score}")
