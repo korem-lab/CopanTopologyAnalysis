@@ -1,0 +1,42 @@
+# config.yaml
+
+# output directories
+graphDir: "workflow/out/copangraphs"
+linksDir: "workflow/out/link_dicts"
+walkDictsDir: "workflow/out/walk_dicts_oriented"
+walkListsDir: "workflow/out/walk_lists_vectorized"
+modelDir: "workflow/out/vectorization_model/models"
+embeddingsDir: "workflow/out/vectorization_model/embeddings"
+edgeEmbeddingsDir: "workflow/out/vectorization_model/edge_embeddings"
+plotsDir: "workflow/out/plots"
+clustersDir: "workflow/out/cluster_dicts"
+distancesDir: "workflow/out/pairwise_distances"
+distancesDir: "workflow/out/pairwise_distances"
+degreeDir: "workflow/out/node_degrees"
+distDegDir: "workflow/out/distance_degree"
+taxonomyDir: "workflow/out/taxonomy"
+validationDir: "workflow/out/validation"
+
+# Graph ID
+graph_id: ["sample_1_0_02"]
+
+# Walk params
+walk_lengths: [50, 100, 150]
+n_walks: [50, 100, 150, 200]
+p: [0.01, 0.1, 0.5, 1.0, 10.0]
+q: [0.01, 0.1, 0.5, 1.0, 10.0]
+seed: 1
+
+# # Embedding params
+dimensions: [50, 100, 150]
+window: 5
+min_count: 5
+sg: 0
+
+# t-SNE params
+perplexities: [100]  # list of perplexity values
+n_iters: [8000]     # list of n_iter values
+n_components: 2
+random_state: 32
+alpha: 0.2
+tax_level: "species"

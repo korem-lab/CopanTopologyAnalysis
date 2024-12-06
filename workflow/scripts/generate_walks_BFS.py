@@ -11,8 +11,7 @@ p = float(sys.argv[4])
 q = float(sys.argv[5])
 SEED = int(sys.argv[6])
 
-WALKS_DICT_F = sys.argv[7]
-WALKS_LIST_F = sys.argv[8]
+WALKS_LIST_F = sys.argv[7]
 
 # Iter through nodes in node_dict
 def main():
@@ -34,8 +33,8 @@ def main():
         walks_list_noOrientation = walks[1]
     
     
-    with open(WALKS_DICT_F, 'w') as f:
-        json.dump(walks_dict_wOrientation, f, indent=4)
+    # with open(WALKS_DICT_F, 'w') as f:
+    #     json.dump(walks_dict_wOrientation, f, indent=4)
     
     with open(WALKS_LIST_F, 'w') as f:
         for walk in walks_list_noOrientation:
@@ -98,7 +97,7 @@ def take_step(node_dict, curr_node, curr_orientation, node_counter, walk_counter
                     transition_probabilities[neighbor] = 1/p
                 elif neighbor in prev_node_neighbors:
                     # neighbor of current node is also neighbor to previous node
-                    transition_probabilities[neighbor] = 1.0
+                    transition_probabilities[neighbor] = 1/p
                 else:
                     # neighbor is not previous node and not neighbor to previous node
                     transition_probabilities[neighbor] = 1/q
