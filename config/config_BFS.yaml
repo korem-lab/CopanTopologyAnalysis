@@ -20,6 +20,9 @@ validationDir: "workflow/out/validation"
 # Graph ID
 graph_id: ["sample_1_0_02"]
 
+bfs_neighbors_walk_length: 3
+bfs_neighbors_n_walks: 50
+
 # Walk params
 walk_lengths: [50, 100, 150]
 n_walks: [50, 100, 150, 200]

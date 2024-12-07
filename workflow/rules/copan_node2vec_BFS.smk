@@ -8,9 +8,26 @@ rule getGraphLinks:
         python3 workflow/scripts/get_graph_links.py {input} {output}
         """
 
-rule randomSampleWalks:
+rule getNeighbors:
     input:
         join(config["linksDir"], "{graph_id}_links.json")
+    output:
+        join(config["linksDir"], "{graph_id}_bfs_neighbors.json")
+    params: 
+        walk_length=config["bfs_neighbors_walk_length"],
+        n_walks=config["bfs_neighbors_n_walks"],
+        seed=config["seed"]
+    shell:
+        """
+        python3 workflow/scripts/BFS_neighbor_node_walks.py {input} \
+        {params.walk_length} {params.n_walks} {params.seed} \
+        {output}
+        """
+
+rule randomSampleWalks:
+    input:
+        links=join(config["linksDir"], "{graph_id}_links.json"), 
+        neighbors=join(config["linksDir"], "{graph_id}_bfs_neighbors.json")
     output:
         join(config["walkListsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q_walks_vectorized_BFS.txt")
     params: 
@@ -21,7 +38,7 @@ rule randomSampleWalks:
         seed=config["seed"]
     shell:
         """
-        python3 workflow/scripts/generate_walks_BFS_pared.py {input} \
+        python3 workflow/scripts/generate_walks_BFS_pared.py {input.links} {input.neighbbors} \
         {params.walk_length} {params.n_walks} {params.p} {params.q} {params.seed} \
         {output}
         """
@@ -134,22 +151,6 @@ rule joinDistanceTax:
         """
         python3 workflow/scripts/join_distance_species.py {input.distances} {input.tax_csv} {output} {params.tax_level}
         """      
-
-rule getDistDegStats:
-    input: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_distancesWithDegree_BFS.csv")
-    output: join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats_BFS.csv")
-    params:
-        dimensions="{k}",
-        walk_length="{walk_length}",
-        n_walks="{n_walks}",
-        p="{p}",
-        q="{q}",
-        graph_id=GRAPH_IDS
-    shell:
-        """
-        python3 get_distance_degree_distribution.py {input} {output} \
-        {params.dimensions} {params.walk_length} {params.n_walks} {params.p} {params.q} {params.graph_id}
-        """
 
 rule getAverageDist:
     input: 
