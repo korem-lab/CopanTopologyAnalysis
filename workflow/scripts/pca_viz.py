@@ -6,18 +6,17 @@ import numpy as np
 
 # Adjusted sys.argv to start from index 1
 EMBEDDING_F = sys.argv[1]  # The embeddings file
-TAX_F = sys.argv[2]        # The species CSV file
 
-EMBEDDING_PLOT = sys.argv[3]  # Output plot file
+EMBEDDING_PLOT = sys.argv[2]  # Output plot file
 
-GRAPH_ID = str(sys.argv[4])   
-WALK_LENGTH = str(sys.argv[5])  
-N_WALKS = str(sys.argv[6])      
-P_VAL = str(sys.argv[7])        
-Q_VAL = str(sys.argv[8])       
+GRAPH_ID = str(sys.argv[3])   
+WALK_LENGTH = str(sys.argv[4])  
+N_WALKS = str(sys.argv[5])      
+P_VAL = str(sys.argv[6])        
+Q_VAL = str(sys.argv[7])       
 
-N_COMPONENTS = int(sys.argv[9]) 
-DIMENSION = str(sys.argv[10])  # Dimension (k)
+N_COMPONENTS = int(sys.argv[8]) 
+DIMENSION = str(sys.argv[9])  # Dimension (k)
 ALPHA = 0.2
 
 def main():

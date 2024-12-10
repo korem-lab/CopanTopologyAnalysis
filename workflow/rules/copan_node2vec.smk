@@ -113,7 +113,7 @@ rule visualizeTSNE_binClustering:
 
 rule PCA:
     input:
-        embeddings=join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
+        join(config["embeddingsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_walks.embeddings")
     output: 
         join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_PCA.png")
     params:
@@ -127,11 +127,10 @@ rule PCA:
     shell:
         """
         python3 workflow/scripts/pca_viz.py \
-        {input.embeddings} {input.tax_csv} {output} \
+        {input} {output} \
         {params.graph_id} {params.walk_length} {params.n_walks} {params.p} {params.q} \
         {params.n_components} {params.dimensions}
         """
-
 
 rule PCA_tax:
     input:
