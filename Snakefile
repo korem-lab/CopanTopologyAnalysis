@@ -75,17 +75,26 @@ rule all:
                q=Q_VALUES,
                k=DIMENSIONS),
 
+       expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_PCA_{tax_level}.png"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES,
+               k=DIMENSIONS, 
+               tax_level=TAX_LEVEL),
+
        # colored by species!
-        # expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot_{tax_level}.png"),
-              #  graph_id=GRAPH_IDS,
-              #  walk_length=WALK_LENGTHS,
-              #  n_walks=N_WALKS,
-              #  p=P_VALUES,
-              #  q=Q_VALUES,
-              #  perplexity=PERPLEXITIES,
-              #  n_iter=N_ITERS, 
-              #  k=DIMENSIONS, 
-              #  tax_level=TAX_LEVEL),
+        expand(join(config["plotsDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{perplexity}perp{n_iter}iter_embeddingPlot_{tax_level}.png"),
+               graph_id=GRAPH_IDS,
+               walk_length=WALK_LENGTHS,
+               n_walks=N_WALKS,
+               p=P_VALUES,
+               q=Q_VALUES,
+               perplexity=PERPLEXITIES,
+               n_iter=N_ITERS, 
+               k=DIMENSIONS, 
+               tax_level=TAX_LEVEL),
 
 #        # cluster dict
        #  expand(join(config["clustersDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_clusters.json"),
@@ -116,7 +125,7 @@ rule all:
               n_walks=N_WALKS,
               p=P_VALUES,
               q=Q_VALUES,
-              k=DIMENSIONS), 
+              k=DIMENSIONS)
 
        #  # joining pairwise distances plus species for each node
        # expand(join(config["taxonomyDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_{tax_level}_distancesWithTax.csv"),
@@ -137,13 +146,13 @@ rule all:
        #        tax_level=TAX_LEVEL)
 
        #  # summary stats on degree + pairwise distance 
-        expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv"),
-              graph_id=GRAPH_IDS,
-              walk_length=WALK_LENGTHS,
-              n_walks=N_WALKS,
-              p=P_VALUES,
-              q=Q_VALUES,
-              k=DIMENSIONS)
+       #  expand(join(config["distDegDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_stats.csv"),
+       #        graph_id=GRAPH_IDS,
+       #        walk_length=WALK_LENGTHS,
+       #        n_walks=N_WALKS,
+       #        p=P_VALUES,
+       #        q=Q_VALUES,
+       #        k=DIMENSIONS)
 
        # validation
        # expand(join(config["validationDir"], "{graph_id}_{walk_length}Lw{n_walks}Nw{p}p{q}q{k}k_nodes_not_in_links.txt"), 
