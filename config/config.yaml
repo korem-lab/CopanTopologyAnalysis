@@ -18,7 +18,8 @@ taxonomyDir: "workflow/out/taxonomy"
 validationDir: "workflow/out/validation"
 
 # Graph ID
-graph_id: ["sample_1_0_02"]
+# graph_id: ["sample_1_0_02"]
+graph_id: ["copan_0"]
 
 # Walk params
 # walk_lengths: [50, 100, 200]
@@ -36,14 +37,34 @@ graph_id: ["sample_1_0_02"]
 # seed: 1
 
 # params for degree analysis
+# walk_lengths: [100]
+# n_walks: [150]
+# p: [0.1, 1.0, 10.0]
+# q: [0.1, 1.0, 10.0]
+# seed: 1
+# dimensions: [120]
+# window: 5
+# min_count: 5
+# sg: 0
+
+# # params for silhouette score analysis
+# walk_lengths: [50, 100]
+# n_walks: [200, 30]
+# p: [0.3, 0.8]
+# q: [0.3, 1.0]
+# seed: 1
+# dimensions: [120, 150]
+# window: 5
+# min_count: 5
+# sg: 0
+
+# params for my stupid ass figure
 walk_lengths: [100]
 n_walks: [150]
-p: [0.1, 1.0, 10.0]
-q: [0.1, 1.0, 10.0]
+p: [1.0]
+q: [1.0]
 seed: 1
-
-# # Embedding params
-dimensions: [120]
+dimensions: [150]
 window: 5
 min_count: 5
 sg: 0
